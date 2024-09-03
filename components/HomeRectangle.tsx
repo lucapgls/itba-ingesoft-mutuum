@@ -8,8 +8,8 @@ const HomeRectangle = ({ coin, balance, ars }: { coin: string, balance: string, 
     <View>
         <View style={styles.rectangle}>
             <Text style={styles.text}>Tu dinero</Text>
-            <Text style={styles.BoldText}>{coin}: {balance}</Text>
-            <Text style={styles.text}>ARS$: {ars}</Text>
+            <Text style={styles.BoldText}>{coin} {balance}</Text>
+            <Text style={styles.text}>ARS$ {ars}</Text>
             <View style={styles.buttons}>
                 <TouchableOpacity style={styles.button} >
                     <Text style={styles.buttonText}>Enviar</Text>
@@ -36,9 +36,10 @@ const styles = StyleSheet.create({
     },
     rectangle: {
         backgroundColor: '#8E66FF',
-        height: 250,
+        height: 260,
         justifyContent: 'center', // Centra el contenido verticalmente dentro del rectángulo
         alignItems: 'center', // Centra el contenido horizontalmente dentro del rectángulo
+        paddingTop: 30,
     },
     BoldText: {
         color: 'white',
@@ -47,17 +48,21 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
+        
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 50,
         padding: 8,
-        width: 100,
+        width: 120,
+        height: 42,
+        justifyContent: 'center',
     },
     buttons: {
-        marginTop: 20,
+        marginTop: 25,
         flexDirection: 'row',
         gap: 20,
     },
     buttonText: {
+        
         color: '#8E66FF',
         textAlign: 'center',
         fontSize: 18, 

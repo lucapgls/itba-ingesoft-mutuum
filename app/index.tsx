@@ -1,6 +1,6 @@
-import { StatusBar } from "expo-status-bar";
+
 import { Text, View, StyleSheet } from "react-native";
-import { Link, router } from "expo-router";
+import { Link, router, Redirect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
 
@@ -22,6 +22,7 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: 'white',
   },
   container: {
     justifyContent: 'center',
