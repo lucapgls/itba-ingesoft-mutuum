@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "239079751775",
+    "project_id": "ingsoft-i",
+    "storage_bucket": "ingsoft-i.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239079751775:android:e7b8b472a4a88f2aa3dbea",
+        "android_client_info": {
+          "package_name": "com.ingesof.mutuum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "239079751775-qrmks2urj2m7pg0rqt0ah2cprcgej9of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj3bB0dKGQqhxw-5kZI-iazxnlbjp8ZPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "239079751775-qrmks2urj2m7pg0rqt0ah2cprcgej9of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
