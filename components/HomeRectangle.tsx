@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         height: 260,
         justifyContent: 'center', // Centra el contenido verticalmente dentro del rectángulo
         alignItems: 'center', // Centra el contenido horizontalmente dentro del rectángulo
-        paddingTop: 30,
+        paddingTop: 40,
     },
     BoldText: {
         color: 'white',

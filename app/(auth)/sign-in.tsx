@@ -4,6 +4,7 @@ import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithCred
 import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { auth } from './firebaseconfig';
 import { WEB_CLIENT_ID } from '@env';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -33,7 +34,7 @@ const SignIn = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>
           Sign in to <Text style={{ color: 'violet' }}>Mutuum</Text>
@@ -59,7 +60,7 @@ const SignIn = () => {
         style={styles.button}
         onPress={handleGoogleSignIn}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
