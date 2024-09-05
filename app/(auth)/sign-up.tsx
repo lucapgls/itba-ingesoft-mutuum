@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth"; // Modular impor
 import { collection, addDoc } from "firebase/firestore"; // Modular import
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
-import { router } from "expo-router";
+import { router, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 const SignUp = () => {
@@ -55,9 +55,18 @@ const SignUp = () => {
 				</View>
 				<View style={{ height: 25 }} />
 				<CustomButton
-					onPress={() => [router.push("/home"), handleSignUp()]}
+					onPress={handleSignUp}
 					text="Sign up"
 				/>
+				<View style={styles.separator} />
+				<Link href="/sign-in" style={{ textAlign: "center" }}>
+					<Text style={{ textAlign: "center", fontSize: 15 }}>
+						Already have an account?{" "}
+						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
+							Log in
+						</Text>
+					</Text>
+				</Link>
 			</View>
 		</View>
         
@@ -115,5 +124,12 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		justifyContent: "center",
 		marginTop: 8,
+	},
+	separator: {
+		height: 1,
+		backgroundColor: "#CBCBCB",
+		marginVertical: 30,
+		width: "80%",
+		alignSelf: "center",
 	},
 });

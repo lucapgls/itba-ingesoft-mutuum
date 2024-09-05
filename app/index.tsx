@@ -8,7 +8,7 @@ import SigninRectangle from "../components/SigninRectangle";
 export default function App() {
   return (
 
-      <Redirect href={'/sign-up'}/>
+      <Redirect href={'/sign-in'}/>
 
   );
 }
