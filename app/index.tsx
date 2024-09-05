@@ -10,20 +10,6 @@ export default function App() {
 
       <Redirect href={'/sign-up'}/>
 
-    // <SafeAreaView style={styles.safeArea}>
-    //   <View style={styles.rectangle}>
-    //     <Text style={styles.title}>Sign in to </Text>
-    //     <Text style={styles.mutuum}>Mutuum</Text> 
-    //   </View>
-    //     <Text style={styles.text}>Username</Text>
-    //     <SigninRectangle/>
-    //     <Text style={styles.text}>Password</Text>
-    //     <SigninRectangle/>
-    //   <View style={styles.container}>
-    //     <View style={{ height: 30 }} />
-    //       <CustomButton onPress={() => router.push('/home')} text="Sign in" />
-    //   </View>
-    // </SafeAreaView>
   );
 }
 
