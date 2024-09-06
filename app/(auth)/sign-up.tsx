@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import { router, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import CustomTextInput from "../../components/CustomTextInput";
 
 const SignUp = () => {
 	const [email, setEmail] = useState("");
@@ -33,26 +34,22 @@ const SignUp = () => {
 			</View>
 
 			<View style={{ padding: 20 }}>
-				<Text style={styles.text}>Email</Text>
-				<View style={styles.border}>
-					<TextInput
-						placeholder="example@mail.com"
-						value={email}
-						onChangeText={setEmail}
-						style={styles.input}
-					/>
-				</View>
+				
+				<CustomTextInput
+                    placeholder="example@mail.com"
+                    value={email}
+                    onChangeText={setEmail}
+					title="Email"
+                />
 				<View style={{ height: 15 }} />
-				<Text style={styles.text}>Password</Text>
-				<View style={styles.border}>
-					<TextInput
-						placeholder="********"
-						value={password}
-						onChangeText={setPassword}
-						secureTextEntry
-						style={styles.input}
-					/>
-				</View>
+				
+				<CustomTextInput
+                    placeholder="********"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+					title="Password"
+                />
 				<View style={{ height: 25 }} />
 				<CustomButton
 					onPress={handleSignUp}
@@ -107,6 +104,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#8E66FF",
 	},
 	text: {
+		marginBottom: 5,
 		color: "black",
 		fontSize: 15,
 	},

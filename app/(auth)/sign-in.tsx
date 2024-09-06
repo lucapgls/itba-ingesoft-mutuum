@@ -21,7 +21,9 @@ import { auth } from "./firebaseconfig";
 import { WEB_CLIENT_ID } from "@env";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import GoogleButton from "../../components/GoogleButton";
+import CustomTextInput from "../../components/CustomTextInput";
 
 const SignIn = () => {
 	const [email, setEmail] = useState("");
@@ -38,6 +40,7 @@ const SignIn = () => {
 			.then((userCredential) => {
 				const user = userCredential.user;
 				console.log("User signed in: ", user);
+				router.push("/home");
 			})
 			.catch((error) => {
 				const errorCode = error.code;
@@ -59,26 +62,23 @@ const SignIn = () => {
 			</View>
 
 			<View style={{ padding: 20 }}>
-				<Text style={styles.text}>Email</Text>
-				<View style={styles.border}>
-					<TextInput
-						placeholder="example@mail.com"
-						value={email}
-						onChangeText={setEmail}
-						style={styles.input}
-					/>
-				</View>
+				
+				<CustomTextInput
+					placeholder="example@mail.com"
+					value={email}
+					onChangeText={setEmail}
+					title="Email"
+				/>
+
 				<View style={{ height: 15 }} />
-				<Text style={styles.text}>Password</Text>
-				<View style={styles.border}>
-					<TextInput
-						placeholder="********"
-						value={password}
-						onChangeText={setPassword}
-						secureTextEntry
-						style={styles.input}
-					/>
-				</View>
+				
+				<CustomTextInput
+					placeholder="********"
+					value={password}
+					onChangeText={setPassword}
+					secureTextEntry
+					title="Password"
+				/>
 				<View style={{ height: 25 }} />
 				<CustomButton onPress={handleSignIn} text="Log in" />
 				<Text
@@ -88,10 +88,7 @@ const SignIn = () => {
 				</Text>
 
 				<View style={styles.googleButtonContainer}>
-					<GoogleSigninButton
-						style={styles.googleButton}
-						onPress={handleGoogleSignIn}
-					/>
+					<GoogleButton onPress={handleGoogleSignIn} />
 				</View>
 				<View style={styles.separator} />
 				<Link href="/sign-up" style={{ textAlign: "center" }}>
@@ -100,6 +97,15 @@ const SignIn = () => {
 						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
 							Sign up
 						</Text>
+					</Text>
+				</Link>
+
+				<Link href="/home" style={{ textAlign: "center", marginTop:20 }}>
+					<Text style={{ textAlign: "center", fontSize: 15 }}>
+						Continue as{" "}
+						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
+							guest
+							</Text>
 					</Text>
 				</Link>
 			</View>
@@ -141,6 +147,7 @@ const styles = StyleSheet.create({
 	text: {
 		color: "black",
 		fontSize: 15,
+		marginBottom: 5,
 	},
 	input: {
 		fontSize: 15,
@@ -158,8 +165,6 @@ const styles = StyleSheet.create({
 		marginTop: 8,
 	},
 	googleButton: {
-		width: "40%",
-		height: 48,
 		marginTop: 15,
 		borderRadius: 30,
 	},
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		width: "100%",
+		marginTop: 20,
 	},
 	separator: {
 		height: 1,

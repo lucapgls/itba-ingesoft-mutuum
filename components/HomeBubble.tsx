@@ -5,6 +5,9 @@ const BubbleProfile = ({prestamo1, prestamo2, prestamo3}: {prestamo1:string, pre
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
+        <Text style={{fontWeight: 'bold', padding: 8, paddingStart: 20, paddingTop:16,
+        fontSize: 18, color: 'black'
+        }}>My Loans</Text>
         <Text style={styles.text}>Préstamo: {prestamo1}</Text>
         <Text style={styles.text}>Préstamo: {prestamo2}</Text>
         <Text style={styles.text}>Préstamo: {prestamo3}</Text>
@@ -31,9 +34,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     text: {
-        fontSize: 20,
+        fontSize: 16,
         color: 'black',
-        marginTop: 20,
-        left: 20,
+        padding: 8,
+        paddingStart: 20,
     },
 })
