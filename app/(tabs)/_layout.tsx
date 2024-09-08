@@ -40,32 +40,32 @@ const TabsLayout = () => {
             },
         }
     }>
-        <Tabs.Screen name='home' options={{title: 'Home',
+        <Tabs.Screen name='home' options={{title: 'Inicio',
             headerShown: false,
             headerLeft: () => null,
             tabBarIcon: ({color, focused}) => (
-                <TabIcon icon={icons.home} iconFocused={icons.homeFocus} color={color} name='Home' focused={focused} />
+                <TabIcon icon={icons.home} iconFocused={icons.homeFocus} color={color} name='Inicio' focused={focused} />
             )
             }}
          />
-         <Tabs.Screen name='explore' options={{title: 'Explore',
+         <Tabs.Screen name='explore' options={{title: 'Explorar',
             headerShown: false,
             tabBarIcon: ({color, focused}) => (
-                <TabIcon icon={icons.explore} iconFocused={icons.exploreFocus} color={color} name='Explore' focused={focused} />
+                <TabIcon icon={icons.explore} iconFocused={icons.exploreFocus} color={color} name='Explorar' focused={focused} />
             )
             }}
          />
-          <Tabs.Screen name='myloans' options={{title: 'My Loans',
+          <Tabs.Screen name='myloans' options={{title: 'Mis Préstamos',
             headerShown: false,
             tabBarIcon: ({color, focused}) => (
-                <TabIcon icon={icons.loan} iconFocused={icons.loanFocus} color={color} name='My Loans' focused={focused} />
+                <TabIcon icon={icons.loan} iconFocused={icons.loanFocus} color={color} name='Mis Préstamos' focused={focused} />
             )
             }}
          />
-          <Tabs.Screen name='profile' options={{title: 'Profile',
+          <Tabs.Screen name='profile' options={{title: 'Perfil',
             headerShown: false,
             tabBarIcon: ({color, focused}) => (
-                <TabIcon icon={icons.profile} iconFocused={icons.profileFocus} color={color} name='Profile' focused={focused} />
+                <TabIcon icon={icons.profile} iconFocused={icons.profileFocus} color={color} name='Perfil' focused={focused} />
             )
             }}
          />
