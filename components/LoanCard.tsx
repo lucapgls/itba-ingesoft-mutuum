@@ -1,5 +1,5 @@
 import React, { useRef, useMemo, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -13,13 +13,15 @@ interface LoanCardProps {
   amount: string | number;
   interest: string | number;
   maxCuotas?: string | number;
+  term: string | number;
+  requirements: { name: string; completed: boolean }[];
   onPress: () => void; // Function to handle press events
 }
 
-const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, interest, maxCuotas, onPress }) => {
+const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, interest, maxCuotas, term, requirements, onPress }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['25%', '50%', '80%'], []);
+  const snapPoints = useMemo(() => ['60%'], []);
 
   const openBottomSheet = () => {
     setModalVisible(true);
@@ -28,6 +30,18 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
   const closeBottomSheet = () => {
     setModalVisible(false);
   };
+
+  const calculateTotalAmount = (amount: number, interest: number, term: number) => {
+    const totalInterest = amount * interest * term;
+    return amount + totalInterest;
+  }
+
+  const calculateMontlyAmount = (amount: number, interest: number, term: number) => {
+    return calculateTotalAmount(amount, interest, term) / term;
+  }
+
+  const montlyAmount = calculateMontlyAmount(Number(amount), Number(interest), Number(term));
+  const totalAmount = calculateTotalAmount(Number(amount), Number(interest), Number(term));
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -54,27 +68,53 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
         animationType="slide"
         onRequestClose={closeBottomSheet}
       >
-        <GestureHandlerRootView style={styles.modalContainer}>
-          <BottomSheet
-            ref={bottomSheetRef}
-            index={0}
-            snapPoints={snapPoints}
-            backgroundStyle={styles.bottomSheetBackground}
-          >
-            <View style={styles.sheetContent}>
-              <View style={styles.requirementsSection}>
-                <Text style={styles.sectionTitle}>Requisitos</Text>
-              </View>
-              <View style={styles.financialDetails}>
-                <Text style={styles.infoText}>Monto por mes: {currency} {}</Text>
-                <Text style={styles.infoText}>Monto total: {currency} {}</Text>
-              </View>
-              <TouchableOpacity style={styles.button} onPress={closeBottomSheet}>
-                <Text style={styles.buttonText}>Tomar</Text>
-              </TouchableOpacity>
-            </View>
-          </BottomSheet>
-        </GestureHandlerRootView>
+        <TouchableWithoutFeedback onPress={closeBottomSheet}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <GestureHandlerRootView style={styles.sheetContainer}>
+                <BottomSheet
+                  ref={bottomSheetRef}
+                  index={0}
+                  snapPoints={snapPoints}
+                  backgroundStyle={styles.bottomSheetBackground}
+                  enablePanDownToClose={true}
+                  onClose={closeBottomSheet}
+                >
+                  <TouchableWithoutFeedback>
+                    <View style={styles.sheetContent}>
+                      <View style={styles.infoSection}>
+                        <Text style={styles.infoText}>Plazo: {term} meses</Text>
+                        <Text style={styles.infoText}>Intereses: {interest}%</Text>
+                      </View>
+                      <View style={styles.divider} />
+
+                      <View style={styles.requirementsSection}>
+                        <Text style={styles.sectionTitle}>Requisitos</Text>
+                        {requirements.map((requirement, index) => (
+                          <View key={index} style={styles.requirementRow}>
+                            <Text style={styles.infoText}>{requirement.name}</Text>
+                            <Text style={styles.infoText}>{requirement.completed ? '✅' : '❌'}</Text>
+                          </View>
+                        ))}
+                      </View>
+                      <View style={styles.divider} />
+
+                      <View style={styles.financialDetails}>
+                        <Text style={styles.infoText}>Monto por mes: {currency} {montlyAmount}</Text>
+                        <Text style={styles.infoText}>Monto total: {currency} {totalAmount}</Text>
+                      </View>
+
+                      {/* Botón para cerrar el BottomSheet */}
+                      <TouchableOpacity style={styles.button} onPress={closeBottomSheet}>
+                        <Text style={styles.buttonText}>Tomar</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </BottomSheet>
+              </GestureHandlerRootView>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </GestureHandlerRootView>
   );
@@ -128,7 +168,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   infoText: {
-    fontSize: 14,
+    fontSize: 16,
     color: 'gray',
   },
   bottomSheetBackground: {
@@ -136,6 +176,12 @@ const styles = StyleSheet.create({
   },
   sheetContent: {
     padding: 16,
+    marginStart: 16,
+    marginEnd: 16,
+    flex: 1,
+  },
+  infoSection: {
+    marginBottom: 16,
   },
   requirementsSection: {
     marginBottom: 16,
@@ -145,14 +191,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
   },
+  requirementRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
   financialDetails: {
     marginBottom: 16,
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    marginVertical: 16,
   },
   button: {
     backgroundColor: '#6c63ff',
     borderRadius: 8,
-    paddingVertical: 10,
+    paddingVertical: 14,
     alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
   },
   buttonText: {
     color: '#fff',
@@ -160,6 +221,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  sheetContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },

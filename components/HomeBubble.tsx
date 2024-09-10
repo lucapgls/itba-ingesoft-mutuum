@@ -1,22 +1,30 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
+import UserLoanSmallCard from './UserLoanSmallCard'
+import { Loan } from '../models/Loan'
 
-const BubbleProfile = ({prestamo1, prestamo2, prestamo3}: {prestamo1:string, prestamo2:string, prestamo3:string}) => {
+const BubbleProfile = ({ loans }: {loans: Loan[]}) => {
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
-        <Text style={{fontWeight: 'bold', padding: 8, paddingStart: 20, paddingTop:16,
-        fontSize: 18, color: 'black'
-        }}>My Loans</Text>
-        <Text style={styles.text}>Préstamo: {prestamo1}</Text>
-        <Text style={styles.text}>Préstamo: {prestamo2}</Text>
-        <Text style={styles.text}>Préstamo: {prestamo3}</Text>
+        <Text style={styles.title}>Últimos Préstamos</Text>
+        {loans.map((loan) => (
+          <UserLoanSmallCard 
+            key={loan.id}
+            profilePicture="" // todo
+            name={"test"} // todo
+            role={loan.role}
+            amount={loan.amount}
+            coinType={loan.coinType}
+            interests={loan.interests}
+          />
+        ))}
       </View>
     </View>
   )
 }
 
-export default BubbleProfile
+export default BubbleProfile;
 
 const styles = StyleSheet.create({
     container: {
@@ -26,8 +34,8 @@ const styles = StyleSheet.create({
     },
     rectangle: {
         marginTop: 20,
+        paddingVertical: 8,
         width: '90%',
-        height: 300,
         backgroundColor: '#f1f1f1',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
@@ -36,7 +44,13 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         color: 'black',
+        paddingHorizontal: 20,
+    },
+    title: {
+        fontSize: 22,
+        color: 'black',
         padding: 8,
         paddingStart: 20,
-    },
+        fontWeight: 'medium',
+    }
 })

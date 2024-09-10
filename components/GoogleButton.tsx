@@ -13,7 +13,7 @@ const GoogleButton: React.FC<GoogleButtonProps> = ({ onPress }) => {
                     source={{ uri: 'https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png' }}
                     style={styles.image}
                 />
-                <Text style={styles.text}>Sign in with Google</Text>
+                <Text style={styles.text}>Iniciar sesión con Google</Text>
             </View>
         </TouchableOpacity>
     );
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2edff',
         borderRadius: 25, // Adjusted for rounded corners
         padding: 10,
-        width: '60%',
+        width: '80%',
         height: 45,
         borderWidth: 0,
         alignItems: 'center',

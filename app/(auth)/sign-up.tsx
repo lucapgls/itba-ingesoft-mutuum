@@ -4,6 +4,22 @@ import CustomButton from "../../components/CustomButton";
 import { router, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import CustomTextInput from "../../components/CustomTextInput";
+import { supabase } from "./SupabaseConfig";
+
+// Sign up a user using Supabase Auth
+export const signUpUser = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    console.error('Error signing up user:', error.message);
+    throw error;
+  }
+
+  return data;
+};
 
 const SignUp = () => {
 	const [email, setEmail] = useState("");
@@ -11,9 +27,12 @@ const SignUp = () => {
 
 	const handleSignUp = async () => {
 		try {
+			await signUpUser(email, password);
+			
 			// await createUserWithEmailAndPassword(auth, email, password);
 			// await addDoc(collection(firestore, "Users"), { email: email });
-			Alert.alert("Success", "User signed up successfully!");
+			Alert.alert("Exito!", "Se creo el usuario correctamente!");
+			router.push("/home");
 		} catch (error: any) {
 			Alert.alert("Error", error.message);
 		}
@@ -32,7 +51,7 @@ const SignUp = () => {
 			<View style={{ padding: 20 }}>
 				
 				<CustomTextInput
-                    placeholder="example@mail.com"
+                    placeholder="miusuario@mail.com"
                     value={email}
                     onChangeText={setEmail}
 					title="Email"
@@ -44,7 +63,7 @@ const SignUp = () => {
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
-					title="Password"
+					title="Contraseña"
                 />
 				<View style={{ height: 25 }} />
 				<CustomButton
@@ -56,7 +75,7 @@ const SignUp = () => {
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						Already have an account?{" "}
 						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
-							Log in
+							Iniciar sesión	
 						</Text>
 					</Text>
 				</Link>
