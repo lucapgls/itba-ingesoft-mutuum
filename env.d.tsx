@@ -1,4 +1,4 @@
 declare module '@env' {
-    export const WEB_CLIENT_ID: string;
-    export const API_KEY: string;
+    export const SUPABASE_API_KEY: string;
+    export const SUPABASE_WEB_URL: string;
 }

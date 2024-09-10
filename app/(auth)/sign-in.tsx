@@ -6,7 +6,6 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { WEB_CLIENT_ID } from "@env";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
@@ -17,24 +16,10 @@ const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	// useEffect(() => {
-	// 	// GoogleSignin.configure({
-	// 	// 	webClientId: WEB_CLIENT_ID, // Use the environment variable
-	// 	});
-	// }, []);
+
 
 	const handleSignIn = () => {
-		// signInWithEmailAndPassword(auth, email, password)
-		// 	.then((userCredential) => {
-		// 		const user = userCredential.user;
-		// 		console.log("User signed in: ", user);
-		// 		router.push("/home");
-		// 	})
-		// 	.catch((error) => {
-		// 		const errorCode = error.code;
-		// 		const errorMessage = error.message;
-		// 		console.log("Error signing in: ", errorCode, errorMessage);
-		// 	});
+
 	};
 
 	const handleGoogleSignIn = async () => {
