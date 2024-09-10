@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Alert, StyleSheet, Text } from "react-native";
-import { auth, firestore } from "./firebaseconfig"; // Import the initialized auth and firestore instances
-import { createUserWithEmailAndPassword } from "firebase/auth"; // Modular import
-import { collection, addDoc } from "firebase/firestore"; // Modular import
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import { router, Link } from "expo-router";
@@ -15,8 +12,8 @@ const SignUp = () => {
 
 	const handleSignUp = async () => {
 		try {
-			await createUserWithEmailAndPassword(auth, email, password);
-			await addDoc(collection(firestore, "Users"), { email: email });
+			// await createUserWithEmailAndPassword(auth, email, password);
+			// await addDoc(collection(firestore, "Users"), { email: email });
 			Alert.alert("Success", "User signed up successfully!");
 		} catch (error: any) {
 			Alert.alert("Error", error.message);
