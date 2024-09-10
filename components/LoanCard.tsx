@@ -8,7 +8,7 @@ const { height: windowHeight } = Dimensions.get('window');
 
 interface LoanCardProps {
   color: string;
-  name: string;
+  name: string | number;
   currency: 'ETH' | 'ARS';
   amount: string | number;
   interest: string | number;
@@ -123,13 +123,9 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
 const styles = StyleSheet.create({
   card: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#f1f1f1',
     borderRadius: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
+  
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -211,9 +207,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 16,
+    bottom: 36,
+    height: 56,
     left: 16,
     right: 16,
+    textAlign: 'center',
   },
   buttonText: {
     color: '#fff',

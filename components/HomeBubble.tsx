@@ -9,9 +9,9 @@ const BubbleProfile = ({ loans }: {loans: Loan[]}) => {
       <View style={styles.rectangle}>
         <Text style={styles.title}>Últimos Préstamos</Text>
         {loans.map((loan) => (
-          <UserLoanSmallCard 
-            key={loan.id}
-            profilePicture="" // todo
+          <UserLoanSmallCard
+            key={loan.userId}
+            profilePicture="a" // todo
             name={"test"} // todo
             role={loan.role}
             amount={loan.amount}

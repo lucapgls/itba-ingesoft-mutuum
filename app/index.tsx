@@ -1,9 +1,7 @@
 
 import { Text, View, StyleSheet } from "react-native";
 import { Link, router, Redirect } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "../components/CustomButton";
-import SigninRectangle from "../components/SigninRectangle";
+
 
 export default function App() {
   return (

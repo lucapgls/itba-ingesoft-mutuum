@@ -16,7 +16,7 @@ const Home = () => {
     },
     {
       role: 'borrower',
-      userId: '1',
+      userId: '2',
       amount: 3.8,
       coinType: 'ETH',
       interests: 5,
@@ -24,7 +24,7 @@ const Home = () => {
     },
     {
       role: 'borrower',
-      userId: '1',
+      userId: '3',
       amount: 3.8,
       coinType: 'ETH',
       interests: 5,

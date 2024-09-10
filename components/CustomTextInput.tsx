@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, TextInputProps, Text } from 'react-native';
+import { View, TextInput, StyleSheet, TextInputProps, Text, KeyboardTypeOptions } from 'react-native';
 
 interface CustomTextInputProps extends TextInputProps {
     placeholder: string;
@@ -7,6 +7,8 @@ interface CustomTextInputProps extends TextInputProps {
     onChangeText: (text: string) => void;
     secureTextEntry?: boolean;
     title: string;
+    keyboardType?: KeyboardTypeOptions;
+    maxLength?: number;
 }
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
@@ -15,6 +17,8 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
     onChangeText,
     secureTextEntry,
     title,
+    keyboardType,
+    maxLength,
     ...props
 }) => {
     const [isFocused, setIsFocused] = useState(false);

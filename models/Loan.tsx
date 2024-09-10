@@ -1,7 +1,7 @@
 import { Key } from "react";
 
+// donde esta loan?
 export interface Loan {
-    [x: string]: Key | null | undefined;
     role: 'borrower' | 'lender';
     userId: string; 
     amount: number;

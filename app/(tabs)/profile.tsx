@@ -9,7 +9,7 @@ const Profile = () => {
         <Text style={styles.text}>username</Text>
         <View style={styles.circle}/>
       </View>
-      <BubbleProfile DNI='1234567' faceID='Sí' phoneNumber='3245673'/> 
+      <BubbleProfile DNI='34392190' email='username@gmail.com' phoneNumber='5893-2981'/> 
     </View>
   )
 }
@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
-      height: 260,
+      height: 250,
     },
 })

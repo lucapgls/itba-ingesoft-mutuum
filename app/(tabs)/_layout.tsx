@@ -50,6 +50,7 @@ const TabsLayout = () => {
          />
          <Tabs.Screen name='explore' options={{title: 'Explorar',
             headerShown: false,
+            headerLeft: () => null,
             tabBarIcon: ({color, focused}) => (
                 <TabIcon icon={icons.explore} iconFocused={icons.exploreFocus} color={color} name='Explorar' focused={focused} />
             )
@@ -57,6 +58,7 @@ const TabsLayout = () => {
          />
           <Tabs.Screen name='myloans' options={{title: 'Mis Préstamos',
             headerShown: false,
+            headerLeft: () => null,
             tabBarIcon: ({color, focused}) => (
                 <TabIcon icon={icons.loan} iconFocused={icons.loanFocus} color={color} name='Mis Préstamos' focused={focused} />
             )
@@ -64,6 +66,7 @@ const TabsLayout = () => {
          />
           <Tabs.Screen name='profile' options={{title: 'Perfil',
             headerShown: false,
+            headerLeft: () => null,
             tabBarIcon: ({color, focused}) => (
                 <TabIcon icon={icons.profile} iconFocused={icons.profileFocus} color={color} name='Perfil' focused={focused} />
             )
