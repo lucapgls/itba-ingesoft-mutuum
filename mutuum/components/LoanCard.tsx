@@ -6,6 +6,11 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const { height: windowHeight } = Dimensions.get('window');
 
+interface Requirement {
+  name: string;
+  completed: boolean;
+}
+
 interface LoanCardProps {
   color: string;
   name: string | number;
@@ -14,8 +19,8 @@ interface LoanCardProps {
   interest: string | number;
   maxCuotas?: string | number;
   term: string | number;
-  requirements: { name: string; completed: boolean }[];
-  onPress: () => void; // Function to handle press events
+  requirements: Requirement[];
+  onPress: () => void; 
 }
 
 const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, interest, maxCuotas, term, requirements, onPress }) => {
@@ -32,15 +37,15 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
   };
 
   const calculateTotalAmount = (amount: number, interest: number, term: number) => {
-    const totalInterest = amount * interest * term;
+    const totalInterest = (amount * interest * term) / 100; // Se asume que interest es un porcentaje
     return amount + totalInterest;
-  }
+  };
 
-  const calculateMontlyAmount = (amount: number, interest: number, term: number) => {
+  const calculateMonthlyAmount = (amount: number, interest: number, term: number) => {
     return calculateTotalAmount(amount, interest, term) / term;
-  }
+  };
 
-  const montlyAmount = calculateMontlyAmount(Number(amount), Number(interest), Number(term));
+  const monthlyAmount = calculateMonthlyAmount(Number(amount), Number(interest), Number(term));
   const totalAmount = calculateTotalAmount(Number(amount), Number(interest), Number(term));
 
   return (
@@ -61,7 +66,6 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
         </View>
       </TouchableOpacity>
 
-      {/* BottomSheet dentro de un Modal */}
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -90,21 +94,20 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
 
                       <View style={styles.requirementsSection}>
                         <Text style={styles.sectionTitle}>Requisitos</Text>
-                        {requirements.map((requirement, index) => (
+                        {requirements.map((req: Requirement, index: number) => (
                           <View key={index} style={styles.requirementRow}>
-                            <Text style={styles.infoText}>{requirement.name}</Text>
-                            <Text style={styles.infoText}>{requirement.completed ? '✅' : '❌'}</Text>
+                            <Text style={styles.infoText}>{req.name}</Text>
+                            <Text style={styles.infoText}>{req.completed ? '✅' : '❌'}</Text>
                           </View>
                         ))}
                       </View>
                       <View style={styles.divider} />
 
                       <View style={styles.financialDetails}>
-                        <Text style={styles.infoText}>Monto por mes: {currency} {montlyAmount}</Text>
-                        <Text style={styles.infoText}>Monto total: {currency} {totalAmount}</Text>
+                        <Text style={styles.infoText}>Monto por mes: {currency} {monthlyAmount.toFixed(2)}</Text>
+                        <Text style={styles.infoText}>Monto total: {currency} {totalAmount.toFixed(2)}</Text>
                       </View>
 
-                      {/* Botón para cerrar el BottomSheet */}
                       <TouchableOpacity style={styles.button} onPress={closeBottomSheet}>
                         <Text style={styles.buttonText}>Tomar</Text>
                       </TouchableOpacity>
@@ -125,7 +128,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f1f1f1',
     borderRadius: 16,
-  
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
@@ -172,8 +174,7 @@ const styles = StyleSheet.create({
   },
   sheetContent: {
     padding: 16,
-    marginStart: 16,
-    marginEnd: 16,
+    marginHorizontal: 16,
     flex: 1,
   },
   infoSection: {
@@ -208,10 +209,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     bottom: 36,
-    height: 56,
     left: 16,
     right: 16,
-    textAlign: 'center',
   },
   buttonText: {
     color: '#fff',
