@@ -29,6 +29,20 @@ const SignUp = () => {
 		try {
 			await signUpUser(email, password);
 			
+			// We create a wallet for the user
+			const wallet_id = postCreateWallet();
+			console.log("My wallet id is!!!!!! " + wallet_id);
+
+			const { data, error } = await supabase
+				.from('users')
+				.update({ wallet_id: wallet_id })
+				.eq('email', email);
+
+			if (error) {
+				console.error('Error setting user wallet_id:', error.message);
+				throw error;
+			}
+
 			// await createUserWithEmailAndPassword(auth, email, password);
 			// await addDoc(collection(firestore, "Users"), { email: email });
 			Alert.alert("Exito!", "Se creo el usuario correctamente!");

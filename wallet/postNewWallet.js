@@ -2,7 +2,7 @@ require('dotenv').config();
 const { generateCiphertext } = require('./genCiphertext');
 const { v4: uuidv4 } = require('uuid');
 
-async function createWallet() {
+async function postCreateWallet() {
   const fetch = (await import('node-fetch')).default;
 
   const url = 'https://api.circle.com/v1/w3s/developer/wallets';
@@ -27,10 +27,18 @@ async function createWallet() {
   try {
     const response = await fetch(url, options);
     const json = await response.json();
-    console.log(json);
+
+    console.log('Full JSON response:', JSON.stringify(json, null, 5));
+    // Check if the response contains wallets
+    if (json.data.wallets) {
+      return json.data.wallets.map(wallet => wallet.id);
+    } else {
+      throw new Error('No wallets found in the response');
+    }
+
   } catch (error) {
     console.error('Error:', error);
   }
 }
 
-module.exports = { createWallet };
+module.exports = { postCreateWallet };
