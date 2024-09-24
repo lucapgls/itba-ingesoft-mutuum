@@ -15,6 +15,7 @@ import { getLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome } from "@expo/vector-icons";
 
+
 // Fetch all lending posts from the lending_post table
 export const fetchLendingPosts = async () => {
 	const { data, error } = await supabase
@@ -31,7 +32,7 @@ export const fetchLendingPosts = async () => {
 
 const Explore = () => {
 	const [loans, setLoans] = useState<any[]>([]); // Estado para almacenar los préstamos
-
+	const [searchText, setSearchText] = useState('');
 	/*  useEffect(() => {
     const loadLendingPosts = async () => {
       try {
@@ -54,21 +55,32 @@ const Explore = () => {
 	return (
 		<View style={styles.safeArea}>
 			<View style={styles.container}>
-			<View style={{ height: 50 }} />
-				<View style={styles.searchSection}>
-					
-					<FontAwesome
-						name="search"
-						size={20}
-						color="gray"
-						style={styles.searchIcon}
-					/>
-					<TextInput
-						style={styles.input}
-						placeholder="Buscar prestamos"
-						value=""
-						onChangeText={() => {}}
-					/>
+				<View style={{ height: 50 }} />
+
+				<View
+					style={{
+						flexDirection: "row",
+						justifyContent: "space-between",
+						alignItems: "center",
+					}}
+				>
+					<View style={styles.searchSection}>
+						<FontAwesome
+							name="search"
+							size={20}
+							color="#bdbdbd"
+							style={styles.searchIcon}
+						/>
+						<TextInput
+							  style={styles.input}
+							  placeholder="Buscar prestamos"
+							  value={searchText}
+							  onChangeText={setSearchText}
+						/>
+					</View>
+					<TouchableOpacity style={styles.filterButton}>
+						<FontAwesome name="filter" size={20} color="gray" />
+					</TouchableOpacity>
 				</View>
 			</View>
 
@@ -95,8 +107,10 @@ const Explore = () => {
 					</View>
 				))}
 				<View style={{ height: 8 }} />
+
+				
 				<CustomButton
-					text="Crear préstamo"
+					text="Nuevo préstamo"
 					onPress={() => router.push("/create_loan")}
 				/>
 			</ScrollView>
@@ -110,21 +124,17 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 	},
 	container: {
-
-		
-		
 		paddingHorizontal: 20,
 		backgroundColor: "#8E66FF",
 	},
 	searchSection: {
-		
 		flexDirection: "row",
 		alignItems: "center",
 		borderColor: "#ccc",
 		borderWidth: 1,
 		borderRadius: 50,
 		paddingHorizontal: 10,
-		width: "100%",
+		width: "85%",
 		marginVertical: 15,
 		backgroundColor: "white",
 	},
@@ -158,6 +168,16 @@ const styles = StyleSheet.create({
 		color: "white",
 		fontSize: 16,
 		fontWeight: "bold",
+	},
+	filterButton: {
+		borderColor: "#ccc",
+		borderWidth: 1,
+		borderRadius: 50,
+		backgroundColor: "white",
+		height: 40,
+		width: 40,
+		
+		padding: 10,
 	},
 });
 

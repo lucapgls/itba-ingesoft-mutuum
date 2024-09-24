@@ -2,14 +2,14 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import BubbleProfile from '../../components/BubbleProfile'
 
-const Profile = () => {
+const Profile = ({ dni, email, phoneNumber}: {dni:string, email:string, phoneNumber:string}) => {
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
         <Text style={styles.text}>username</Text>
         <View style={styles.circle}/>
       </View>
-      <BubbleProfile DNI='34392190' email='username@gmail.com' phoneNumber='5893-2981'/> 
+      <BubbleProfile DNI={dni} email={email} phoneNumber={phoneNumber}/> 
     </View>
   )
 }

@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         
-        color: '#8E66FF',
+        color: 'black',
         textAlign: 'center',
         fontSize: 18, 
     },
