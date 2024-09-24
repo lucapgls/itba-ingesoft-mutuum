@@ -1,9 +1,10 @@
-require('dotenv').config();
-const forge = require('node-forge');
+import Config from 'react-native-config';
+import forge from 'node-forge';
+import { ENTITY_SECRET, PUBLIC_KEY } from '@env';
 
 function generateCiphertext() {
-    const entitySecretHex = process.env.ENTITY_SECRET;
-    const publicKeyPem = process.env.PUBLIC_KEY;
+  const entitySecretHex = ENTITY_SECRET;
+  const publicKeyPem = PUBLIC_KEY;
 
   const entitySecret = forge.util.hexToBytes(entitySecretHex);
   const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
@@ -16,4 +17,4 @@ function generateCiphertext() {
   return forge.util.encode64(encryptedData);
 }
 
-module.exports = { generateCiphertext };
+export { generateCiphertext };

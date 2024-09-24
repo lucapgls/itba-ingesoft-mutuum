@@ -5,6 +5,7 @@ import { router, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import CustomTextInput from "../../components/CustomTextInput";
 import { supabase } from "./SupabaseConfig";
+import { postCreateWallet } from "../../wallet/postNewWallet";
 
 // Sign up a user using Supabase Auth
 export const signUpUser = async (email: string, password: string) => {
@@ -18,6 +19,25 @@ export const signUpUser = async (email: string, password: string) => {
     throw error;
   }
 
+  // We create a wallet for the user
+  const wallet_ids = await postCreateWallet();
+  if (!wallet_ids) {
+	throw new Error('Error creating wallet');
+  }
+  const wallet_id = wallet_ids[0];
+
+//   console.log("My wallet id is!!!!!! " + wallet_id);
+
+  const { error: updateError } = await supabase
+	  .from('users')
+	  .update({ wallet_id: wallet_id })
+	  .eq('id', data?.user?.id);
+
+  if (error) {
+	  console.error('Error setting user wallet_id:', updateError?.message);
+	  throw error;
+  }
+
   return data;
 };
 
@@ -29,19 +49,6 @@ const SignUp = () => {
 		try {
 			await signUpUser(email, password);
 			
-			// We create a wallet for the user
-			const wallet_id = postCreateWallet();
-			console.log("My wallet id is!!!!!! " + wallet_id);
-
-			const { data, error } = await supabase
-				.from('users')
-				.update({ wallet_id: wallet_id })
-				.eq('email', email);
-
-			if (error) {
-				console.error('Error setting user wallet_id:', error.message);
-				throw error;
-			}
 
 			// await createUserWithEmailAndPassword(auth, email, password);
 			// await addDoc(collection(firestore, "Users"), { email: email });
@@ -49,6 +56,7 @@ const SignUp = () => {
 			router.push("/home");
 		} catch (error: any) {
 			Alert.alert("Error", error.message);
+			console.log(error);
 		}
 	};
 
