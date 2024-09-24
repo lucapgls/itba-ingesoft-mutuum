@@ -7,11 +7,12 @@ const BubbleProfile = ({ loans }: {loans: Loan[]}) => {
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
-        <Text style={styles.title}>Últimos Préstamos</Text>
+        <Text style={styles.title}>Préstamos recientes</Text>
+        <View style={{ height: 6 }} />
         {loans.map((loan) => (
           <UserLoanSmallCard
             key={loan.userId}
-            profilePicture='https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png' // todo
+            profilePicture='https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=' // todo
             name={"test"} // todo
             role={loan.role}
             amount={loan.amount}
@@ -33,9 +34,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     rectangle: {
-        marginTop: 20,
-        paddingVertical: 8,
-        width: '90%',
+        
+        padding: 20,
+        width: '100%',
         backgroundColor: '#f1f1f1',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
@@ -44,13 +45,12 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         color: 'black',
-        paddingHorizontal: 20,
+        
     },
     title: {
-        fontSize: 22,
+        fontSize: 18,
         color: 'black',
-        padding: 8,
-        paddingStart: 20,
-        fontWeight: 'medium',
+        
+        
     }
 })
