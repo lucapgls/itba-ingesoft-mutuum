@@ -95,12 +95,10 @@ const Explore = () => {
 					</View>
 				))}
 				<View style={{ height: 8 }} />
-				<TouchableOpacity
-					style={styles.button}
+				<CustomButton
+					text="Crear préstamo"
 					onPress={() => router.push("/create_loan")}
-				>
-					<Text style={styles.buttonText}>Crear préstamo</Text>
-				</TouchableOpacity>
+				/>
 			</ScrollView>
 		</View>
 	);

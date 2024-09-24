@@ -11,7 +11,7 @@ const BubbleProfile = ({ loans }: {loans: Loan[]}) => {
         {loans.map((loan) => (
           <UserLoanSmallCard
             key={loan.userId}
-            profilePicture="a" // todo
+            profilePicture='https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png' // todo
             name={"test"} // todo
             role={loan.role}
             amount={loan.amount}
