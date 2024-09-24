@@ -1,30 +1,38 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../(auth)/SupabaseConfig';
-import { router } from 'expo-router';
-import LoanCard from '../../components/LoanCard';
-import CustomButton from '../../components/CustomButton';
-import { getLoans } from '../../store/LoanStore';
-
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	TextInput,
+	ScrollView,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { supabase } from "../(auth)/SupabaseConfig";
+import { router } from "expo-router";
+import LoanCard from "../../components/LoanCard";
+import CustomButton from "../../components/CustomButton";
+import { getLoans } from "../../store/LoanStore";
+import CustomTextInput from "../../components/CustomTextInput";
+import { FontAwesome } from "@expo/vector-icons";
 
 // Fetch all lending posts from the lending_post table
 export const fetchLendingPosts = async () => {
-  const { data, error } = await supabase
-    .from('lending_post')  // Select from the lending_post table
-    .select('*');  // Select all columns
+	const { data, error } = await supabase
+		.from("lending_post") // Select from the lending_post table
+		.select("*"); // Select all columns
 
-  if (error) {
-    console.error('Error fetching lending posts:', error.message);
-    throw error;
-  }
+	if (error) {
+		console.error("Error fetching lending posts:", error.message);
+		throw error;
+	}
 
-  return data;
+	return data;
 };
 
 const Explore = () => {
-  const [loans, setLoans] = useState<any[]>([]);  // Estado para almacenar los préstamos
+	const [loans, setLoans] = useState<any[]>([]); // Estado para almacenar los préstamos
 
-/*  useEffect(() => {
+	/*  useEffect(() => {
     const loadLendingPosts = async () => {
       try {
         const data = await fetchLendingPosts();
@@ -37,99 +45,122 @@ const Explore = () => {
   }, []);
   */
 
-  useEffect(() => {
-    const loansArray = getLoans();  // Obtener los préstamos del array
-    setLoans(loansArray);
-    console.log(loansArray);
-  }, []);
+	useEffect(() => {
+		const loansArray = getLoans(); // Obtener los préstamos del array
+		setLoans(loansArray);
+		console.log(loansArray);
+	}, []);
 
-  return (
-    <View style={styles.safeArea}>
-      <View style={styles.rectangle}>
-        <Text style={styles.title}>Explorar</Text>
-          <TouchableOpacity style={styles.button}
-          onPress={() => router.push('/create_loan')}
-          >
-          <Text style={styles.buttonText}>Crear préstamo</Text>
-        </TouchableOpacity>
-      </View>
+	return (
+		<View style={styles.safeArea}>
+			<View style={styles.container}>
+			<View style={{ height: 50 }} />
+				<View style={styles.searchSection}>
+					
+					<FontAwesome
+						name="search"
+						size={20}
+						color="gray"
+						style={styles.searchIcon}
+					/>
+					<TextInput
+						style={styles.input}
+						placeholder="Buscar prestamos"
+						value=""
+						onChangeText={() => {}}
+					/>
+				</View>
+			</View>
 
-    <ScrollView contentContainerStyle={styles.container}>
+			<ScrollView contentContainerStyle={styles.scrollContainer}>
+				<View style={{ height: 20 }} />
+				<Text style={styles.title}>Préstamos recomendados</Text>
+				<View style={{ height: 10 }} />
 
-  
-      {loans.map((loan) => (
-        <View style={styles.card}>
-        <LoanCard
-          key={loan.id}  
-          color={loan.color ?? '#8E66FF'}  
-          name={"Felidown" ?? 'Loan'}
-          currency={loan.currency ?? 'USD'}
-          amount={loan.amount ?? 0}
-          interest={loan.interest ?? 0}
-          term={loan.term ?? 0}
-          // maxCuotas={loan.maxCuotas ?? 0}
-          requirements={[{ name: "Email", completed: false }]} 
-          onPress={() => console.log(`Pressed loan ${loan.id}`)}  
-        />
-        </View>
-      ))}
-    
-    </ScrollView>
-    </View>
-  );
+				{loans.map((loan) => (
+					<View style={styles.card} key={loan.id}>
+						<LoanCard
+							color={loan.color ?? "#8E66FF"}
+							name={loan.name ?? "Prestamo"}
+							currency={loan.currency ?? "USD"}
+							amount={loan.amount ?? 0}
+							interest={loan.interest ?? 0}
+							term={loan.term ?? 0}
+							// maxCuotas={loan.maxCuotas ?? 0}
+							requirements={[{ name: "Email", completed: false }]}
+							onPress={() =>
+								console.log(`Pressed loan ${loan.id}`)
+							}
+						/>
+					</View>
+				))}
+				<View style={{ height: 8 }} />
+				<TouchableOpacity
+					style={styles.button}
+					onPress={() => router.push("/create_loan")}
+				>
+					<Text style={styles.buttonText}>Crear préstamo</Text>
+				</TouchableOpacity>
+			</ScrollView>
+		</View>
+	);
 };
-
 const styles = StyleSheet.create({
-  safeArea: {
-    // flex: 1,
-    backgroundColor: 'white',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-  },
-  card: {
-    flex: 1,
-    width: '90%',
-  },
+	safeArea: {
+		flex: 1,
+		backgroundColor: "white",
+		justifyContent: "flex-start",
+	},
+	container: {
 
-  container: {
-    paddingTop: 50,
-    backgroundColor: 'white',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-  },
-  title: {
-    paddingTop: 85,
-    fontSize: 40,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  rectangle: {
-    // marginTop: 0,
-    // paddingVertical: 8,
-    width: '100%',
-    height: 200,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor: '#8E66FF',
-  },
-  button: {
-    marginTop: 10,
-    height: 50,
-    backgroundColor: '#f1f1f1',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
-    width: 200,
-  },
-  buttonText: {
-    color: 'black',
-    fontSize: 18,
-    fontWeight: 'light',
-  },
+		
+		
+		paddingHorizontal: 20,
+		backgroundColor: "#8E66FF",
+	},
+	searchSection: {
+		
+		flexDirection: "row",
+		alignItems: "center",
+		borderColor: "#ccc",
+		borderWidth: 1,
+		borderRadius: 50,
+		paddingHorizontal: 10,
+		width: "100%",
+		marginVertical: 15,
+		backgroundColor: "white",
+	},
+	searchIcon: {
+		marginRight: 10,
+	},
+	input: {
+		flex: 1,
+		height: 40,
+	},
+	scrollContainer: {
+		paddingHorizontal: 16,
+		paddingBottom: 16,
+	},
+	title: {
+		color: "black",
+
+		fontSize: 20,
+	},
+	card: {
+		marginBottom: 0, // Fixed space between cards
+	},
+	button: {
+		backgroundColor: "#8E66FF",
+		padding: 16,
+		borderRadius: 8,
+		alignItems: "center",
+		marginVertical: 16,
+	},
+	buttonText: {
+		color: "white",
+		fontSize: 16,
+		fontWeight: "bold",
+	},
 });
 
 export default Explore;
