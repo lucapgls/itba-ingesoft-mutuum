@@ -6,8 +6,8 @@ import { generateCiphertext } from './wallet/ciphertext.js';
 import { createWallet } from './wallet/wallet.js';
 import { getWalletBalanceValue } from './wallet/balance.js';
 
-// DB imports
-
+// User imports
+import { createUser } from './user/create_user.js';
 
 // Load environment variables
 config();
@@ -86,6 +86,38 @@ app.get('/api/wallet/balance', async (req, res) => {
         res.status(200).json({ balances });
     } catch (error) {
         res.status(500).json({ error: 'Error fetching wallet balance', details: error.message });
+    }
+});
+
+/*
+ * @POST /api/user/create
+ *
+ * brief: Create a user (and a wallet for the user)
+ * 
+ * Request body:
+ * - email: The email of the user
+ * - password: The password of the user
+ * 
+ * Example request:
+ * /api/user/create
+ * {
+ *     "email": "email",
+ *    "password": "password"
+ * }
+ */
+app.post('/api/user/create', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required." });
+    }
+
+    try {
+
+
+        const { user, wallet_id } = await createUser(email, password);
+        res.status(201).json({ user, wallet_id });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
