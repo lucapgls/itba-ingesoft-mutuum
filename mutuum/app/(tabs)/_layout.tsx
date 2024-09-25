@@ -1,9 +1,10 @@
 import { View, Text, Image, ImageSourcePropType, StyleSheet } from 'react-native'
-import React from 'react'
+import React,  { useEffect } from 'react'
 import { Tabs, Redirect } from 'expo-router'
 import {icons} from '../../constants'
 import { Platform } from 'react-native';
-
+import * as Haptics from 'expo-haptics';
+import {  useNavigation } from '@react-navigation/native';
 
 
 const TabIcon = ({ icon, iconFocused, color, name, focused }: { icon: ImageSourcePropType, iconFocused: ImageSourcePropType, color: string, name: string, focused: boolean }) => {
@@ -22,6 +23,20 @@ const TabIcon = ({ icon, iconFocused, color, name, focused }: { icon: ImageSourc
 const tabBarHeight = Platform.OS === 'ios' ? 90 : 70;
 
 const TabsLayout = () => {
+  const navigation = useNavigation(); // Use useNavigation to get the navigation object
+
+  useEffect(() => {
+    const handleTabChange = () => {
+      Haptics.selectionAsync(); // Trigger haptic feedback
+    };
+
+    const unsubscribe = navigation.addListener('state', handleTabChange);
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
+
   return (
     <>
     <Tabs screenOptions={

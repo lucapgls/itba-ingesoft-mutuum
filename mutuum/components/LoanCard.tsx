@@ -1,5 +1,5 @@
 import React, { useRef, useMemo, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback, Image } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -47,16 +47,20 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <TouchableOpacity style={styles.card} onPress={openBottomSheet}>
-        <View style={[styles.avatar, { backgroundColor: color }]} />
+      <Image
+                                source={{ uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=" }}
+                                style={styles.avatar}
+                            />
         <View style={styles.details}>
           <Text style={styles.name}>{name}</Text>
           <View style={styles.currencyRow}>
-            <FontAwesome5 name={currency === 'ETH' ? 'ethereum' : 'money-bill-wave'} size={20} color="gray" />
-            <Text style={styles.currencyText}>{currency}</Text>
+            
+            <Text style={styles.currencyText}>${currency}</Text>
             <Text style={styles.amountText}>{amount}</Text>
           </View>
           <View style={styles.infoRow}>
-            <Text style={styles.infoText}>Intereses: {interest}%</Text>
+            <Text style={styles.infoText}>Interes del</Text>
+            <Text style={styles.amountText}>{interest}%</Text>
             {maxCuotas && <Text style={[styles.infoText, { marginLeft: 8 }]}>Max. cuotas: {maxCuotas}</Text>}
           </View>
         </View>
@@ -135,16 +139,16 @@ const styles = StyleSheet.create({
   card: {
     padding: 16,
     backgroundColor: '#f1f1f1',
-    borderRadius: 16,
+    borderRadius: 20,
   
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 70,
+    height: 70,
+    borderRadius: 50,
     marginRight: 16,
   },
   details: {
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "500",
     marginBottom: 8,
   },
   currencyRow: {
@@ -161,18 +165,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   currencyText: {
-    marginLeft: 8,
+    
     fontSize: 16,
     color: 'gray',
   },
   amountText: {
-    marginLeft: 8,
+    marginLeft: 5,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "500",
   },
   infoRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    
   },
   infoText: {
     fontSize: 16,

@@ -82,7 +82,7 @@ const MyLoans = () => {
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={{ height: 20 }} />
+            
             <Text style={styles.title}>Mis préstamos</Text>
             <View style={{ height: 10 }} />
 
@@ -145,8 +145,7 @@ const styles = StyleSheet.create({
 		height: 40,
 	},
 	scrollContainer: {
-		paddingHorizontal: 16,
-		paddingBottom: 16,
+		padding: 20,
 	},
 	title: {
 		color: "black",

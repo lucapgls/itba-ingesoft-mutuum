@@ -4,7 +4,7 @@ import UserLoanSmallCard from "./UserLoanSmallCard";
 import { Loan } from "../models/Loan";
 import { router } from "expo-router";
 
-const BubbleProfile = ({ loans }: { loans: Loan[] }) => {
+const HomeBubble = ({ loans }: { loans: Loan[] }) => {
     return (
         <View style={styles.container}>
             <View style={styles.rectangle}>
@@ -31,7 +31,7 @@ const BubbleProfile = ({ loans }: { loans: Loan[] }) => {
     );
 };
 
-export default BubbleProfile;
+export default HomeBubble;
 
 const styles = StyleSheet.create({
     container: {

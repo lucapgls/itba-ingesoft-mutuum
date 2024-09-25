@@ -14,6 +14,7 @@ import CustomButton from "../../components/CustomButton";
 import { getLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome } from "@expo/vector-icons";
+import * as Haptics from 'expo-haptics';
 
 
 // Fetch all lending posts from the lending_post table
@@ -85,7 +86,7 @@ const Explore = () => {
 			</View>
 
 			<ScrollView contentContainerStyle={styles.scrollContainer}>
-				<View style={{ height: 20 }} />
+				
 				<Text style={styles.title}>Explorar préstamos</Text>
 				<View style={{ height: 10 }} />
 
@@ -107,8 +108,7 @@ const Explore = () => {
 					</View>
 				))}
 				<View style={{ height: 8 }} />
-
-				
+			
 				
 			</ScrollView>
 		</View>
@@ -142,8 +142,7 @@ const styles = StyleSheet.create({
 		height: 40,
 	},
 	scrollContainer: {
-		paddingHorizontal: 16,
-		paddingBottom: 16,
+		padding: 20,
 	},
 	title: {
 		color: "black",
