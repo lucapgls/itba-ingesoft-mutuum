@@ -82,9 +82,9 @@ const SignIn = () => {
 				<View style={styles.separator} />
 				<Link href="/sign-up" style={{ textAlign: "center" }}>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
-						¿Todavía no tienes cuenta?{" "}
+						¿Todavía no tenes cuenta?{" "}
 						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
-							Crea una cuenta
+							Registrate
 						</Text>
 					</Text>
 				</Link>

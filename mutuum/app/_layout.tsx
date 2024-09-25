@@ -9,7 +9,7 @@ const RootLayout = () => {
     <Stack.Screen name='index' options={{headerShown: false}} />
     <Stack.Screen name='(tabs)' options={{headerShown: false, headerTitle: "Inicio"}} />
     <Stack.Screen name='(auth)' options={{headerShown: false}} />
-    <Stack.Screen name='create_loan' options={{headerShown: true, headerTitle: "Crear prestamo" }} />
+    <Stack.Screen name='create_loan' options={{headerShown: true, headerTitle: "Crear prestamo",  }} />
     </Stack>
   )
 }

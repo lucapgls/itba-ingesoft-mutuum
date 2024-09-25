@@ -1,25 +1,36 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import React from 'react'
+import { Ionicons } from '@expo/vector-icons';
 
 
+const Header_Max_Height = 280;
+const Header_Min_Height = 260;
+const Scroll_Distance = Header_Max_Height - Header_Min_Height;
 
-const HomeRectangle = ({ coin, balance, ars }: { coin: string, balance: string, ars: string }) => {
+
+const HomeRectangle = ({  coin, balance, ars }: { coin: string, balance: string, ars: string }) => {
+
+    
+
+
   return (
-    <View>
-        <View style={styles.rectangle}>
+    <Animated.View style={styles.rectangle}>
+        <View >
             <Text style={styles.text}>Tu dinero</Text>
             <Text style={styles.BoldText}>{coin} {balance}</Text>
             <Text style={styles.text}>~ARS$ {ars}</Text>
             <View style={styles.buttons}>
-                <TouchableOpacity style={styles.button} >
+            <TouchableOpacity style={styles.button} >
+                    <Ionicons name="arrow-up" size={16} color="white" style={styles.icon} />
                     <Text style={styles.buttonText}>Enviar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} >
+                    <Ionicons name="arrow-down" size={16} color="white" style={styles.icon} />
                     <Text style={styles.buttonText}>Depositar</Text>
                 </TouchableOpacity> 
             </View>
         </View>
-    </View>
+    </Animated.View>
   )
 }
 
@@ -49,11 +60,13 @@ const styles = StyleSheet.create({
     },
     button: {
         
-        backgroundColor: 'white',
+        backgroundColor: '#f2edff',
         borderRadius: 50,
         padding: 8,
-        width: 120,
+        width: 130,
         height: 42,
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'center',
     },
     buttons: {
@@ -66,5 +79,8 @@ const styles = StyleSheet.create({
         color: 'black',
         textAlign: 'center',
         fontSize: 18, 
+    },    icon: {
+        marginRight: 5,
+        color: 'black',
     },
 })

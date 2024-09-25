@@ -66,7 +66,7 @@ const SignUp = () => {
             <StatusBar backgroundColor="#c6b3ff"  />
 			<View style={styles.rectangle}>
 				<View style={{ height: 30 }} />
-				<Text style={styles.title}>Register to </Text>
+				<Text style={styles.title}>Registrate en</Text>
 				<Text style={styles.mutuum}>Mutuum</Text>
 			</View>
 
@@ -90,12 +90,12 @@ const SignUp = () => {
 				<View style={{ height: 25 }} />
 				<CustomButton
 					onPress={handleSignUp}
-					text="Sign up"
+					text="Resgistrarse"
 				/>
 				<View style={styles.separator} />
 				<Link href="/sign-in" style={{ textAlign: "center" }}>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
-						Already have an account?{" "}
+						Ya tenes una cuenta?{" "}
 						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
 							Iniciar sesión	
 						</Text>

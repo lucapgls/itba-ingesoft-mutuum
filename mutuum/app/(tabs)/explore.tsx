@@ -73,7 +73,7 @@ const Explore = () => {
 						/>
 						<TextInput
 							  style={styles.input}
-							  placeholder="Buscar prestamos"
+							  placeholder="Buscar préstamos"
 							  value={searchText}
 							  onChangeText={setSearchText}
 						/>
@@ -86,14 +86,14 @@ const Explore = () => {
 
 			<ScrollView contentContainerStyle={styles.scrollContainer}>
 				<View style={{ height: 20 }} />
-				<Text style={styles.title}>Préstamos recomendados</Text>
+				<Text style={styles.title}>Explorar préstamos</Text>
 				<View style={{ height: 10 }} />
 
 				{loans.map((loan) => (
 					<View style={styles.card} key={loan.id}>
 						<LoanCard
 							color={loan.color ?? "#8E66FF"}
-							name={loan.name ?? "Prestamo"}
+							name={loan.name ?? "Préstamo"}
 							currency={loan.currency ?? "USD"}
 							amount={loan.amount ?? 0}
 							interest={loan.interest ?? 0}
@@ -109,10 +109,7 @@ const Explore = () => {
 				<View style={{ height: 8 }} />
 
 				
-				<CustomButton
-					text="Nuevo préstamo"
-					onPress={() => router.push("/create_loan")}
-				/>
+				
 			</ScrollView>
 		</View>
 	);
@@ -130,8 +127,7 @@ const styles = StyleSheet.create({
 	searchSection: {
 		flexDirection: "row",
 		alignItems: "center",
-		borderColor: "#ccc",
-		borderWidth: 1,
+		
 		borderRadius: 50,
 		paddingHorizontal: 10,
 		width: "85%",
@@ -170,8 +166,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	filterButton: {
-		borderColor: "#ccc",
-		borderWidth: 1,
+		
 		borderRadius: 50,
 		backgroundColor: "white",
 		height: 40,

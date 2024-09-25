@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import BubbleProfile from '../../components/BubbleProfile'
 
@@ -6,8 +6,14 @@ const Profile = ({ dni, email, phoneNumber}: {dni:string, email:string, phoneNum
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
-        <Text style={styles.text}>username</Text>
-        <View style={styles.circle}/>
+        <View style={{ height: 50 }} />
+        <Image
+                                source={{ uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=" }}
+                                style={styles.circle}
+                            />
+      <View style={{ height: 20 }} />
+        <Text style={styles.text}>Nombre</Text>
+        
       </View>
       <BubbleProfile DNI={dni} email={email} phoneNumber={phoneNumber}/> 
     </View>
@@ -28,19 +34,19 @@ const styles = StyleSheet.create({
       fontSize: 25,
     },
     circle: {
-        top: 10,
+        
         width: 100,
         height: 100,
         borderRadius: 100,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
+        
     },
     rectangle: {
       backgroundColor: '#8E66FF',
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
-      height: 250,
+      height: 260,
     },
 })
