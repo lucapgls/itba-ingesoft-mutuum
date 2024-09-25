@@ -13,8 +13,9 @@ import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";
 import { getLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
+
 
 
 // Fetch all lending posts from the lending_post table
@@ -80,7 +81,7 @@ const Explore = () => {
 						/>
 					</View>
 					<TouchableOpacity style={styles.filterButton}>
-						<FontAwesome name="filter" size={20} color="gray" />
+						<Ionicons name="filter" size={20} color="black" />
 					</TouchableOpacity>
 				</View>
 			</View>
