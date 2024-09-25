@@ -96,7 +96,7 @@ const MyLoans = () => {
                         interest={loan.interest ?? 0}
                         term={loan.term ?? 0}
                         // maxCuotas={loan.maxCuotas ?? 0}
-                        requirements={[{ name: "Email", completed: false }]}
+                        requirements={[{ name: "Email", completed: true }, { name: "DNI", completed: true }, { name: "Teléfono", completed: false }]}
                         onPress={() =>
                             console.log(`Pressed loan ${loan.id}`)
                         }

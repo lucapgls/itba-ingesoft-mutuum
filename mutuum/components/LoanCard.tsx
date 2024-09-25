@@ -1,8 +1,9 @@
 import React, { useRef, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import CustomButton from './CustomButton';
 
 const { height: windowHeight } = Dimensions.get('window');
 
@@ -65,7 +66,7 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
       <Modal
         visible={isModalVisible}
         transparent={true}
-        animationType="slide"
+        animationType="fade"
         onRequestClose={closeBottomSheet}
       >
         <TouchableWithoutFeedback onPress={closeBottomSheet}>
@@ -83,6 +84,7 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
                   <TouchableWithoutFeedback>
                     <View style={styles.sheetContent}>
                       <View style={styles.infoSection}>
+					  <Text style={styles.sectionTitle}>Información</Text>
                         <Text style={styles.infoText}>Plazo: {term} meses</Text>
                         <Text style={styles.infoText}>Intereses: {interest}%</Text>
                       </View>
@@ -90,24 +92,33 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
 
                       <View style={styles.requirementsSection}>
                         <Text style={styles.sectionTitle}>Requisitos</Text>
-                        {requirements.map((requirement, index) => (
+						{requirements.map((requirement, index) => (
                           <View key={index} style={styles.requirementRow}>
                             <Text style={styles.infoText}>{requirement.name}</Text>
-                            <Text style={styles.infoText}>{requirement.completed ? '✅' : '❌'}</Text>
+                            <Ionicons
+                              name={requirement.completed ? 'checkmark' : 'close'}
+                              size={22}
+                              color="black"
+                            />
                           </View>
                         ))}
                       </View>
                       <View style={styles.divider} />
 
                       <View style={styles.financialDetails}>
+					  <Text style={styles.sectionTitle}>Dinero</Text>
                         <Text style={styles.infoText}>Monto por mes: {currency} {montlyAmount}</Text>
                         <Text style={styles.infoText}>Monto total: {currency} {totalAmount}</Text>
                       </View>
 
                       {/* Botón para cerrar el BottomSheet */}
-                      <TouchableOpacity style={styles.button} onPress={closeBottomSheet}>
-                        <Text style={styles.buttonText}>Tomar</Text>
-                      </TouchableOpacity>
+					  <View style={{ height: 14 }} />
+                      <CustomButton
+						text='Tomar préstamo'
+						onPress={closeBottomSheet}
+						
+						
+									/>
                     </View>
                   </TouchableWithoutFeedback>
                 </BottomSheet>
@@ -221,6 +232,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+	backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   sheetContainer: {
     flex: 1,

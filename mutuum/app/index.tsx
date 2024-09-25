@@ -1,11 +1,12 @@
 
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, StatusBar } from "react-native";
 import { Link, router, Redirect } from "expo-router";
 
 
 export default function App() {
   return (
 
+      
       <Redirect href={'/sign-in'}/>
 
   );

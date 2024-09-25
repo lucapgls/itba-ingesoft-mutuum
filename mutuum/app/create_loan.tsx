@@ -8,6 +8,7 @@ import {
 	Text,
 	TouchableOpacity,
 	Alert,
+	ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import CustomTextInput from "../components/CustomTextInput";
@@ -18,6 +19,7 @@ import { addLoan } from "../store/LoanStore";
 import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import CustomChip from "../components/CustomChip";
+
 
 // Function to create a new lending post
 export const createLendingPost = async (
@@ -119,7 +121,7 @@ const CreateLoan: React.FC = () => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<CustomTextInput
 				placeholder="0"
 				value={amount}
@@ -164,7 +166,7 @@ const CreateLoan: React.FC = () => {
             </View>
 			<View style={{ height: 30 }} />
 			<CustomButton text="Crear préstamo" onPress={handleSubmit} />
-		</View>
+		</ScrollView>
 	);
 };
 const styles = StyleSheet.create({
