@@ -1,33 +1,38 @@
 import {
 	View,
 	Text,
-	TextInput,
 	StyleSheet,
-	TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import GoogleButton from "../../components/GoogleButton";
 import CustomTextInput from "../../components/CustomTextInput";
 
-import { supabase } from "./SupabaseConfig";
+import API_BASE_URL from "../../api/api_temp";
 
 // Sign in the user with email and password
 export const signInUser = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    console.error('Error signing in user:', error.message);
-    throw error;
-  }
-
-  return data;
-};
+	try {
+	  const response = await fetch(`${API_BASE_URL}/api/v1/user/create`, {
+		method: "POST",
+		headers: {
+		  "Content-Type": "application/json",
+		},
+		body: JSON.stringify({ email, password }),
+	  });
+  
+	  if (!response.ok) {
+		throw new Error("Failed to create user");
+	  }
+  
+	  const data = await response.json();
+	  return data;
+	} catch (error) {
+	  console.error("Error:", error);
+	  throw error;
+	}
+  };
 
 
 const SignIn = () => {
