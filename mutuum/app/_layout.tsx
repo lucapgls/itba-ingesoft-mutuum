@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Stack, router } from "expo-router";
-import "../global.css";
+
 
 import { Ionicons } from "@expo/vector-icons";
 
