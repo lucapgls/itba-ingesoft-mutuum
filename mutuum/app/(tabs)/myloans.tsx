@@ -5,52 +5,36 @@ import {
 	TouchableOpacity,
 	TextInput,
 	ScrollView,
+    FlatList 
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";
-import { getLoans } from "../../store/LoanStore";
+
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome } from "@expo/vector-icons";
+import { loadLoans, getLoans } from "../../store/LoanStore";
 
 
-export const fetchLendingPosts = async () => {
-	const { data, error } = await supabase
-		.from("lending_post") // Select from the lending_post table
-		.select("*"); // Select all columns
-
-	if (error) {
-		console.error("Error fetching lending posts:", error.message);
-		throw error;
-	}
-
-	return data;
-};
 
 
 const MyLoans = () => {
-    const [loans, setLoans] = useState<any[]>([]); // Estado para almacenar los préstamos
-	const [searchText, setSearchText] = useState('');
-	/*  useEffect(() => {
-    const loadLendingPosts = async () => {
-      try {
-        const data = await fetchLendingPosts();
-        setLoans(data);  // Almacena los préstamos en el estado
-      } catch (error) {
-        console.error('Error loading loans:', error);
-      }
-    };
-    loadLendingPosts();  // Llama a la función para cargar los préstamos
-  }, []);
-  */
+    const [loans, setLoans] = useState<any[]>([]);
+    //TODO: get current user ID
+    const currentUserId = "user_123"; 
+    const [searchText, setSearchText] = useState('');
+    useEffect(() => {
+        const fetchLoansData = async () => {
+            await loadLoans();
+            const allLoans = getLoans();
+            const userLoans = allLoans.filter(loan => loan.lender_id === currentUserId);
+            setLoans(userLoans);
+        };
+        fetchLoansData();
+    }, []);
 
-	useEffect(() => {
-		const loansArray = getLoans(); // Obtener los préstamos del array
-		setLoans(loansArray);
-		console.log(loansArray);
-	}, []);
     return (
         <View style={styles.safeArea}>
         <View style={styles.container}>
@@ -86,23 +70,24 @@ const MyLoans = () => {
             <Text style={styles.title}>Mis préstamos</Text>
             <View style={{ height: 10 }} />
 
-            {loans.map((loan) => (
-                <View style={styles.card} key={loan.id}>
+            <FlatList
+                data={loans}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
                     <LoanCard
-                        color={loan.color ?? "#8E66FF"}
-                        name={loan.name ?? "Préstamo"}
-                        currency={loan.currency ?? "USD"}
-                        amount={loan.amount ?? 0}
-                        interest={loan.interest ?? 0}
-                        term={loan.term ?? 0}
-                        // maxCuotas={loan.maxCuotas ?? 0}
-                        requirements={[{ name: "Email", completed: true }, { name: "DNI", completed: true }, { name: "Teléfono", completed: false }]}
-                        onPress={() =>
-                            console.log(`Pressed loan ${loan.id}`)
-                        }
+                        color="red"
+                        name="Loan" 
+                        currency="ETH"
+                        amount={item.initial_amount}
+                        interest={item.interest}
+                        term={item.dead_line}
+                        requirements={item.requirements} 
+                        onPress={() => {
+                            
+                        }}
                     />
-                </View>
-            ))}
+                )}
+            />
             <View style={{ height: 8 }} />
 
             

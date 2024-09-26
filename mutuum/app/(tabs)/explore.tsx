@@ -6,52 +6,32 @@ import {
 	TextInput,
 	ScrollView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { supabase } from "../(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";
-import { getLoans } from "../../store/LoanStore";
+import { getLoans, loadLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
 
 
 
-// Fetch all lending posts from the lending_post table
-export const fetchLendingPosts = async () => {
-	const { data, error } = await supabase
-		.from("lending_post") // Select from the lending_post table
-		.select("*"); // Select all columns
-
-	if (error) {
-		console.error("Error fetching lending posts:", error.message);
-		throw error;
-	}
-
-	return data;
-};
 
 const Explore = () => {
-	const [loans, setLoans] = useState<any[]>([]); // Estado para almacenar los préstamos
+	const [loans, setLoans] = useState<any[]>([]); 
 	const [searchText, setSearchText] = useState('');
-	/*  useEffect(() => {
-    const loadLendingPosts = async () => {
-      try {
-        const data = await fetchLendingPosts();
-        setLoans(data);  // Almacena los préstamos en el estado
-      } catch (error) {
-        console.error('Error loading loans:', error);
-      }
-    };
-    loadLendingPosts();  // Llama a la función para cargar los préstamos
-  }, []);
-  */
+
 
 	useEffect(() => {
-		const loansArray = getLoans(); // Obtener los préstamos del array
-		setLoans(loansArray);
-		console.log(loansArray);
+		const fetchData = async () => {
+			await loadLoans();
+			const loansArray = getLoans(); 
+			setLoans(loansArray);
+			console.log(loansArray);
+		};
+		fetchData();
 	}, []);
 
 	return (
@@ -91,13 +71,14 @@ const Explore = () => {
 				<Text style={styles.title}>Explorar préstamos</Text>
 				<View style={{ height: 10 }} />
 
+			
 				{loans.map((loan) => (
 					<View style={styles.card} key={loan.id}>
 						<LoanCard
 							color={loan.color ?? "#8E66FF"}
 							name={loan.name ?? "Préstamo"}
 							currency={loan.currency ?? "USD"}
-							amount={loan.amount ?? 0}
+							amount={loan.initial_amount ?? 0}
 							interest={loan.interest ?? 0}
 							term={loan.term ?? 0}
 							// maxCuotas={loan.maxCuotas ?? 0}

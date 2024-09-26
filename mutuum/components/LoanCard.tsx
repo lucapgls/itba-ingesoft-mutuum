@@ -7,6 +7,11 @@ import CustomButton from './CustomButton';
 
 const { height: windowHeight } = Dimensions.get('window');
 
+interface Requirement {
+  name: string;
+  completed: boolean;
+}
+
 interface LoanCardProps {
   color: string;
   name: string | number;
@@ -15,8 +20,8 @@ interface LoanCardProps {
   interest: string | number;
   maxCuotas?: string | number;
   term: string | number;
-  requirements: { name: string; completed: boolean }[];
-  onPress: () => void; // Function to handle press events
+  requirements: Requirement[];
+  onPress: () => void; 
 }
 
 const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, interest, maxCuotas, term, requirements, onPress }) => {
@@ -33,15 +38,15 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
   };
 
   const calculateTotalAmount = (amount: number, interest: number, term: number) => {
-    const totalInterest = amount * interest * term;
+    const totalInterest = (amount * interest * term) / 100; // Se asume que interest es un porcentaje
     return amount + totalInterest;
-  }
+  };
 
-  const calculateMontlyAmount = (amount: number, interest: number, term: number) => {
+  const calculateMonthlyAmount = (amount: number, interest: number, term: number) => {
     return calculateTotalAmount(amount, interest, term) / term;
-  }
+  };
 
-  const montlyAmount = calculateMontlyAmount(Number(amount), Number(interest), Number(term));
+  const monthlyAmount = calculateMonthlyAmount(Number(amount), Number(interest), Number(term));
   const totalAmount = calculateTotalAmount(Number(amount), Number(interest), Number(term));
 
   return (
@@ -66,7 +71,6 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
         </View>
       </TouchableOpacity>
 
-      {/* BottomSheet dentro de un Modal */}
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -111,7 +115,7 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
 
                       <View style={styles.financialDetails}>
 					  <Text style={styles.sectionTitle}>Dinero</Text>
-                        <Text style={styles.infoText}>Monto por mes: {currency} {montlyAmount}</Text>
+                        <Text style={styles.infoText}>Monto por mes: {currency} {monthlyAmount}</Text>
                         <Text style={styles.infoText}>Monto total: {currency} {totalAmount}</Text>
                       </View>
 
@@ -194,8 +198,7 @@ const styles = StyleSheet.create({
   },
   sheetContent: {
     padding: 16,
-    marginStart: 16,
-    marginEnd: 16,
+    marginHorizontal: 16,
     flex: 1,
   },
   infoSection: {
@@ -230,10 +233,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     bottom: 36,
-    height: 56,
     left: 16,
     right: 16,
-    textAlign: 'center',
   },
   buttonText: {
     color: '#fff',
