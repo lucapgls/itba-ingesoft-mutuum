@@ -9,8 +9,8 @@ import {
 	TouchableOpacity,
 	Alert,
 	ScrollView,
+	Modal,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import CustomTextInput from "../components/CustomTextInput";
 import { GestureResponderEvent } from "react-native";
 
@@ -19,7 +19,7 @@ import { addLoan } from "../store/LoanStore";
 import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import CustomChip from "../components/CustomChip";
-
+import { Picker } from "@react-native-picker/picker";
 
 // Function to create a new lending post
 export const createLendingPost = async (
@@ -58,6 +58,8 @@ const CreateLoan: React.FC = () => {
 	const [isPhoneNumberEnabled, setIsPhoneNumberEnabled] = useState(false);
 	const [isIdEnabled, setIsIdEnabled] = useState(false);
 	const [isFaceIdEnabled, setIsFaceIdEnabled] = useState(false);
+	const [isPickerVisible, setPickerVisible] = useState(false);
+	const [selectedValue, setSelectedValue] = useState("0");
 
 	const handleChipPress = (chipType: string) => {
 		switch (chipType) {
@@ -76,6 +78,10 @@ const CreateLoan: React.FC = () => {
 			default:
 				break;
 		}
+	};
+
+	const togglePicker = () => {
+		setPickerVisible(!isPickerVisible);
 	};
 
 	useEffect(() => {
@@ -142,28 +148,75 @@ const CreateLoan: React.FC = () => {
 
 			<Text style={{ fontSize: 15 }}>Requerimientos</Text>
 			<View style={{ height: 10 }} />
-      <View style={styles.chipContainer}>
-                <CustomChip
-                    text="E-mail"
-                    enabled={isEmailEnabled}
-                    onPress={() => handleChipPress("email")}
-                />
-                <CustomChip
-                    text="Telefono"
-                    enabled={isPhoneNumberEnabled}
-                    onPress={() => handleChipPress("phone")}
-                />
-                <CustomChip
-                    text="DNI"
-                    enabled={isIdEnabled}
-                    onPress={() => handleChipPress("id")}
-                />
-                <CustomChip
-                    text="Face ID"
-                    enabled={isFaceIdEnabled}
-                    onPress={() => handleChipPress("faceId")}
-                />
-            </View>
+			<View style={styles.chipContainer}>
+				<CustomChip
+					text="E-mail"
+					enabled={isEmailEnabled}
+					onPress={() => handleChipPress("email")}
+				/>
+				<CustomChip
+					text="Telefono"
+					enabled={isPhoneNumberEnabled}
+					onPress={() => handleChipPress("phone")}
+				/>
+				<CustomChip
+					text="DNI"
+					enabled={isIdEnabled}
+					onPress={() => handleChipPress("id")}
+				/>
+				<CustomChip
+					text="Face ID"
+					enabled={isFaceIdEnabled}
+					onPress={() => handleChipPress("faceId")}
+				/>
+			</View>
+			<View style={{ height: 8 }} />
+			<View>
+				<Text style={{ fontSize: 15 }}>Plazo (Meses)</Text>
+				<View style={{ height: 10 }} />
+				<TouchableOpacity onPress={togglePicker}>
+					<View style={styles.pickerValue}>
+						<Text style={{ fontSize: 16, paddingStart: 14 }}>
+							{selectedValue}
+						</Text>
+					</View>
+				</TouchableOpacity>
+
+				<Modal
+					visible={isPickerVisible}
+					transparent={true}
+					animationType="fade"
+					onRequestClose={togglePicker}
+				>
+					<View style={styles.modalContainer}>
+						
+						<View style={styles.pickerContainer}>
+							<View style={{ alignItems: "center" }} >
+						<Text style={{ fontSize: 16 }}>
+							Meses
+						</Text>
+						</View>
+							<Picker
+								selectedValue={selectedValue}
+								onValueChange={(itemValue) =>
+									setSelectedValue(itemValue)
+								}
+							>
+								{Array.from({ length: 25 }, (_, i) => (
+									<Picker.Item
+										key={i}
+										label={i.toString()}
+										value={i.toString()}
+									/>
+								))}
+							</Picker>
+
+							<CustomButton text="Aceptar" onPress={togglePicker} />
+						</View>
+					</View>
+				</Modal>
+			</View>
+
 			<View style={{ height: 30 }} />
 			<CustomButton text="Crear préstamo" onPress={handleSubmit} />
 		</ScrollView>
@@ -175,10 +228,10 @@ const styles = StyleSheet.create({
 		padding: 16,
 		backgroundColor: "#f2f2f2",
 	},
-  chipContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-},
+	chipContainer: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
 	label: {
 		marginBottom: 8,
 		fontSize: 16,
@@ -196,6 +249,29 @@ const styles = StyleSheet.create({
 		padding: 16,
 		borderRadius: 4,
 		alignItems: "center",
+	},
+	modalContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "rgba(0, 0, 0, 0.5)",
+	},
+	pickerContainer: {
+		backgroundColor: "white",
+		padding: 20,
+		borderRadius: 10,
+		width: "80%",
+		
+	},
+	pickerValue: {
+		borderWidth: 2,
+		borderColor: "#ccc",
+		justifyContent: "center",
+		width: "30%",
+		borderRadius: 12,
+		height: 50,
+		color: "black",
+		fontSize: 16,
 	},
 });
 
