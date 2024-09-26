@@ -118,7 +118,7 @@ const Explore = () => {
 const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
-		backgroundColor: "white",
+		backgroundColor: "#f2f2f2",
 		justifyContent: "flex-start",
 	},
 	container: {
@@ -144,11 +144,12 @@ const styles = StyleSheet.create({
 	},
 	scrollContainer: {
 		padding: 20,
+		backgroundColor: "#f2f2f2",
+		
 	},
 	title: {
-		color: "black",
-
-		fontSize: 20,
+		fontSize: 18,
+        fontWeight: "500",
 	},
 	card: {
 		marginBottom: 0, // Fixed space between cards

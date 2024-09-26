@@ -42,10 +42,18 @@ const styles = StyleSheet.create({
     rectangle: {
         padding: 20,
         width: "100%",
-        backgroundColor: "#f1f1f1",
+        backgroundColor: "white",
         justifyContent: "flex-start",
         alignItems: "flex-start",
         borderRadius: 20,
+         // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.10,
+    shadowRadius: 3.84,
+    // Elevation for Android
+    elevation: 5,
+        
     },
     header: {
         flexDirection: "row",

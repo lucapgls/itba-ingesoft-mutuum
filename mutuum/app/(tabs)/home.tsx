@@ -5,6 +5,7 @@ import HomeBubble from "../../components/HomeBubble";
 import RecentUsersBubble from "../../components/RecentClientsBubble";
 import { Loan } from "../../models/Loan";
 import { User } from "../../models/User"; // Assuming you have a User model
+import { LinearGradient } from "expo-linear-gradient";
 
 const Home = () => {
 	const loans: Loan[] = [
@@ -65,37 +66,30 @@ const Home = () => {
 
 	return (
 		<View style={styles.container}>
-			
-			<ScrollView
-            
-				style={styles.scroll}
-				showsVerticalScrollIndicator={false}
-				
+			<LinearGradient
+				// Background Linear Gradient
+				colors={["#8E66FF", "#fff"]}
+				style={styles.container}
 			>
-                <HomeRectangle
-				
-				coin="ETH"
-				balance="294.1"
-				ars="239824"
-			/>
-				<View style={{ padding: 20 }}>
-					<RecentUsersBubble Users={Users} />
-					<View style={{ height: 20 }} />
-					<HomeBubble loans={loans} />
-				</View>
-			</ScrollView>
+				<ScrollView showsVerticalScrollIndicator={false}>
+					<View style={{ height: 40 }} />
+					<HomeRectangle coin="ETH" balance="294.1" ars="239824" />
+					<View style={{ height: 10 }} />
+					<View style={{ padding: 20 }}>
+						<RecentUsersBubble Users={Users} />
+						<View style={{ height: 20 }} />
+						<HomeBubble loans={loans} />
+					</View>
+				</ScrollView>
+			</LinearGradient>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "green",
 		height: "100%",
 		width: "100%",
-	},
-	scroll: {
-		backgroundColor: "white",
 	},
 });
 

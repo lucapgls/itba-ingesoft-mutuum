@@ -21,7 +21,7 @@ const GoogleButton: React.FC<GoogleButtonProps> = ({ onPress }) => {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#f2edff',
+        backgroundColor: '#FFF',
         borderRadius: 25, // Adjusted for rounded corners
         padding: 10,
         width: '80%',
@@ -29,6 +29,13 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         alignItems: 'center',
         justifyContent: 'center',
+        // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.10,
+    shadowRadius: 3.84,
+    // Elevation for Android
+    elevation: 5,
     },
     content: {
         flexDirection: 'row',

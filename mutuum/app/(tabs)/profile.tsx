@@ -3,6 +3,7 @@ import React from "react";
 import BubbleProfile from "../../components/BubbleProfileInfo";
 import ProfileBubble from "../../components/ProfileBubble";
 import { router, Link } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Profile = ({
 	dni,
@@ -14,9 +15,14 @@ const Profile = ({
 	phoneNumber: string;
 }) => {
 	return (
-		<ScrollView style={styles.container}>
+		<LinearGradient
+				// Background Linear Gradient
+				colors={["#8E66FF", "#fff"]}
+				style={styles.container}
+			>
+		<ScrollView >
 			<View style={styles.rectangle}>
-				<View style={{ height: 50 }} />
+				<View style={{ height: 80 }} />
 				<Image
 					source={{
 						uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=",
@@ -26,6 +32,7 @@ const Profile = ({
 				<View style={{ height: 20 }} />
 				<Text style={styles.text}>Nombre</Text>
 			</View>
+			<View style={{ height: 20 }} />
 
 			<View style={styles.options}>
 				<ProfileBubble title="Mis datos" icon="person" onPress={() => {}} />
@@ -47,6 +54,7 @@ const Profile = ({
           </TouchableOpacity>
 			</View>
 		</ScrollView>
+		</LinearGradient>
 	);
 };
 
@@ -63,6 +71,7 @@ const styles = StyleSheet.create({
 		color: "white",
 		textAlign: "center",
 		fontSize: 25,
+		fontWeight: "500",
 	},
 	circle: {
 		width: 100,
@@ -72,11 +81,11 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	rectangle: {
-		backgroundColor: "#8E66FF",
+		
 		justifyContent: "center",
 		alignItems: "center",
 		width: "100%",
-		height: 260,
+		
 	},
   options: {
     padding: 20,

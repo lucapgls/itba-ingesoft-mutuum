@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     rectangle: {
-        backgroundColor: '#8E66FF',
-        height: 260,
+        
+        
         justifyContent: 'center', // Centra el contenido verticalmente dentro del rectángulo
         alignItems: 'center', // Centra el contenido horizontalmente dentro del rectángulo
         paddingTop: 40,

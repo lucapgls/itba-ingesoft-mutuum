@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
 
-		backgroundColor: "white",
+		backgroundColor: "#f2f2f2",
 		justifyContent: "flex-start",
 	},
 	container: {
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		flex: 1,
 		width: "100%",
-		backgroundColor: "white",
+		backgroundColor: "#f2f2f2",
 	},
 	title: {
 		color: "white", // Replace with your desired primary color

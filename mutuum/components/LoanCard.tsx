@@ -138,12 +138,18 @@ const LoanCard: React.FC<LoanCardProps> = ({ color, name, currency, amount, inte
 const styles = StyleSheet.create({
   card: {
     padding: 16,
-    backgroundColor: '#f1f1f1',
+    backgroundColor: '#fff',
     borderRadius: 20,
-  
     marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.10,
+    shadowRadius: 3.84,
+    // Elevation for Android
+    elevation: 5,
   },
   avatar: {
     width: 70,
