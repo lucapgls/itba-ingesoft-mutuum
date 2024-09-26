@@ -20,7 +20,6 @@ async function createUser(email, password) {
     }
 
     const user = userData.user;
-    console.log("User created successfully:", user);
 
     // Create a wallet for the user
     const wallet_ids = await createWallet();
