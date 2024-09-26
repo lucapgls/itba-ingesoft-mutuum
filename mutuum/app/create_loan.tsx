@@ -108,7 +108,7 @@ const CreateLoan: React.FC = () => {
 		};
 
 		addLoan(newLoan);
-		router.push("/explore");
+		router.replace("/explore");
 		// temp
 		Alert.alert("Success", "Lending post created successfully!");
 		// try {

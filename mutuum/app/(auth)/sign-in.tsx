@@ -4,6 +4,7 @@ import {
 	TextInput,
 	StyleSheet,
 	TouchableOpacity,
+	ScrollView
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -50,7 +51,7 @@ const SignIn = () => {
 				<Text style={styles.mutuum}>Mutuum</Text>
 			</View>
 
-			<View style={{ padding: 20 }}>
+			<ScrollView style={{ padding: 20 }}>
 				
 				<CustomTextInput
 					placeholder="example@mail.com"
@@ -80,7 +81,7 @@ const SignIn = () => {
 					<GoogleButton onPress={handleGoogleSignIn} />
 				</View>
 				<View style={styles.separator} />
-				<Link href="/sign-up" style={{ textAlign: "center" }}>
+				<Link href="/sign-up" style={{ textAlign: "center" }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						¿Todavía no tenes cuenta?{" "}
 						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
@@ -89,7 +90,7 @@ const SignIn = () => {
 					</Text>
 				</Link>
 
-				<Link href="/home" style={{ textAlign: "center", marginTop:20 }}>
+				<Link href="/home" style={{ textAlign: "center", marginTop:20 }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						Continuar como{" "}
 						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
@@ -97,7 +98,7 @@ const SignIn = () => {
 							</Text>
 					</Text>
 				</Link>
-			</View>
+			</ScrollView>
 		</View>
 	);
 };

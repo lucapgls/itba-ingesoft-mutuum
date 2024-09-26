@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Alert, StyleSheet, Text } from "react-native";
+import { View, TextInput, Button, Alert, StyleSheet, Text, ScrollView } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { router, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -53,7 +53,7 @@ const SignUp = () => {
 			// await createUserWithEmailAndPassword(auth, email, password);
 			// await addDoc(collection(firestore, "Users"), { email: email });
 			Alert.alert("Exito!", "Se creo el usuario correctamente!");
-			router.push("/home");
+			router.replace("/home");
 		} catch (error: any) {
 			Alert.alert("Error", error.message);
 			console.log(error);
@@ -70,7 +70,7 @@ const SignUp = () => {
 				<Text style={styles.mutuum}>Mutuum</Text>
 			</View>
 
-			<View style={{ padding: 20 }}>
+			<ScrollView style={{ padding: 20 }}>
 				
 				<CustomTextInput
                     placeholder="miusuario@mail.com"
@@ -93,7 +93,7 @@ const SignUp = () => {
 					text="Resgistrarse"
 				/>
 				<View style={styles.separator} />
-				<Link href="/sign-in" style={{ textAlign: "center" }}>
+				<Link href="/sign-in" style={{ textAlign: "center" }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						Ya tenes una cuenta?{" "}
 						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
@@ -101,7 +101,7 @@ const SignUp = () => {
 						</Text>
 					</Text>
 				</Link>
-			</View>
+			</ScrollView>
 		</View>
         
 	);
