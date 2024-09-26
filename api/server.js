@@ -3,9 +3,6 @@ import { config } from 'dotenv';
 import walletRouter from './wallet/walletRoutes.js';
 import userRouter from './user/userRoutes.js';
 
-// User imports
-// import { createUser } from './user/create_user.js';
-
 // Load environment variables
 config();
 

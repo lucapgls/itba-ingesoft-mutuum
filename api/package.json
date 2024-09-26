@@ -17,5 +17,10 @@
     "supabase": "^1.200.3",
     "uuid": "^10.0.0"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
+  }
 }
