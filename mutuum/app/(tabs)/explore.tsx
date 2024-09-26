@@ -11,7 +11,7 @@ import { supabase } from "../(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";
-import { getLoans } from "../../store/LoanStore";
+import { getLoans, loadLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -31,25 +31,18 @@ export const fetchLendingPosts = async () => {
 };
 
 const Explore = () => {
-	const [loans, setLoans] = useState<any[]>([]); // Estado para almacenar los préstamos
+	const [loans, setLoans] = useState<any[]>([]); 
 	const [searchText, setSearchText] = useState('');
-	/*  useEffect(() => {
-    const loadLendingPosts = async () => {
-      try {
-        const data = await fetchLendingPosts();
-        setLoans(data);  // Almacena los préstamos en el estado
-      } catch (error) {
-        console.error('Error loading loans:', error);
-      }
-    };
-    loadLendingPosts();  // Llama a la función para cargar los préstamos
-  }, []);
-  */
+
 
 	useEffect(() => {
-		const loansArray = getLoans(); // Obtener los préstamos del array
-		setLoans(loansArray);
-		console.log(loansArray);
+		const fetchData = async () => {
+			await loadLoans();
+			const loansArray = getLoans(); 
+			setLoans(loansArray);
+			console.log(loansArray);
+		};
+		fetchData();
 	}, []);
 
 	return (
@@ -89,17 +82,18 @@ const Explore = () => {
 				<Text style={styles.title}>Préstamos recomendados</Text>
 				<View style={{ height: 10 }} />
 
+			
 				{loans.map((loan) => (
 					<View style={styles.card} key={loan.id}>
 						<LoanCard
 							color={loan.color ?? "#8E66FF"}
 							name={loan.name ?? "Prestamo"}
 							currency={loan.currency ?? "USD"}
-							amount={loan.amount ?? 0}
+							amount={loan.initial_amount ?? 0}
 							interest={loan.interest ?? 0}
 							term={loan.term ?? 0}
 							// maxCuotas={loan.maxCuotas ?? 0}
-							requirements={[{ name: "Email", completed: false }]}
+							requirements={ loan.requirements ?? []}
 							onPress={() =>
 								console.log(`Pressed loan ${loan.id}`)
 							}
