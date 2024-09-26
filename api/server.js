@@ -1,7 +1,7 @@
 import express, { json } from 'express';
 import { config } from 'dotenv';
-import walletRouter from './wallet/walletRoutes.js';
-import userRouter from './user/userRoutes.js';
+import walletRouter from './v1/wallet/walletRoutes.js';
+import userRouter from './v1/user/userRoutes.js';
 
 // Load environment variables
 config();
@@ -29,3 +29,5 @@ app.use('/api/v1/user', userRouter);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;

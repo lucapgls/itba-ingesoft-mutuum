@@ -1,5 +1,5 @@
 import { createWallet } from '../wallet/wallet.js';
-import { supabase } from '../supabase_config.js';
+import { supabase } from '../../supabase_config.js';
 
 async function createUser(email, password) {
     // Sign up the user
