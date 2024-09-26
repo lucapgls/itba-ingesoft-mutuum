@@ -92,31 +92,32 @@ const CreateLoan: React.FC = () => {
 	}, []);
 
 	const handleSubmit = async () => {
-		// if (!userId) {
-		//   Alert.alert('Error', 'User not authenticated!');
-		//   return;
-		// }
-
-		const newLoan = {
-			id: Date.now().toString(), // Usar un ID único
-			coinType,
-			amount: parseFloat(amount),
-			interests: parseFloat(interests),
-			requirements,
-		};
-
-		addLoan(newLoan);
-		router.push("/explore");
-		// temp
-		Alert.alert("Success", "Lending post created successfully!");
-		// try {
-		//   // await createLendingPost(userId, parseFloat(amount), parseFloat(interests), requirements);
-		//   // push prestamo -> /explore
-		//   Alert.alert('Success', 'Lending post created successfully!');
-		// } catch (error) {
-		//   Alert.alert('Error', 'Failed to create lending post.');
-		// }
-	};
+	//	if (!userId) {
+	//	  Alert.alert('Error', 'User not authenticated!');
+	//	  return;
+	//	}
+		//TMP
+		const userId = "11111111-1111-1111-1111-111111111111" 
+		const initialAmount = parseFloat(amount);
+		const interest = parseFloat(interests);
+		const deadline = new Date().toISOString(); // Cambia esto por el valor real
+	  
+		const requirements = [
+		  { name: 'Email Required', completed: isEmailEnabled },
+		  { name: 'Phone Required', completed: isPhoneNumberEnabled },
+		 // { name: 'DNI Required', completed: isIdEnabled },
+		 // { name: 'Face ID Required', completed: isFaceIdEnabled },
+		];
+	  
+		try {
+		  await addLoan(userId, initialAmount, initialAmount, interest, deadline, requirements);
+		  router.push("/explore");
+		  Alert.alert('Success', 'Lending post created successfully!');
+		} catch (error) {
+		  Alert.alert('Error', 'Failed to create lending post.');
+		}
+	  };
+	 
 
 	return (
 		<View style={styles.container}>

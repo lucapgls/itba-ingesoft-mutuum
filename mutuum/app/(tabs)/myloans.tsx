@@ -12,7 +12,6 @@ const MyLoans = () => {
         const fetchLoansData = async () => {
             await loadLoans();
             const allLoans = getLoans();
-            // Filtrar solo los préstamos del usuario actual
             const userLoans = allLoans.filter(loan => loan.lender_id === currentUserId);
             setLoans(userLoans);
         };
