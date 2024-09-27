@@ -22,7 +22,7 @@ const RootLayout = () => {
 					},
 					headerTintColor: "#FFFFFF",
 					headerLeft: () => (
-						<TouchableOpacity onPress={router.back}>
+						<TouchableOpacity onPress={router.back} style={{paddingRight: 15}}>
 							<Ionicons
 								name="arrow-back"
 								size={24}

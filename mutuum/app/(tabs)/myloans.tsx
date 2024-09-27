@@ -94,6 +94,7 @@ const MyLoans = () => {
             <CustomButton
                 text="Ofrecer nuevo préstamo"
                 onPress={() => router.push("/create_loan")}
+                
             />
         </ScrollView>
     </View>

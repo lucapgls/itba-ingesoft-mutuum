@@ -4,12 +4,16 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 interface CustomButtonProps {
   onPress: () => void;
   text: string;
+  outlined?: boolean;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ onPress, text }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({ onPress, text, outlined = false }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{text}</Text>
+    <TouchableOpacity
+      style={[styles.button, outlined && styles.outlinedButton]}
+      onPress={onPress}
+    >
+      <Text style={[styles.text, outlined && styles.outlinedText]}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -21,13 +25,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     borderRadius: 50,
     alignItems: 'center',
-    
+  },
+  outlinedButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 3,
+    borderColor: '#8E66FF',
   },
   text: {
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  outlinedText: {
+    color: '#8E66FF',
   },
 });
 

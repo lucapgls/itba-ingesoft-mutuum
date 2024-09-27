@@ -100,32 +100,38 @@ const CreateLoan: React.FC = () => {
 	}, []);
 
 	const handleSubmit = async () => {
-	//	if (!userId) {
-	//	  Alert.alert('Error', 'User not authenticated!');
-	//	  return;
-	//	}
+		//	if (!userId) {
+		//	  Alert.alert('Error', 'User not authenticated!');
+		//	  return;
+		//	}
 		//TMP
-		const userId = "11111111-1111-1111-1111-111111111111" 
+		const userId = "11111111-1111-1111-1111-111111111111";
 		const initialAmount = parseFloat(amount);
 		const interest = parseFloat(interests);
 		const deadline = new Date().toISOString(); // Cambia esto por el valor real
-	  
+
 		const requirements = [
-		  { name: 'Email Required', completed: isEmailEnabled },
-		  { name: 'Phone Required', completed: isPhoneNumberEnabled },
-		 // { name: 'DNI Required', completed: isIdEnabled },
-		 // { name: 'Face ID Required', completed: isFaceIdEnabled },
+			{ name: "Email Required", completed: isEmailEnabled },
+			{ name: "Phone Required", completed: isPhoneNumberEnabled },
+			// { name: 'DNI Required', completed: isIdEnabled },
+			// { name: 'Face ID Required', completed: isFaceIdEnabled },
 		];
-	  
+
 		try {
-		  await addLoan(userId, initialAmount, initialAmount, interest, deadline, requirements);
-		  router.replace("/explore");
-		  Alert.alert('Success', 'Lending post created successfully!');
+			await addLoan(
+				userId,
+				initialAmount,
+				initialAmount,
+				interest,
+				deadline,
+				requirements
+			);
+			router.replace("/explore");
+			Alert.alert("Success", "Lending post created successfully!");
 		} catch (error) {
-		  Alert.alert('Error', 'Failed to create lending post.');
+			Alert.alert("Error", "Failed to create lending post.");
 		}
-	  };
-	 
+	};
 
 	return (
 		<ScrollView style={styles.container}>
@@ -190,13 +196,18 @@ const CreateLoan: React.FC = () => {
 					onRequestClose={togglePicker}
 				>
 					<View style={styles.modalContainer}>
-						
 						<View style={styles.pickerContainer}>
-							<View style={{ alignItems: "center" }} >
-						<Text style={{ fontSize: 16 }}>
-							Meses
-						</Text>
-						</View>
+							<View style={{ alignItems: "center" }}>
+								<Text
+									style={{
+										fontSize: 18,
+										fontWeight: "600",
+										marginBottom: 20,
+									}}
+								>
+									Meses
+								</Text>
+							</View>
 							<Picker
 								selectedValue={selectedValue}
 								onValueChange={(itemValue) =>
@@ -212,13 +223,25 @@ const CreateLoan: React.FC = () => {
 								))}
 							</Picker>
 
-							<CustomButton text="Aceptar" onPress={togglePicker} />
+							<View
+								style={{
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+							>
+								<TouchableOpacity onPress={togglePicker}>
+									<Text style={styles.closeButton}>
+										Aceptar
+									</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 				</Modal>
 			</View>
 
 			<View style={{ height: 30 }} />
+
 			<CustomButton text="Crear préstamo" onPress={handleSubmit} />
 		</ScrollView>
 	);
@@ -262,7 +285,6 @@ const styles = StyleSheet.create({
 		padding: 20,
 		borderRadius: 10,
 		width: "80%",
-		
 	},
 	pickerValue: {
 		borderWidth: 2,
@@ -273,6 +295,11 @@ const styles = StyleSheet.create({
 		height: 50,
 		color: "black",
 		fontSize: 16,
+	},
+	closeButton: {
+		color: "#8E66FF",
+		fontSize: 18,
+		marginTop: 20,
 	},
 });
 
