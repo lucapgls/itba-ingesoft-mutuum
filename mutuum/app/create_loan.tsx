@@ -53,7 +53,6 @@ const CreateLoan: React.FC = () => {
 	const [quotas, setQuotas] = useState("");
 	const [interests, setInterests] = useState("");
 	const [requirements, setRequirements] = useState("");
-	const [userId, setUserId] = useState<string | null>(null);
 	const [isEmailEnabled, setIsEmailEnabled] = useState(false);
 	const [isPhoneNumberEnabled, setIsPhoneNumberEnabled] = useState(false);
 	const [isIdEnabled, setIsIdEnabled] = useState(false);
@@ -84,28 +83,21 @@ const CreateLoan: React.FC = () => {
 		setPickerVisible(!isPickerVisible);
 	};
 
-	useEffect(() => {
-		const fetchUser = async () => {
+
+	const handleSubmit = async () => {
+	
+		
 			const {
 				data: { user },
 				error,
 			} = await supabase.auth.getUser();
-			if (user) {
-				setUserId(user.id);
-			} else {
-			}
-		};
+		const userId = user?.id;
 
-		fetchUser();
-	}, []);
+		if(!userId) {
+			Alert.alert("Error", "Failed to create lending post.");
+			return;
+		}
 
-	const handleSubmit = async () => {
-		//	if (!userId) {
-		//	  Alert.alert('Error', 'User not authenticated!');
-		//	  return;
-		//	}
-		//TMP
-		const userId = "11111111-1111-1111-1111-111111111111";
 		const initialAmount = parseFloat(amount);
 		const interest = parseFloat(interests);
 		const deadline = new Date().toISOString(); // Cambia esto por el valor real

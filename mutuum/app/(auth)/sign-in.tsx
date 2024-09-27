@@ -36,7 +36,10 @@ const SignIn = () => {
 	const [password, setPassword] = useState("");
 
 	const handleSignIn = async () => {
-		await signInUser(email, password);
+		const data = await signInUser(email, password);
+		if (data) {
+			router.push('/home'); 
+		  }
 	};
 
 	const handleGoogleSignIn = async () => {

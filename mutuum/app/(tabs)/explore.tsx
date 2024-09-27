@@ -61,10 +61,9 @@ const Explore = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			await loadLoans();
 			const loansArray = getLoans();
 			setLoans(loansArray);
-			console.log(loansArray);
+			//console.log(loansArray);
 		};
 		fetchData();
 	}, []);
@@ -119,11 +118,7 @@ const Explore = () => {
 							interest={loan.interest ?? 0}
 							term={loan.term ?? 0}
 							// maxCuotas={loan.maxCuotas ?? 0}
-							requirements={[
-								{ name: "Email", completed: true },
-								{ name: "DNI", completed: true },
-								{ name: "Teléfono", completed: false },
-							]}
+							requirements={loan.requirements ?? []}
 							onPress={() =>
 								console.log(`Pressed loan ${loan.id}`)
 							}
