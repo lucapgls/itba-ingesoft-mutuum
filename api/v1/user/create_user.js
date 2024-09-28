@@ -3,7 +3,7 @@ import { supabase } from '../../supabase_config.js';
 
 async function createUser(email, password) {
     // Sign up the user
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
     });
@@ -13,13 +13,11 @@ async function createUser(email, password) {
     }
 
     // Fetch the user details after signing up
-    const { data: userData, error: fetchError } = await supabase.auth.getUser();
-    
-    if (fetchError || !userData.user) {
-        throw new Error('User created, but unable to fetch user details.');
+    const { user, session } = data;
+   
+    if (!user || !session) {
+        throw new Error('Error fetching user details');
     }
-
-    const user = userData.user;
 
     // Create a wallet for the user
     const wallet_ids = await createWallet();

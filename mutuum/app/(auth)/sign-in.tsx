@@ -16,7 +16,25 @@ import API_BASE_URL from "../../api/api_temp";
 // Sign in the user with email and password
 export const signInUser = async (email: string, password: string) => {
 	// TEMP TODO
-	return true;
+	try {
+	const response = await fetch(`${API_BASE_URL}/api/v1/user/login`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ email, password }),
+	});
+
+		if (!response.ok) { 
+			throw new Error("Failed to create user");
+	  	}
+  
+	  	const data = await response.json();
+	  	return data;
+	} catch (error) {
+	  console.error("Error: ", error);
+	  throw error;
+	}
 };
 
 

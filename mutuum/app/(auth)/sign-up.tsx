@@ -24,7 +24,7 @@ export const signUpUser = async (email: string, password: string) => {
 	  const data = await response.json();
 	  return data;
 	} catch (error) {
-	  console.error("Error:", error);
+	  console.error("Error: ", error);
 	  throw error;
 	}
 
