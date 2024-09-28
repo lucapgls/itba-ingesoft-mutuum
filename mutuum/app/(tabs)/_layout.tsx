@@ -49,9 +49,9 @@ const TabsLayout = () => {
                 height: tabBarHeight,
                 borderTopWidth: 0,
                
-                shadowColor: '#000000',
-                shadowOpacity: 0.1,
-                shadowRadius: 10,
+                // shadowColor: '#000000',
+                // shadowOpacity: 0.1,
+                // shadowRadius: 10,
             },
         }
     }>
