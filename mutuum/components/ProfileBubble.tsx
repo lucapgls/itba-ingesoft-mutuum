@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import React from "react";
 import UserLoanSmallCard from "./UserLoanSmallCard";
 import { Loan } from "../models/Loan";
@@ -18,8 +18,15 @@ const ProfileBubble: React.FC<CustomProfileBubbleProps> = ({
 }) => {
 	return (
         <View style={styles.container}>
-        <TouchableOpacity onPress={onPress}>
-          <View style={styles.rectangle}>
+        <Pressable onPress={onPress}
+		style={({pressed}) => [
+			styles.rectangle, pressed &&
+			{
+				backgroundColor: "#CDCDCD",
+			},
+			
+		]}>
+          <View >
             <View style={styles.header}>
               <View style={styles.iconAndTitle}>
                 <Ionicons
@@ -38,7 +45,7 @@ const ProfileBubble: React.FC<CustomProfileBubbleProps> = ({
               />
             </View>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 	);
 };
