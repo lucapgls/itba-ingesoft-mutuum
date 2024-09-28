@@ -5,42 +5,30 @@ import { router, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import CustomTextInput from "../../components/CustomTextInput";
 import { supabase } from "./SupabaseConfig";
-import { postCreateWallet } from "../../wallet/postNewWallet";
+import  API_BASE_URL from "../../api/api_temp";
 
-// Sign up a user using Supabase Auth
 export const signUpUser = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password
-  });
-
-  if (error) {
-    console.error('Error signing up user:', error.message);
-    throw error;
-  }
-
-  // We create a wallet for the user
-  const wallet_ids = await postCreateWallet();
-  if (!wallet_ids) {
-	throw new Error('Error creating wallet');
-  }
-  const wallet_id = wallet_ids[0];
-
-//   console.log("My wallet id is!!!!!! " + wallet_id);
-
-  const { error: updateError } = await supabase
-	  .from('users')
-	  .update({ wallet_id: wallet_id })
-	  .eq('id', data?.user?.id);
-
-  if (error) {
-	  console.error('Error setting user wallet_id:', updateError?.message);
+	try {
+	  const response = await fetch(`${API_BASE_URL}/api/v1/user/create`, {
+		method: "POST",
+		headers: {
+		  "Content-Type": "application/json",
+		},
+		body: JSON.stringify({ email, password }),
+	  });
+  
+	  if (!response.ok) {
+		throw new Error("Failed to create user");
+	  }
+  
+	  const data = await response.json();
+	  return data;
+	} catch (error) {
+	  console.error("Error:", error);
 	  throw error;
-  }
+	}
 
-  return data;
-};
-
+}
 const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
