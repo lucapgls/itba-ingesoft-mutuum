@@ -45,7 +45,8 @@ const SignIn = () => {
 	const handleSignIn = async () => {
 		const data = await signInUser(email, password);
 		if (data) {
-			router.push('/home'); 
+			router.push('/home');
+			// TODO: set the user in the global state
 		  }
 	};
 
