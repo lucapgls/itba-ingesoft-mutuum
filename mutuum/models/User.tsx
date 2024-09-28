@@ -22,6 +22,7 @@ export type User = {
 //     return data;
 // };
 
+// TODO -> API BACKEND
 export const getCurrentUserEmail = async () => {
     const { data, error } = await supabase.auth.getUser();
   
@@ -36,6 +37,7 @@ export const getCurrentUserEmail = async () => {
     return email;
 };
 
+// TODO -> API BACKEND
 export const getCurrentUserId = async () => {
     const { data, error } = await supabase.auth.getUser();
   

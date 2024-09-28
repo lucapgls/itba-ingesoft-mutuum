@@ -1,10 +1,9 @@
-import Config from 'react-native-config';
 import forge from 'node-forge';
-import { ENTITY_SECRET, PUBLIC_KEY } from '@env';
 
+// Function to generate ciphertext
 function generateCiphertext() {
-  const entitySecretHex = ENTITY_SECRET;
-  const publicKeyPem = PUBLIC_KEY;
+  const entitySecretHex = process.env.ENTITY_SECRET;
+  const publicKeyPem = process.env.PUBLIC_KEY;
 
   const entitySecret = forge.util.hexToBytes(entitySecretHex);
   const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);

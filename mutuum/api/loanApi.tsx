@@ -1,6 +1,7 @@
 import { supabase } from "../app/(auth)/SupabaseConfig.js"
 
 export const fetchLoans = async () => {
+  // TODO -> API BACKEND
   const { data, error } = await supabase
     .from('lending_post')
     .select('*')
