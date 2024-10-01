@@ -74,8 +74,8 @@ const Home = () => {
 				<ScrollView showsVerticalScrollIndicator={false}>
 					<View style={{ height: 40 }} />
 					<HomeRectangle coin="ETH" balance="294.1" ars="239824" />
-					<View style={{ height: 10 }} />
-					<View style={{ padding: 20 }}>
+					<View style={{ height: 20 }} />
+					<View style={{ paddingHorizontal: 20 }}>
 						<RecentUsersBubble Users={Users} />
 						<View style={{ height: 20 }} />
 						<HomeBubble loans={loans} />
