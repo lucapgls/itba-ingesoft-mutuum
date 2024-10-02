@@ -1,58 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { supabase } from "./(auth)/SupabaseConfig";
+import React, { useState } from "react";
 import {
-	Button,
-	TextInput,
 	View,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	Alert,
 	ScrollView,
+	Alert,
 	Modal,
+	TouchableOpacity,
+	Text,
+	StyleSheet,
 } from "react-native";
 import CustomTextInput from "../components/CustomTextInput";
-import { GestureResponderEvent } from "react-native";
-
-import { getCurrentUserEmail, getCurrentUserId } from "../models/User";
-import { addLoan } from "../store/LoanStore";
-import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import CustomChip from "../components/CustomChip";
 import { Picker } from "@react-native-picker/picker";
-
-// Function to create a new lending post
-export const createLendingPost = async (
-	lenderId: string, // ID of the lender (from auth.users.id)
-	initialAmount: number, // Total amount for the lending post
-	interest: number, // Interest rate for the loan
-	deadline: string // Deadline for loan repayment (formatted as string)
-) => {
-	// Insert into the lending_post table
-	const { data, error } = await supabase.from("lending_post").insert([
-		{
-			lender_id: lenderId, // Lender's ID from auth.users.id
-			initial_amount: initialAmount, // Total loan amount
-			available_amount: initialAmount, // Initially available amount is the total amount
-			interest: interest, // Interest rate for the loan
-			dead_line: deadline, // Deadline for repayment (must be a valid date string)
-		},
-	]);
-
-	if (error) {
-		console.error("Error creating lending post:", error.message);
-		throw error;
-	}
-
-	return data;
-};
+import { supabase } from "./(auth)/SupabaseConfig";
+import { router } from "expo-router";
+import API_BASE_URL from "../api/api_temp"; 
 
 const CreateLoan: React.FC = () => {
 	const [coinType, setCoinType] = useState("");
 	const [amount, setAmount] = useState("");
 	const [quotas, setQuotas] = useState("");
 	const [interests, setInterests] = useState("");
-	const [requirements, setRequirements] = useState("");
 	const [isEmailEnabled, setIsEmailEnabled] = useState(false);
 	const [isPhoneNumberEnabled, setIsPhoneNumberEnabled] = useState(false);
 	const [isIdEnabled, setIsIdEnabled] = useState(false);
@@ -83,46 +51,52 @@ const CreateLoan: React.FC = () => {
 		setPickerVisible(!isPickerVisible);
 	};
 
-
-	const handleSubmit = async () => {
-	
-		
-			const {
-				data: { user },
-				error,
-			} = await supabase.auth.getUser();
+	const handleCreateLoan  = async () => {
+		const {
+			data: { user },
+			error,
+		} = await supabase.auth.getUser();
 		const userId = user?.id;
 
-		if(!userId) {
-			Alert.alert("Error", "Failed to create lending post.");
+		if (!userId) {
+			Alert.alert("Error", "Debe iniciar sesion para publicar un prestamo");
 			return;
 		}
 
 		const initialAmount = parseFloat(amount);
 		const interest = parseFloat(interests);
-		const deadline = new Date().toISOString(); // Cambia esto por el valor real
+		const deadline = new Date().toISOString(); // Update this with the actual value
 
 		const requirements = [
 			{ name: "Email Required", completed: isEmailEnabled },
 			{ name: "Phone Required", completed: isPhoneNumberEnabled },
-			// { name: 'DNI Required', completed: isIdEnabled },
-			// { name: 'Face ID Required', completed: isFaceIdEnabled },
 		];
 
 		try {
-			await addLoan(
-				userId,
-				initialAmount,
-				initialAmount,
-				interest,
-				deadline,
-				requirements
-			);
+			const response = await fetch(`${API_BASE_URL}/api/v1/loan/createLendingPost`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					lenderId: userId, // Pass the user's ID
+					initialAmount,
+					interest,
+					deadline,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				throw new Error("Failed to create lending post");
+			}
+
 			router.replace("/explore");
 			Alert.alert("Success", "Lending post created successfully!");
 		} catch (error) {
 			Alert.alert("Error", "Failed to create lending post.");
-		}
+		}	
 	};
 
 	return (
@@ -234,10 +208,11 @@ const CreateLoan: React.FC = () => {
 
 			<View style={{ height: 30 }} />
 
-			<CustomButton text="Crear préstamo" onPress={handleSubmit} />
+			<CustomButton text="Crear préstamo" onPress={handleCreateLoan } />
 		</ScrollView>
 	);
 };
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -248,23 +223,15 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		flexWrap: "wrap",
 	},
-	label: {
-		marginBottom: 8,
-		fontSize: 16,
-	},
-	input: {
-		height: 40,
+	pickerValue: {
+		borderWidth: 2,
 		borderColor: "#ccc",
-		borderWidth: 1,
-		paddingHorizontal: 8,
-	},
-	button: {
-		backgroundColor: "#8E66FF",
-		color: "white",
-		marginTop: 16,
-		padding: 16,
-		borderRadius: 4,
-		alignItems: "center",
+		justifyContent: "center",
+		width: "30%",
+		borderRadius: 12,
+		height: 50,
+		color: "black",
+		fontSize: 16,
 	},
 	modalContainer: {
 		flex: 1,
@@ -277,16 +244,6 @@ const styles = StyleSheet.create({
 		padding: 20,
 		borderRadius: 10,
 		width: "80%",
-	},
-	pickerValue: {
-		borderWidth: 2,
-		borderColor: "#ccc",
-		justifyContent: "center",
-		width: "30%",
-		borderRadius: 12,
-		height: 50,
-		color: "black",
-		fontSize: 16,
 	},
 	closeButton: {
 		color: "#8E66FF",
