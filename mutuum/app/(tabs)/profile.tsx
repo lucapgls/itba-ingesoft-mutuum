@@ -11,7 +11,7 @@ import BubbleProfile from "../../components/BubbleProfileInfo";
 import ProfileBubble from "../../components/ProfileBubble";
 import { router, Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
-import theme from '@theme/theme';
+import theme from "@theme/theme";
 
 const Profile = ({
 	dni,
@@ -46,8 +46,9 @@ const Profile = ({
 					<ProfileBubble
 						title="Mis datos"
 						icon="person"
-						onPress={() => {}}
+						onPress={() => router.push("/profile_data")}
 					/>
+
 					<View style={{ height: 15 }} />
 					<ProfileBubble
 						title="Notificaciones"

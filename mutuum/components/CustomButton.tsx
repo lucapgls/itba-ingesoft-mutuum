@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   outlinedText: {
     color: theme.colors.primary, 

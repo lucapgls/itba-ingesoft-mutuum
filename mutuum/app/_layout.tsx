@@ -13,6 +13,7 @@ const RootLayout = () => {
 				options={{ headerShown: false, headerTitle: "Inicio" }}
 			/>
 			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+			<Stack.Screen name="(profile)" options={{ headerShown: false }} />
 			<Stack.Screen
 				name="create_loan"
 				options={{

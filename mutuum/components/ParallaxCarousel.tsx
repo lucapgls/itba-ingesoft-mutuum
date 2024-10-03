@@ -95,13 +95,7 @@ const styles = StyleSheet.create({
 	carouselContainer: {
 		position: "relative",
 		alignItems: "center", // Center the carousel horizontally
-		// Shadow for iOS
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 3 },
-		shadowOpacity: 0.1,
-		shadowRadius: 3.84,
-		// Elevation for Android
-		elevation: 4,
+		
 	},
 	carouselItem: {
 		flex: 1,
@@ -123,6 +117,13 @@ const styles = StyleSheet.create({
 	},
 	carousel: {
 		borderRadius: 20,
+		// Shadow for iOS
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 3 },
+		shadowOpacity: 0.1,
+		shadowRadius: 3.84,
+		// Elevation for Android
+		elevation: 4,
 	},
 	img: {
 		height: "100%",
