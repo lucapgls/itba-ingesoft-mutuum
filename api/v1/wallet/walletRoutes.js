@@ -2,6 +2,7 @@ import express from 'express';
 import { generateCiphertext } from './ciphertext.js';
 import { createWallet } from './wallet.js';
 import { getWalletBalanceValue } from './balance.js';
+import { convertTokenToARS } from './convert.js';
 
 const router = express.Router();
 
@@ -62,6 +63,33 @@ router.get('/balance', async (req, res) => {
         res.status(200).json({ balances });
     } catch (error) {
         res.status(500).json({ error: 'Error fetching wallet balance', details: error.message });
+    }
+});
+
+/*
+    * @GET /api/wallet/convert
+    *
+    * brief: Convert a token to ARS
+    * 
+    * Query parameters:
+    * - amount: The amount of the token to convert
+    * - token: The token to convert
+    * 
+    * Example request:
+    * /api/wallet/convert?amount=100&token=usd
+    */
+router.get('/convert' , async (req, res) => {
+    const { amount, token } = req.query;
+
+    if (!amount || !token) {
+        return res.status(400).json({ error: 'amount and token are required' });
+    }
+
+    try {
+        const convertedAmount = await convertTokenToARS(amount, token);
+        res.status(200).json({ convertedAmount });
+    } catch (error) {
+        res.status(500).json({ error: 'Error converting token to ARS', details: error.message });
     }
 });
 

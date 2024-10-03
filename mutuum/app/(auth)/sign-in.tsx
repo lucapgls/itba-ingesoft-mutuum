@@ -27,7 +27,7 @@ export const signInUser = async (email: string, password: string) => {
 	});
 
 		if (!response.ok) { 
-			throw new Error("Failed to create user");
+			throw new Error("Error al intentar iniciar sesión");
 	  	}
   
 	  	const data = await response.json();
