@@ -251,16 +251,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		flexWrap: "wrap",
 	},
-	pickerValue: {
-		borderWidth: 2,
-		borderColor: "#ccc",
-		justifyContent: "center",
-		width: "30%",
-		borderRadius: 12,
-		height: 50,
-		color: "black",
-		fontSize: 16,
-	},
+	
 	input: {
 		height: 40,
 		borderColor: theme.colors.borderGray,
