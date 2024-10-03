@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TextInputProps, Text, KeyboardTypeOptions } from 'react-native';
+import theme from '@theme/theme';
 
 interface CustomTextInputProps extends TextInputProps {
     placeholder: string;
@@ -46,14 +47,14 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
 const styles = StyleSheet.create({
     border: {
         borderWidth: 2,
-        borderColor: '#ccc',
+        borderColor: theme.colors.borderGray,
         borderRadius: 12,
         width: '100%',
         height: 50,
         justifyContent: 'center',
     },
     focusedBorder: {
-        borderColor: '#8E66FF',
+        borderColor: theme.colors.primary,
     },
     input: {
         height: 40,

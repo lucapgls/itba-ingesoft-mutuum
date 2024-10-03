@@ -20,6 +20,8 @@ import { router } from "expo-router";
 import CustomButton from "../components/CustomButton";
 import CustomChip from "../components/CustomChip";
 import { Picker } from "@react-native-picker/picker";
+import theme from '@theme/theme';
+
 
 // Function to create a new lending post
 export const createLendingPost = async (
@@ -242,7 +244,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 16,
-		backgroundColor: "#f2f2f2",
+		backgroundColor: theme.colors.background,
 	},
 	chipContainer: {
 		flexDirection: "row",
@@ -254,12 +256,12 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		height: 40,
-		borderColor: "#ccc",
+		borderColor: theme.colors.borderGray,
 		borderWidth: 1,
 		paddingHorizontal: 8,
 	},
 	button: {
-		backgroundColor: "#8E66FF",
+		backgroundColor: theme.colors.primary,
 		color: "white",
 		marginTop: 16,
 		padding: 16,
@@ -280,7 +282,7 @@ const styles = StyleSheet.create({
 	},
 	pickerValue: {
 		borderWidth: 2,
-		borderColor: "#ccc",
+		borderColor: theme.colors.borderGray,
 		justifyContent: "center",
 		width: "30%",
 		borderRadius: 12,
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	closeButton: {
-		color: "#8E66FF",
+		color: theme.colors.primary,
 		fontSize: 18,
 		marginTop: 20,
 	},

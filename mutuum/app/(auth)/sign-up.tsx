@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import CustomTextInput from "../../components/CustomTextInput";
 import { supabase } from "./SupabaseConfig";
 import  API_BASE_URL from "../../api/api_temp";
+import theme from '@theme/theme';
 
 export const signUpUser = async (email: string, password: string) => {
 	try {
@@ -51,7 +52,7 @@ const SignUp = () => {
 	return (
         
 		<View style={styles.safeArea}>
-            <StatusBar backgroundColor="#c6b3ff"  />
+            <StatusBar backgroundColor= "theme.colors.primary"  />
 			<View style={styles.rectangle}>
 				<View style={{ height: 30 }} />
 				<Text style={styles.title}>Registrate en</Text>
@@ -84,7 +85,7 @@ const SignUp = () => {
 				<Link href="/sign-in" style={{ textAlign: "center" }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						Ya tenes una cuenta?{" "}
-						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
+						<Text style={{ color: theme.colors.primary, fontWeight: 600 }}>
 							Iniciar sesión	
 						</Text>
 					</Text>
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
 
-		backgroundColor: "#f2f2f2",
+		backgroundColor: theme.colors.background,
 		justifyContent: "flex-start",
 	},
 	container: {
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		flex: 1,
 		width: "100%",
-		backgroundColor: "#f2f2f2",
+		backgroundColor: theme.colors.background,
 	},
 	title: {
 		color: "white", // Replace with your desired primary color
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
 		height: 260,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#8E66FF",
+		backgroundColor: theme.colors.primary,
 	},
 	text: {
 		marginBottom: 5,
@@ -135,14 +136,14 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		fontSize: 15,
-		color: "#000",
+		color: theme.colors.textBlack,
 		paddingStart: 10,
 	},
 	border: {
 		width: "100%",
 		height: 50,
 		backgroundColor: "white",
-		borderColor: "#CBCBCB",
+		borderColor: theme.colors.borderGray,
 		borderWidth: 2,
 		borderRadius: 12,
 		justifyContent: "center",
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
 	},
 	separator: {
 		height: 1,
-		backgroundColor: "#CBCBCB",
+		backgroundColor: theme.colors.borderGray,
 		marginVertical: 30,
 		width: "80%",
 		alignSelf: "center",

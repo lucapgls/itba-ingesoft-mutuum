@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import theme from '@theme/theme';
 
 interface CustomButtonProps {
   onPress: () => void;
@@ -20,7 +21,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({ onPress, text, outlined = f
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#8E66FF', // Replace with your desired primary color
+    backgroundColor: theme.colors.primary, 
     paddingVertical: 12,
     paddingHorizontal: 50,
     borderRadius: 50,
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   outlinedButton: {
     backgroundColor: 'transparent',
     borderWidth: 3,
-    borderColor: '#8E66FF',
+    borderColor: theme.colors.primary, 
   },
   text: {
     color: 'white',
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   outlinedText: {
-    color: '#8E66FF',
+    color: theme.colors.primary, 
   },
 });
 

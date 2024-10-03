@@ -16,6 +16,7 @@ import CustomButton from "../../components/CustomButton";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome } from "@expo/vector-icons";
 import { loadLoans, getLoans } from "../../store/LoanStore";
+import theme from '@theme/theme';
 
 const MyLoans = () => {
     const [loans, setLoans] = useState<any[]>([]);
@@ -54,7 +55,7 @@ const MyLoans = () => {
                         <FontAwesome
                             name="search"
                             size={20}
-                            color="#bdbdbd"
+                            
                             style={styles.searchIcon}
                         />
                         <TextInput
@@ -103,12 +104,12 @@ export default MyLoans;
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: "#f2f2f2",
+        backgroundColor: theme.colors.background,
         justifyContent: "flex-start",
     },
     container: {
         paddingHorizontal: 20,
-        backgroundColor: "#8E66FF",
+        backgroundColor: theme.colors.primary,
     },
     searchSection: {
         flexDirection: "row",
@@ -122,6 +123,7 @@ const styles = StyleSheet.create({
     },
     searchIcon: {
         marginRight: 10,
+       color: theme.colors.iconGray,
     },
     input: {
         flex: 1,
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
         marginBottom: 0, // Fixed space between cards
     },
     button: {
-        backgroundColor: "#8E66FF",
+        backgroundColor: theme.colors.primary,
         padding: 16,
         borderRadius: 8,
         alignItems: "center",

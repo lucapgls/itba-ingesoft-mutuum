@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import theme from '@theme/theme';
 
 interface CustomChipProps {
   text: string;
@@ -11,7 +12,7 @@ interface CustomChipProps {
 const CustomChip: React.FC<CustomChipProps> = ({ text, enabled, onPress }) => {
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor: enabled ? '#8E66FF' : '#c4c4c4' }]}
+      style={[styles.button, { backgroundColor: enabled ? theme.colors.primary : theme.colors.chipInactive }]}
       onPress={onPress}
     >
       <FontAwesome

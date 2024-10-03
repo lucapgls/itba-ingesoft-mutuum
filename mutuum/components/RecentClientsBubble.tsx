@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { User } from "../models/User"; // Assuming you have a User model
+import theme from '@theme/theme';
 
 const RecentUsersBubble = ({ Users }: { Users: User[] }) => {
     return (
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     buttonText: {
-        color: "#8E66FF",
+        color: theme.colors.primary,
         fontSize: 14,
     },
 });

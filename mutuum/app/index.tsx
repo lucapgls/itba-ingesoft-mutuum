@@ -1,7 +1,7 @@
 
 import { Text, View, StyleSheet, StatusBar } from "react-native";
 import { Link, router, Redirect } from "expo-router";
-
+import theme from '@theme/theme';
 
 export default function App() {
   return (
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     height: 250,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8E66FF',
+    backgroundColor: theme.colors.primary,
   },
   text: {
     marginTop: 80,

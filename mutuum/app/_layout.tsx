@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Stack, router } from "expo-router";
-
+import theme from '@theme/theme';
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -18,9 +18,9 @@ const RootLayout = () => {
 				options={{
 					title: "Nuevo préstamo",
 					headerStyle: {
-						backgroundColor: "#8E66FF", // Purple background
+						backgroundColor: theme.colors.primary, // Purple background
 					},
-					headerTintColor: "#FFFFFF",
+					headerTintColor: theme.colors.textWhite,
 					headerLeft: () => (
 						<TouchableOpacity onPress={router.back} style={{paddingRight: 15}}>
 							<Ionicons

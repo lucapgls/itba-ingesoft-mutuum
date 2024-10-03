@@ -40,7 +40,7 @@ const HomeRectangle = ({
 						<TouchableOpacity style={styles.button}>
 							<Ionicons
 								name="arrow-up"
-								size={16}
+								size={18}
 								color="white"
 								style={styles.icon}
 							/>
@@ -49,9 +49,10 @@ const HomeRectangle = ({
 						<TouchableOpacity style={styles.button}>
 							<Ionicons
 								name="arrow-down"
-								size={16}
+								size={18}
 								color="white"
 								style={styles.icon}
+								
 							/>
 							<Text style={styles.buttonText}>Depositar</Text>
 						</TouchableOpacity>
@@ -105,10 +106,12 @@ const styles = StyleSheet.create({
 		color: "white",
 		textAlign: "center",
 		fontSize: 18,
+		fontWeight: "500",
 	},
 	icon: {
 		marginRight: 5,
 		color: "white",
+		
 	},
 	card: {
 		padding: 20,

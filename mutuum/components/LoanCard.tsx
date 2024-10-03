@@ -13,6 +13,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "./CustomButton";
+import theme from '@theme/theme';
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -231,7 +232,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 const styles = StyleSheet.create({
 	card: {
 		padding: 16,
-		backgroundColor: "#fff",
+		backgroundColor: "white",
 		borderRadius: 20,
 		marginBottom: 16,
 		flexDirection: "row",
@@ -309,20 +310,10 @@ const styles = StyleSheet.create({
 	},
 	divider: {
 		borderBottomWidth: 1,
-		borderBottomColor: "#ddd",
+		borderBottomColor: theme.colors.borderGray,
 		marginVertical: 16,
 	},
-	button: {
-		backgroundColor: "#6c63ff",
-		borderRadius: 8,
-		paddingVertical: 14,
-		alignItems: "center",
-		justifyContent: "center",
-		position: "absolute",
-		bottom: 36,
-		left: 16,
-		right: 16,
-	},
+	
 	buttonText: {
 		color: "#fff",
 		fontSize: 16,

@@ -5,6 +5,7 @@ import {icons} from '../../constants'
 import { Platform } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import {  useNavigation } from '@react-navigation/native';
+import theme from '@theme/theme';
 
 
 const TabIcon = ({ icon, iconFocused, color, name, focused }: { icon: ImageSourcePropType, iconFocused: ImageSourcePropType, color: string, name: string, focused: boolean }) => {
@@ -41,8 +42,8 @@ const TabsLayout = () => {
     <>
     <Tabs screenOptions={
         {
-            tabBarActiveTintColor: '#8E66FF',
-            tabBarInactiveTintColor: '#bababa',
+            tabBarActiveTintColor: theme.colors.primary,
+            tabBarInactiveTintColor: theme.colors.tabInactive,
            tabBarShowLabel: false,
             tabBarStyle: {
                 backgroundColor: '#FFF',

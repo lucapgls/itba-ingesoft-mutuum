@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Pressable, Animated } from "react-native";
 import React from "react";
 import UserLoanSmallCard from "./UserLoanSmallCard";
 import { Loan } from "../models/Loan";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import theme from '@theme/theme';
 
 interface CustomProfileBubbleProps {
 	title: string;
@@ -16,17 +18,37 @@ const ProfileBubble: React.FC<CustomProfileBubbleProps> = ({
 	icon,
 	onPress,
 }) => {
+	const [backgroundColor] = useState(new Animated.Value(0));
+
+  const handlePressIn = () => {
+    Animated.timing(backgroundColor, {
+      toValue: 1,
+      duration: 100,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.timing(backgroundColor, {
+      toValue: 0,
+      duration: 100,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const animatedBackgroundColor = backgroundColor.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#FFF', theme.colors.tabInactive], // From white to grey
+  });
 	return (
         <View style={styles.container}>
-        <Pressable onPress={onPress}
-		style={({pressed}) => [
-			styles.rectangle, pressed &&
-			{
-				backgroundColor: "#CDCDCD",
-			},
-			
-		]}>
-          <View >
+        <Pressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+    >
+      <Animated.View style={[styles.rectangle, { backgroundColor: animatedBackgroundColor }]}>
+          
             <View style={styles.header}>
               <View style={styles.iconAndTitle}>
                 <Ionicons
@@ -44,7 +66,7 @@ const ProfileBubble: React.FC<CustomProfileBubbleProps> = ({
                 style={styles.icon}
               />
             </View>
-          </View>
+          </Animated.View>
         </Pressable>
       </View>
 	);
@@ -89,10 +111,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
 	},
 
-	buttonText: {
-		color: "#8E66FF",
-		fontSize: 14,
-	},
+	
 	icon: {
 		marginRight: 5,
 	},

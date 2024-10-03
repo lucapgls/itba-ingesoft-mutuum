@@ -6,6 +6,7 @@ import RecentUsersBubble from "../../components/RecentClientsBubble";
 import { Loan } from "../../models/Loan";
 import { User } from "../../models/User"; // Assuming you have a User model
 import { LinearGradient } from "expo-linear-gradient";
+import theme from '@theme/theme';
 
 const Home = () => {
 	const loans: Loan[] = [
@@ -68,11 +69,11 @@ const Home = () => {
 		<View style={styles.container}>
 			<LinearGradient
 				// Background Linear Gradient
-				colors={["#8E66FF", "#fff"]}
+				colors={[theme.colors.backgroundGradient, "#fff"]}
 				style={styles.container}
 			>
 				<ScrollView showsVerticalScrollIndicator={false}>
-					<View style={{ height: 40 }} />
+					<View style={{ height: 20 }} />
 					<HomeRectangle coin="ETH" balance="294.1" ars="239824" />
 					<View style={{ height: 20 }} />
 					<View style={{ paddingHorizontal: 20 }}>

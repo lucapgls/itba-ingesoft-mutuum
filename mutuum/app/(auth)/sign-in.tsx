@@ -10,6 +10,7 @@ import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import GoogleButton from "../../components/GoogleButton";
 import CustomTextInput from "../../components/CustomTextInput";
+import theme from '@theme/theme';
 
 import API_BASE_URL from "../../api/api_temp";
 
@@ -95,7 +96,7 @@ const SignIn = () => {
 				<Link href="/sign-up" style={{ textAlign: "center" }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						¿Todavía no tenes cuenta?{" "}
-						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
+						<Text style={{ color: theme.colors.primary, fontWeight: 600 }}>
 							Registrate
 						</Text>
 					</Text>
@@ -104,7 +105,7 @@ const SignIn = () => {
 				<Link href="/home" style={{ textAlign: "center", marginTop:20 }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						Continuar como{" "}
-						<Text style={{ color: "#8E66FF", fontWeight: 600 }}>
+						<Text style={{ color: theme.colors.primary, fontWeight: 600 }}>
 							invitado
 							</Text>
 					</Text>
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
 
-		backgroundColor: "#f2f2f2",
+		backgroundColor:  theme.colors.background,
 		justifyContent: "flex-start",
 	},
 	container: {
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		flex: 1,
 		width: "100%",
-		backgroundColor: "#f2f2f2",
+		backgroundColor: theme.colors.background,
 	},
 	title: {
 		color: "white", // Replace with your desired primary color
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
 		height: 260,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#8E66FF",
+		backgroundColor: theme.colors.primary,
 	},
 	text: {
 		color: "black",
@@ -152,14 +153,14 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		fontSize: 15,
-		color: "#000",
+		color: theme.colors.textBlack,
 		paddingStart: 10,
 	},
 	border: {
 		width: "100%",
 		height: 50,
 		backgroundColor: "white",
-		borderColor: "#CBCBCB",
+		borderColor: theme.colors.borderGray,
 		borderWidth: 2,
 		borderRadius: 12,
 		justifyContent: "center",
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
 	},
 	separator: {
 		height: 1,
-		backgroundColor: "#CBCBCB",
+		backgroundColor: theme.colors.borderGray,
 		marginVertical: 30,
 		width: "80%",
 		alignSelf: "center",

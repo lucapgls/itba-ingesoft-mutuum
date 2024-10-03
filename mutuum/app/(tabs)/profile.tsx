@@ -11,6 +11,7 @@ import BubbleProfile from "../../components/BubbleProfileInfo";
 import ProfileBubble from "../../components/ProfileBubble";
 import { router, Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import theme from '@theme/theme';
 
 const Profile = ({
 	dni,
@@ -24,7 +25,7 @@ const Profile = ({
 	return (
 		<LinearGradient
 			// Background Linear Gradient
-			colors={["#8E66FF", "#fff"]}
+			colors={[theme.colors.primary, "#fff"]}
 			style={styles.container}
 		>
 			<ScrollView>
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	buttonText: {
-		color: "#e35349",
+		color: theme.colors.cancel,
 		fontSize: 18,
 		textAlign: "center",
 	},

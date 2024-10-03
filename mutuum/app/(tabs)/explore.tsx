@@ -16,6 +16,7 @@ import { getLoans, loadLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import theme from '@theme/theme';
 
 const Explore = () => {
 	const [loans, setLoans] = useState<any[]>([]);
@@ -84,7 +85,7 @@ const Explore = () => {
 						<FontAwesome
 							name="search"
 							size={20}
-							color="#bdbdbd"
+							
 							style={styles.searchIcon}
 						/>
 						<TextInput
@@ -98,7 +99,7 @@ const Explore = () => {
 						style={styles.filterButton}
 						onPress={openModal}
 					>
-						<Ionicons name="filter" size={20} color="black" />
+						<Ionicons name="filter" size={20} color={theme.colors.textBlack} />
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -111,7 +112,7 @@ const Explore = () => {
 				{loans.map((loan) => (
 					<View style={styles.card} key={loan.id}>
 						<LoanCard
-							color={loan.color ?? "#8E66FF"}
+							color={loan.color ?? theme.colors.primary}
 							name={loan.name ?? "Préstamo"}
 							currency={loan.currency ?? "USD"}
 							amount={loan.initial_amount ?? 0}
@@ -178,12 +179,12 @@ const Explore = () => {
 const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
-		backgroundColor: "#f2f2f2",
+		backgroundColor: theme.colors.background,
 		justifyContent: "flex-start",
 	},
 	container: {
 		paddingHorizontal: 20,
-		backgroundColor: "#8E66FF",
+		backgroundColor: theme.colors.primary,
 	},
 	searchSection: {
 		flexDirection: "row",
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
 	},
 	searchIcon: {
 		marginRight: 10,
+		color: theme.colors.iconGray,
 	},
 	input: {
 		flex: 1,
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
 	},
 	scrollContainer: {
 		padding: 20,
-		backgroundColor: "#f2f2f2",
+		backgroundColor: theme.colors.background,
 	},
 	title: {
 		fontSize: 18,
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
 		marginBottom: 0, // Fixed space between cards
 	},
 	button: {
-		backgroundColor: "#8E66FF",
+		backgroundColor: theme.colors.primary,
 		padding: 16,
 		borderRadius: 8,
 		alignItems: "center",
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	closeButton: {
-		color: "#8E66FF",
+		color: theme.colors.primary,
 		fontSize: 18,
 		marginTop: 20,
 	},

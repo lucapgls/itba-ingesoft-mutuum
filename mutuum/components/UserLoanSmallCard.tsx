@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import theme from '@theme/theme';
 
 interface UserLoanSmallCardProps {
 	profilePicture: string;
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
 		height: 45,
 		borderRadius: 25,
 		marginRight: 10,
-		backgroundColor: "#ccc",
+		backgroundColor: theme.colors.iconGray,
 	},
 	textContainer: {
 		flex: 1,
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
 	},
 	role: {
 		fontSize: 14,
-		color: "#666",
+		color: theme.colors.textGray,
 	},
 	amountContainer: {
 		alignItems: "flex-end",
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
 	},
 	interest: {
 		fontSize: 14,
-		color: "#666",
+		color: theme.colors.textGray,
 	},
 });
 

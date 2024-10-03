@@ -3,6 +3,7 @@ import React from "react";
 import UserLoanSmallCard from "./UserLoanSmallCard";
 import { Loan } from "../models/Loan";
 import { router } from "expo-router";
+import theme from '@theme/theme';
 
 const HomeBubble = ({ loans }: { loans: Loan[] }) => {
     return (
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     },
   
     buttonText: {
-        color: "#8E66FF",
+        color: theme.colors.primary,
         fontSize: 14,
     },
 });
