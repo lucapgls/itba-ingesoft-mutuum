@@ -1,13 +1,22 @@
 import React, { useRef } from "react";
-import { View, StyleSheet, ScrollView, Animated } from "react-native";
-import HomeRectangle from "../../components/HomeRectangle";
-import HomeBubble from "../../components/HomeBubble";
-import RecentUsersBubble from "../../components/RecentClientsBubble";
+import {
+	View,
+	StyleSheet,
+	ScrollView,
+	Animated,
+	Dimensions,
+	Image,
+} from "react-native";
+import HomeRectangle from "@components/HomeRectangle";
+import HomeBubble from "@components/HomeBubble";
+import RecentUsersBubble from "@components/RecentClientsBubble";
 import { Loan } from "../../models/Loan";
 import { User } from "../../models/User"; // Assuming you have a User model
 import { LinearGradient } from "expo-linear-gradient";
 import { getConvertToARS, getWalletBalance } from "../../api/wallet";
-import theme from '@theme/theme';
+import theme from "@theme/theme";
+import Carousel from "react-native-reanimated-carousel";
+import ParallaxCarousel from "@components/ParallaxCarousel";
 
 const Home = () => {
 	const loans: Loan[] = [
@@ -70,25 +79,43 @@ const Home = () => {
 
 	React.useEffect(() => {
 		const fetchWalletBalance = async () => {
-			const { amount, token } = await getWalletBalance("35ba7ec3-f2e7-5033-b6e1-014c7c24142c");
+			const { amount, token } = await getWalletBalance(
+				"35ba7ec3-f2e7-5033-b6e1-014c7c24142c"
+			);
 			setWallet({ balance: amount, coin: token });
 		};
 		fetchWalletBalance();
 	}, []);
 
-	
-
-	const [convertedBalance, setConvertedBalance] = React.useState<number | null>(null);
+	const [convertedBalance, setConvertedBalance] = React.useState<
+		number | null
+	>(null);
 
 	React.useEffect(() => {
 		const convertBalance = async () => {
-			const { amount, token } = await getConvertToARS(wallet.balance, wallet.coin);
+			const { amount, token } = await getConvertToARS(
+				wallet.balance,
+				wallet.coin
+			);
 			setConvertedBalance(amount);
 		};
 		if (wallet.balance && wallet.coin) {
 			convertBalance();
 		}
 	}, [wallet]);
+
+	const { width: screenWidth } = Dimensions.get("window");
+	const paddingHorizontal = 20;
+	const carouselWidth = screenWidth - 2 * paddingHorizontal;
+
+	const carouselList = [
+		{
+			id: 1,
+			title: "Title 1",
+			description: "Description 1",
+			image: require("@assets/images/thumbnail.png"),
+		},
+	];
 
 	return (
 		<View style={styles.container}>
@@ -99,10 +126,18 @@ const Home = () => {
 			>
 				<ScrollView showsVerticalScrollIndicator={false}>
 					<View style={{ height: 10 }} />
-					<HomeRectangle coin={wallet.coin} balance={wallet.balance} ars={convertedBalance ?? 0} />
-					
+					<HomeRectangle
+						coin={wallet.coin}
+						balance={wallet.balance}
+						ars={convertedBalance ?? 0}
+					/>
+
 					<View style={{ height: 20 }} />
+
+					<ParallaxCarousel />
+
 					<View style={{ paddingHorizontal: 20 }}>
+						<View style={{ height: 20 }} />
 						<RecentUsersBubble Users={Users} />
 						<View style={{ height: 20 }} />
 						<HomeBubble loans={loans} />
@@ -116,6 +151,19 @@ const Home = () => {
 
 const styles = StyleSheet.create({
 	container: {
+		height: "100%",
+		width: "100%",
+	},
+	carouselItem: {
+		justifyContent: "center",
+		flex: 1,
+		overflow: "hidden",
+	},
+	carouselImage: {
+		width: "100%",
+		height: "100%",
+	},
+	img: {
 		height: "100%",
 		width: "100%",
 	},
