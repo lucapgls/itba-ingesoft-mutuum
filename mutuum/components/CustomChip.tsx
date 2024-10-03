@@ -12,7 +12,7 @@ interface CustomChipProps {
 const CustomChip: React.FC<CustomChipProps> = ({ text, enabled, onPress }) => {
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor: enabled ? theme.colors.primary : theme.colors.chipInactive }]}
+      style={[styles.button, { backgroundColor: enabled ? theme.colors.primaryLight : theme.colors.chipInactive }]}
       onPress={onPress}
     >
       <FontAwesome

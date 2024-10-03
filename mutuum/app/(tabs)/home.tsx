@@ -94,11 +94,11 @@ const Home = () => {
 		<View style={styles.container}>
 			<LinearGradient
 				// Background Linear Gradient
-				colors={[theme.colors.backgroundGradient, "#fff"]}
+				colors={[theme.colors.primary, "#fff"]}
 				style={styles.container}
 			>
 				<ScrollView showsVerticalScrollIndicator={false}>
-					<View style={{ height: 40 }} />
+					<View style={{ height: 10 }} />
 					<HomeRectangle coin={wallet.coin} balance={wallet.balance} ars={convertedBalance ?? 0} />
 					
 					<View style={{ height: 20 }} />
@@ -107,6 +107,7 @@ const Home = () => {
 						<View style={{ height: 20 }} />
 						<HomeBubble loans={loans} />
 					</View>
+					<View style={{ height: 20 }} />
 				</ScrollView>
 			</LinearGradient>
 		</View>

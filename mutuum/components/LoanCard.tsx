@@ -23,8 +23,8 @@ interface Requirement {
 }
 
 interface LoanCardProps {
-	color: string;
-	name: string | number;
+	
+	id: string;
 	currency: "ETH" | "ARS";
 	amount: string | number;
 	interest: string | number;
@@ -35,8 +35,8 @@ interface LoanCardProps {
 }
 
 const LoanCard: React.FC<LoanCardProps> = ({
-	color,
-	name,
+	
+	id,
 	currency,
 	amount,
 	interest,
@@ -95,7 +95,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 					style={styles.avatar}
 				/>
 				<View style={styles.details}>
-					<Text style={styles.name}>{name}</Text>
+					<Text style={styles.name}>Nombre</Text>
 					<View style={styles.currencyRow}>
 						<Text style={styles.currencyText}>${currency}</Text>
 						<Text style={styles.amountText}>{amount}</Text>
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.1,
 		shadowRadius: 3.84,
 		// Elevation for Android
-		elevation: 5,
+		elevation: 4,
 	},
 	avatar: {
 		width: 65,

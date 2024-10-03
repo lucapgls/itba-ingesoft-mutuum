@@ -16,7 +16,7 @@ import { getLoans, loadLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import theme from '@theme/theme';
+import theme from "@theme/theme";
 
 const Explore = () => {
 	const [loans, setLoans] = useState<any[]>([]);
@@ -73,6 +73,7 @@ const Explore = () => {
 
 	return (
 		<View style={styles.safeArea}>
+			
 			<View style={styles.container}>
 				<View style={{ height: 50 }} />
 
@@ -87,7 +88,6 @@ const Explore = () => {
 						<FontAwesome
 							name="search"
 							size={20}
-							
 							style={styles.searchIcon}
 						/>
 						<TextInput
@@ -101,7 +101,11 @@ const Explore = () => {
 						style={styles.filterButton}
 						onPress={openModal}
 					>
-						<Ionicons name="filter" size={20} color={theme.colors.textBlack} />
+						<Ionicons
+							name="filter"
+							size={20}
+							color={theme.colors.textBlack}
+						/>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -114,8 +118,7 @@ const Explore = () => {
 				{loans.map((loan) => (
 					<View style={styles.card} key={loan.id}>
 						<LoanCard
-							color={loan.color ?? theme.colors.primary}
-							name={loan.name ?? "Préstamo"}
+							id= {loan.lender_id}
 							currency={loan.currency ?? "USD"}
 							amount={loan.initial_amount ?? 0}
 							interest={loan.interest ?? 0}
@@ -186,17 +189,19 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingHorizontal: 20,
-		backgroundColor: theme.colors.primary,
+		
 	},
 	searchSection: {
 		flexDirection: "row",
 		alignItems: "center",
 
-		borderRadius: 50,
+		borderRadius: 10,
 		paddingHorizontal: 10,
 		width: "85%",
 		marginVertical: 15,
 		backgroundColor: "white",
+
+		
 	},
 	searchIcon: {
 		marginRight: 10,
@@ -207,7 +212,7 @@ const styles = StyleSheet.create({
 		height: 40,
 	},
 	scrollContainer: {
-		padding: 20,
+		paddingHorizontal: 20,
 		backgroundColor: theme.colors.background,
 	},
 	title: {
@@ -230,7 +235,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	filterButton: {
-		borderRadius: 50,
+		borderRadius: 10,
 		backgroundColor: "white",
 		height: 40,
 		width: 40,

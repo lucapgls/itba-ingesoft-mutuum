@@ -18,15 +18,16 @@ const RootLayout = () => {
 				options={{
 					title: "Nuevo préstamo",
 					headerStyle: {
-						backgroundColor: theme.colors.primary, // Purple background
+						backgroundColor: theme.colors.background,
+						
 					},
-					headerTintColor: theme.colors.textWhite,
+					headerTintColor: theme.colors.textBlack,
 					headerLeft: () => (
 						<TouchableOpacity onPress={router.back} style={{paddingRight: 15}}>
 							<Ionicons
 								name="arrow-back"
 								size={24}
-								color="white"
+								color={theme.colors.textBlack}
 							/>
 						</TouchableOpacity>
 					),

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.10,
     shadowRadius: 3.84,
     // Elevation for Android
-    elevation: 5,
+    elevation: 4,
         
     },
     header: {

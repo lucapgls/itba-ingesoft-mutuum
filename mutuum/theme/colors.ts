@@ -2,7 +2,7 @@
 const colors = {
     // Primary brand colors
     primary: '#9d7cff', // Main purple
-    primaryLight: '#cca8ff', // Lighter purple used for backgrounds
+    primaryLight: '#c4b8ec', // Lighter purple used for backgrounds
     
 
     // Background and surface colors

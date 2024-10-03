@@ -1,43 +1,50 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Alert, StyleSheet, Text, ScrollView } from "react-native";
+import {
+	View,
+	TextInput,
+	Button,
+	Alert,
+	StyleSheet,
+	Text,
+	ScrollView,
+} from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { router, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import CustomTextInput from "../../components/CustomTextInput";
 import { supabase } from "./SupabaseConfig";
-import  API_BASE_URL from "../../api/api_temp";
-import theme from '@theme/theme';
+import API_BASE_URL from "../../api/api_temp";
+import theme from "@theme/theme";
 
 export const signUpUser = async (email: string, password: string) => {
 	try {
-	  const response = await fetch(`${API_BASE_URL}/api/v1/user/create`, {
-		method: "POST",
-		headers: {
-		  "Content-Type": "application/json",
-		},
-		body: JSON.stringify({ email, password }),
-	  });
-  
-	  if (!response.ok) {
-		throw new Error("Failed to create user");
-	  }
-  
-	  const data = await response.json();
-	  return data;
-	} catch (error) {
-	  console.error("Error: ", error);
-	  throw error;
-	}
+		const response = await fetch(`${API_BASE_URL}/api/v1/user/create`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ email, password }),
+		});
 
-}
+		if (!response.ok) {
+			throw new Error("Failed to create user");
+		}
+
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error("Error: ", error);
+		throw error;
+	}
+};
 const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [username, setUsername] = useState("");
 
 	const handleSignUp = async () => {
 		try {
 			await signUpUser(email, password);
-			
 
 			// await createUserWithEmailAndPassword(auth, email, password);
 			// await addDoc(collection(firestore, "Users"), { email: email });
@@ -50,9 +57,8 @@ const SignUp = () => {
 	};
 
 	return (
-        
 		<View style={styles.safeArea}>
-            <StatusBar backgroundColor= "theme.colors.primary"  />
+			<StatusBar backgroundColor="theme.colors.primary" />
 			<View style={styles.rectangle}>
 				<View style={{ height: 30 }} />
 				<Text style={styles.title}>Registrate en</Text>
@@ -60,39 +66,52 @@ const SignUp = () => {
 			</View>
 
 			<ScrollView style={{ padding: 20 }}>
-				
-				<CustomTextInput
-                    placeholder="miusuario@mail.com"
-                    value={email}
-                    onChangeText={setEmail}
-					title="Email"
-                />
-				<View style={{ height: 15 }} />
-				
-				<CustomTextInput
-                    placeholder="********"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-					title="Contraseña"
-                />
-				<View style={{ height: 25 }} />
-				<CustomButton
-					onPress={handleSignUp}
-					text="Resgistrarse"
+			<CustomTextInput
+					placeholder="miusuario"
+					value={username}
+					onChangeText={()=>{}}
+					title="Nombre de usuario"
 				/>
+				<View style={{ height: 15 }} />
+				<CustomTextInput
+					placeholder="miusuario@mail.com"
+					value={email}
+					onChangeText={setEmail}
+					title="Email"
+				/>
+				<View style={{ height: 15 }} />
+
+				<CustomTextInput
+					placeholder="********"
+					value={password}
+					onChangeText={setPassword}
+					secureTextEntry
+					title="Contraseña"
+				/>
+				<View style={{ height: 15 }} />
+
+				
+
+
+
+				<View style={{ height: 25 }} />
+				<CustomButton onPress={handleSignUp} text="Resgistrarse" />
 				<View style={styles.separator} />
 				<Link href="/sign-in" style={{ textAlign: "center" }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						Ya tenes una cuenta?{" "}
-						<Text style={{ color: theme.colors.primary, fontWeight: 600 }}>
-							Iniciar sesión	
+						<Text
+							style={{
+								color: theme.colors.primary,
+								fontWeight: 600,
+							}}
+						>
+							Iniciar sesión
 						</Text>
 					</Text>
 				</Link>
 			</ScrollView>
 		</View>
-        
 	);
 };
 
