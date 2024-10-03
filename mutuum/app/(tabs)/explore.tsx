@@ -62,6 +62,8 @@ const Explore = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			//TODO: ponerlo en un archivo de inicio
+			await loadLoans();
 			const loansArray = getLoans();
 			setLoans(loansArray);
 			//console.log(loansArray);
