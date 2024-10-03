@@ -61,7 +61,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
     border: {
       borderWidth: 2,
       borderColor: theme.colors.borderGray,
-      borderRadius: 12,
+      borderRadius: 10,
       width: '100%',
       height: 50,
       justifyContent: 'center',
