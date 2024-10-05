@@ -14,6 +14,7 @@ import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "./CustomButton";
 import theme from '@theme/theme';
+import NotificationDialog from './NotificationDialog';
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -48,6 +49,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 	const [isModalVisible, setModalVisible] = useState(false);
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["60%"], []);
+	const [dialogVisible, setDialogVisible] = useState(false);
 
 	const openBottomSheet = () => {
 		setModalVisible(true);
@@ -55,7 +57,18 @@ const LoanCard: React.FC<LoanCardProps> = ({
 
 	const closeBottomSheet = () => {
 		setModalVisible(false);
+		
 	};
+
+	const handlePressIn = () => {
+		closeBottomSheet();
+		setDialogVisible(true);
+
+	};
+
+	const closeDialog = () => {
+		setDialogVisible(false);
+	  };
 
 	const calculateTotalAmount = (
 		amount: number,
@@ -182,7 +195,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 																name={
 																	requirement.completed
 																		? "checkmark"
-																		: "close"
+																		: "close-outline"
 																}
 																size={22}
 																color="black"
@@ -214,8 +227,8 @@ const LoanCard: React.FC<LoanCardProps> = ({
 											{/* Botón para cerrar el BottomSheet */}
 											<View style={{ height: 14 }} />
 											<CustomButton
-												text="Tomar préstamo"
-												onPress={closeBottomSheet}
+												text="Solicitar préstamo"
+												onPress={handlePressIn}
 											/>
 										</View>
 									</TouchableWithoutFeedback>
@@ -225,6 +238,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 					</View>
 				</TouchableWithoutFeedback>
 			</Modal>
+			<NotificationDialog visible={dialogVisible} onClose={closeDialog} />
 		</GestureHandlerRootView>
 	);
 };

@@ -17,6 +17,8 @@ import { getConvertToARS, getWalletBalance } from "../../api/wallet";
 import theme from "@theme/theme";
 import Carousel from "react-native-reanimated-carousel";
 import ParallaxCarousel from "@components/ParallaxCarousel";
+import NoLoansBubble from "@components/NoLoansBubble";
+import { router } from "expo-router";
 
 const Home = () => {
 	const loans: Loan[] = [
@@ -137,6 +139,13 @@ const Home = () => {
 					<ParallaxCarousel />
 
 					<View style={{ paddingHorizontal: 20 }}>
+					<View style={{ height: 20 }} />
+					{/* NoLoansBubble se usan cuando todavía no se solicitó/creó ningun prestamo */}
+						<NoLoansBubble text="Todavía no tenes tu prestamo?" buttonText="Explorar prestamos" 
+						onPress={() => router.replace("/explore")}/>
+						<View style={{ height: 20 }} />
+						<NoLoansBubble text="Queres hacer rendir tu plata?" buttonText="Crear prestamo" 
+						onPress={() => router.push("/create_loan")}/>
 						<View style={{ height: 20 }} />
 						<RecentUsersBubble Users={Users} />
 						<View style={{ height: 20 }} />

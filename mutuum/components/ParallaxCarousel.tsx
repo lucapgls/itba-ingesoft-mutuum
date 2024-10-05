@@ -12,7 +12,7 @@ const data = Array.from({ length: 10 }).map((_, index) => index);
 export const list = [
 	{
 		id: "1",
-		title: "Todavía no tenes tu préstamo?\nSolicita uno ahora!",
+		title: "Segun expertos, las personas que prestan\nen mutuum son confiables y seguras",
 		color: theme.colors.primary,
 		img: require("@assets/images/thumbnail.png"),
 	},
@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
 	},
 	carouselText: {
 		textAlign: "center",
-		fontSize: 15,
+		fontSize: 16,
+		fontWeight: "500",
 	},
 	paginationContainer: {
 		position: "absolute",

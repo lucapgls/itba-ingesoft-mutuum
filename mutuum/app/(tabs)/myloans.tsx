@@ -123,7 +123,7 @@ const MyLoans = () => {
 				))}
 				<View style={{ height: 8 }} />
                 <CustomButton
-                    text="Ofrecer nuevo préstamo"
+                    text="Crear préstamo"
                     onPress={() => router.push("/create_loan")}
                 />
                 <View style={{ height: 20 }} />

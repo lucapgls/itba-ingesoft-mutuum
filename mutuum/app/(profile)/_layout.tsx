@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { Redirect, Stack, router } from "expo-router";
 import theme from "@theme/theme";
@@ -13,48 +13,68 @@ const AuthLayout = () => {
 					options={{
 						title: "Mis datos",
 						headerStyle: {
-							backgroundColor: theme.colors.background,
+						  backgroundColor: theme.colors.background,
 						},
+						headerShadowVisible: false,
 						headerTintColor: theme.colors.textBlack,
 						headerLeft: () => (
-							<TouchableOpacity
-								onPress={router.back}
-								style={{ paddingRight: 15 }}
-							>
-								<Ionicons
-									name="arrow-back"
-									size={24}
-									color={theme.colors.textBlack}
-								/>
+						  <View style={styles.buttonContainer}>
+							<TouchableOpacity onPress={router.back} style={styles.button}>
+							  <Ionicons
+								name="arrow-back"
+								size={24}
+								color={theme.colors.textBlack}
+			
+							  />
 							</TouchableOpacity>
+						  </View>
 						),
-					}}
+					  }}
 				/>
 				<Stack.Screen
 					name="edit_profile"
 					options={{
 						title: "Editar perfil",
 						headerStyle: {
-							backgroundColor: theme.colors.background,
+						  backgroundColor: theme.colors.background,
 						},
+						headerShadowVisible: false,
 						headerTintColor: theme.colors.textBlack,
 						headerLeft: () => (
-							<TouchableOpacity
-								onPress={router.back}
-								style={{ paddingRight: 15 }}
-							>
-								<Ionicons
-									name="arrow-back"
-									size={24}
-									color={theme.colors.textBlack}
-								/>
+						  <View style={styles.buttonContainer}>
+							<TouchableOpacity onPress={router.back} style={styles.button}>
+							  <Ionicons
+								name="arrow-back"
+								size={24}
+								color={theme.colors.textBlack}
+			
+							  />
 							</TouchableOpacity>
+						  </View>
 						),
-					}}
+					  }}
 				/>
 			</Stack>
 		</>
 	);
 };
 
+
+const styles = StyleSheet.create({
+	buttonContainer: {
+	  justifyContent: 'center', // Center content vertically
+	  alignItems: 'center', // Center content horizontally
+	  height: '100%', // Ensure it takes the full height of the parent
+	  paddingRight: 15,
+	},
+	button: {
+	  borderRadius: 10,
+	  backgroundColor: "white",
+	  height: 40,
+	  width: 40,
+	  justifyContent: 'center', // Center content vertically
+	  alignItems: 'center', // Center content horizontally
+	  
+	},
+  });
 export default AuthLayout;
