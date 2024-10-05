@@ -16,6 +16,8 @@ import { supabase } from "./(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import API_BASE_URL from "../api/api_temp"; 
 import theme from '@theme/theme';
+import { createLendingPostAndRequirements } from "api/loan";
+import { addLoan } from "store/LoanStore";
 
 
 // Function to create a new lending post
@@ -101,30 +103,15 @@ const CreateLoan: React.FC = () => {
 		];
 
 		try {
-			const response = await fetch(`${API_BASE_URL}/api/v1/loan/createLendingPost`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					lenderId: userId, // Pass the user's ID
-					initialAmount,
-					interest,
-					deadline,
-				}),
-			});
+			await addLoan(userId, initialAmount, initialAmount, interest, deadline, requirements);
 
-			const data = await response.json();
-
-			if (!response.ok) {
-				throw new Error("Failed to create lending post");
-			}
 
 			router.replace("/explore");
 			Alert.alert("Success", "Lending post created successfully!");
 		} catch (error) {
 			Alert.alert("Error", "Failed to create lending post.");
-		}	
+		}
+	
 	};
 
 	return (

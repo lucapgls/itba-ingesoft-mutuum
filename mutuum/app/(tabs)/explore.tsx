@@ -66,7 +66,7 @@ const Explore = () => {
 			await loadLoans();
 			const loansArray = getLoans();
 			setLoans(loansArray);
-			//console.log(loansArray);
+			
 		};
 		fetchData();
 	}, []);

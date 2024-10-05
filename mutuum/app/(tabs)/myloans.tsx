@@ -12,7 +12,7 @@ import { supabase } from "../(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";
-import { getLoans, loadLoans } from "../../store/LoanStore";
+import { getLoans, getLoansByUserId, loadLoans } from "../../store/LoanStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
@@ -62,11 +62,19 @@ const MyLoans = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			//TODO: ponerlo en un archivo de inicio
-			await loadLoans();
-			const loansArray = getLoans();
-			setLoans(loansArray);
-			//console.log(loansArray);
+			const {
+				data: { user },
+				error,
+			} = await supabase.auth.getUser();
+			const userId = user?.id;
+	
+			if (userId) {
+				const loansArray = await getLoansByUserId(userId);
+				setLoans(loansArray ?? []);
+				//console.log(loansArray);
+			} else {
+				console.error("User ID is undefined");
+			}
 		};
 		fetchData();
 	}, []);

@@ -1,4 +1,4 @@
-import { fetchLoans, fetchLoanRequirements, createLendingPost, createLoanRequirements } from "../api/loanApi";
+import { fetchLoans, fetchLoanRequirements, createLendingPostAndRequirements, fetchLoansByUserId } from "api/loan";
 
 let loansArray: Array<any> = [];
 
@@ -29,45 +29,24 @@ export const addLoan = async (
   deadline: string,
   requirements: Array<{ name: string; completed: boolean }>
 ) => {
-  const result = await createLendingPostAndRequirements(lenderId, initialAmount, availableAmount, interest, deadline, requirements);
+  await createLendingPostAndRequirements(lenderId, initialAmount, availableAmount, interest, deadline, requirements);
+  await loadLoans();
+  console.log('Loan added successfully:');
 
-  if (result) {
-    const { lendingPostId, requirements } = result;
-    const newLoan = {
-      id: lendingPostId,
-      lender_id: lenderId,
-      initial_amount: initialAmount,
-      available_amount: availableAmount,
-      interest: interest,
-      dead_line: deadline,
-      requirements: requirements,
-    };
-    await loadLoans();
-    console.log('Loan added successfully:', newLoan);
-  } else {
-    console.log('Failed to add new loan');
-  }
 };
 
-
-export const createLendingPostAndRequirements = async (
-  lenderId: string,
-  initialAmount: number,
-  availableAmount: number,
-  interest: number,
-  deadline: string,
-  requirements: Array<{ name: string; completed: boolean }>
-) => {
-  const lendingPostId = await createLendingPost(lenderId, initialAmount, availableAmount, interest, deadline);
-
-  if (lendingPostId) {
-    await createLoanRequirements(lendingPostId, requirements);
-    return { lendingPostId, requirements };
+export const getLoansByUserId = async (userId: string) => {
+  const loans = await fetchLoansByUserId(userId);
+  if (Array.isArray(loans)) {
+    for (const loan of loans) {
+      const requirements = await fetchLoanRequirements(loan.id);
+      loan.requirements = requirements;
+    }
+    return loans;
   } else {
-    console.log('Failed to create lending post');
-    return null;
+    console.log('No loans available or an error occurred.');
   }
-};
+}
 
 
 export const getLoans = () => loansArray;
