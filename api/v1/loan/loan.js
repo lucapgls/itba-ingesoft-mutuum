@@ -119,3 +119,32 @@ export const createLoanRequirements = async (lendingPostId, requirements) => {
     throw error;
   }
 };
+
+
+
+// Function to create a loan
+export const createLoan = async (lendingPostId, borrowerId, loanAmount) => {
+  try {
+    // Insert the loan into the loan table
+    const { data, error } = await supabase
+      .from('loan')
+      .insert([
+        {
+          lending_post_id: lendingPostId,
+          borrower_id: borrowerId,
+          loan_amount: loanAmount,
+          is_paid: false, // New column to track loan payment status
+        },
+      ]);
+
+    if (error) {
+      console.error('Error creating loan:', error.message);
+      return null;
+    }
+
+    return data[0]; // Return the created loan object
+  } catch (error) {
+    console.error('Error creating loan:', error.message);
+    return null;
+  }
+};

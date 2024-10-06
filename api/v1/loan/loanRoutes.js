@@ -86,6 +86,46 @@ router.get('/requirements/:lendingPostId', async (req, res) => {
         }
     });
 
+    
+    
+    /*
+    * @POST /api/loan
+    * brief: Create a loan based on lending post and borrower request
+    * 
+    * Example request:
+    * /api/loan/createLoan
+    */
+    router.post('/createLoan', async (req, res) => {
+        const { lendingPostId, borrowerId, loanAmount } = req.body;
+
+        try {
+            // Fetch the lending post to check the available amount
+            const lendingPost = await getLendingPostById(lendingPostId);
+
+            if (!lendingPost) {
+                return res.status(404).json({ error: 'Post de préstamo no encontrado' });
+            }
+
+            const availableAmount = lendingPost.available_amount;
+
+            // Check if the loan amount can be borrowed
+            if (loanAmount > availableAmount) {
+                return res.status(400).json({ error: 'El monto del préstamo excede el presupuesto disponible' });
+            }
+
+            // Create the loan
+            const newLoan = await createLoan(lendingPostId, borrowerId, loanAmount);
+
+            if (!newLoan) {
+                return res.status(500).json({ error: 'No se pudo crear el préstamo' });
+            }
+
+            res.status(201).json({ loan: newLoan, message: 'Préstamo creado exitosamente' });
+        } catch (error) {
+            res.status(500).json({ error: 'Error al crear el préstamo', details: error.message });
+        }
+    });
+
 
     
 
