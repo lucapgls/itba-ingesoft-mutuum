@@ -32,7 +32,7 @@ const NoLoansBubble:React.FC<NoLoanProps> = ({
 				onPress={onPress}
 				style={styles.containerPress}
 			>
-				<View style={styles.rectangle}>
+				<View style={[styles.rectangle, theme.shadowAndroid, theme.shadowIOS]}>
 					<View style={styles.header}>
 						<Text style={styles.title}>
 							{text}
@@ -66,13 +66,7 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
 		borderRadius: 20,
-		// Shadow for iOS
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 3 },
-		shadowOpacity: 0.1,
-		shadowRadius: 3.84,
-		// Elevation for Android
-		elevation: 4,
+	
 	},
 	header: {
 		justifyContent: "center",

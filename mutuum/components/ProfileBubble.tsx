@@ -47,7 +47,7 @@ const ProfileBubble: React.FC<CustomProfileBubbleProps> = ({
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
     >
-      <Animated.View style={[styles.rectangle, { backgroundColor: animatedBackgroundColor }]}>
+      <Animated.View style={[styles.rectangle, { backgroundColor: animatedBackgroundColor }, theme.shadowAndroid, theme.shadowIOS]}>
           
             <View style={styles.header}>
               <View style={styles.iconAndTitle}>
@@ -87,13 +87,7 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
 		borderRadius: 20,
-		 // Shadow for iOS
-		 shadowColor: '#000',
-		 shadowOffset: { width: 0, height: 3 },
-		 shadowOpacity: 0.10,
-		 shadowRadius: 3.84,
-		 // Elevation for Android
-		 elevation: 4,
+	
 	},
     iconAndTitle: {
         flexDirection: 'row',

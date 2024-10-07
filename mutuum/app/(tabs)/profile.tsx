@@ -53,7 +53,7 @@ const Profile = ({
 					<ProfileBubble
 						title="Notificaciones"
 						icon="notifications"
-						onPress={() => {}}
+						onPress={() => router.push("/notifications")}
 					/>
 					<View style={{ height: 15 }} />
 					<ProfileBubble

@@ -45,9 +45,9 @@ function ParallaxCarousel() {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<View style={{ flex: 1 }}>
-				<View style={styles.carouselContainer}>
+				<View style={[styles.carouselContainer, theme.shadowIOS]}>
 					<Carousel
-						style={styles.carousel}
+						style={[styles.carousel, theme.shadowAndroid]}
 						ref={ref}
 						width={carouselWidth}
 						height={100}
@@ -118,13 +118,8 @@ const styles = StyleSheet.create({
 	},
 	carousel: {
 		borderRadius: 20,
-		// Shadow for iOS
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 3 },
-		shadowOpacity: 0.1,
-		shadowRadius: 3.84,
-		// Elevation for Android
-		elevation: 4,
+		
+		
 	},
 	img: {
 		height: "100%",

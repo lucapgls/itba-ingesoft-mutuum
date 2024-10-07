@@ -6,7 +6,7 @@ import theme from "@theme/theme";
 const RecentUsersBubble = ({ Users }: { Users: User[] }) => {
 	return (
 		<View style={styles.container}>
-			<View style={styles.rectangle}>
+			<View style={[styles.rectangle, theme.shadowAndroid, theme.shadowIOS]}>
 				<View style={styles.header}>
 					<Text style={styles.title}>Conexiones recientes</Text>
 					<TouchableOpacity>
@@ -48,13 +48,7 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 		borderRadius: 20,
 
-		// Shadow for iOS
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 3 },
-		shadowOpacity: 0.1,
-		shadowRadius: 3.84,
-		// Elevation for Android
-		elevation: 4,
+		
 	},
 	header: {
 		flexDirection: "row",
