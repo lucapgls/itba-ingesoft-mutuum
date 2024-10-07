@@ -18,7 +18,7 @@ import API_BASE_URL from "../../api/api_temp";
 export const signInUser = async (email: string, password: string) => {
 	// TEMP TODO
 	try {
-	const response = await fetch(`${API_BASE_URL}/api/v1/user/login`, {
+	const response = await fetch(`${API_BASE_URL}/api/v1/users/login`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

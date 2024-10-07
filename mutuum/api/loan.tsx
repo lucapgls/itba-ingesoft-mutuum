@@ -1,8 +1,12 @@
 import API_BASE_URL from "./api_temp"
 
+const API_SLUG = (slug: string) => {
+    return `${API_BASE_URL}/api/v1/loans${slug}`
+};
+
 export const fetchLoans = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/loan`, {
+      const response = await fetch(API_SLUG('/'), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -13,19 +17,17 @@ export const fetchLoans = async () => {
       if (!response.ok) {
         throw new Error('Error al obtener préstamos');
       }
-      
+     
       const data = await response.json();
-      console.log(data.loans);
       return data.loans;
     } catch (error) {
-      console.error('Error al obtener préstamos:', error);
       throw error;
     }
   };
   
   export const fetchLoanRequirements = async (lendingPostId: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/loan/requirements/${lendingPostId}`, {
+      const response = await fetch(API_SLUG(`/requirements?lendingPostId=${lendingPostId}`), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -39,24 +41,23 @@ export const fetchLoans = async () => {
       const data = await response.json();
       return data.requirements;
     } catch (error) {
-      console.error('Error al obtener los requisitos del préstamo:', error);
       throw error;
     }
   };
 
   export const fetchLoansByUserId = async (userId: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/loan/${userId}`, {
+      const response = await fetch(API_SLUG(`?userId=${userId}`), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!response.ok) {
         throw new Error('Error al obtener préstamos por ID de usuario');
       }
-  
+
       const data = await response.json();
       return data.loans;
     } catch (error) {
@@ -75,7 +76,7 @@ export const fetchLoans = async () => {
     requirements: Array<{ name: string; completed: boolean }>
   ) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/loan`, {
+      const response = await fetch(API_SLUG("/create"), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

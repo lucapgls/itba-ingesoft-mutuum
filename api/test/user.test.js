@@ -10,7 +10,7 @@ describe('User API Tests', () => {
     it('should create a new user, if it doesnt exist', (done) => {
         // Increase timeout for supabase to respond
         request(app)
-            .post('/api/v1/user/create')
+            .post('/api/v1/users/create')
             .send(
                 { 
                     'email': randomEmail, 
@@ -27,7 +27,7 @@ describe('User API Tests', () => {
 
     it('should login a user, if it exists', (done) => {
         request(app)
-            .post('/api/v1/user/login')
+            .post('/api/v1/users/login')
             .send(
                 { 
                     'email': randomEmail,

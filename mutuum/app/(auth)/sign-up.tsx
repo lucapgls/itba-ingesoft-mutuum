@@ -18,7 +18,7 @@ import theme from "@theme/theme";
 
 export const signUpUser = async (email: string, password: string) => {
 	try {
-		const response = await fetch(`${API_BASE_URL}/api/v1/user/create`, {
+		const response = await fetch(`${API_BASE_URL}/api/v1/users/create`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

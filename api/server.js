@@ -1,9 +1,9 @@
 import express, { json } from 'express';
 import { config } from 'dotenv';
 
-import walletRouter from './v1/wallet/walletRoutes.js';
-import userRouter from './v1/user/userRoutes.js';
-import loanRouter from './v1/loan/loanRoutes.js';
+import walletRouter from './v1/wallets/walletRoutes.js';
+import userRouter from './v1/users/userRoutes.js';
+import loanRouter from './v1/loans/loanRoutes.js';
 
 // Load environment variables
 config();
@@ -23,9 +23,9 @@ app.get('/api/health', (req, res) => {
 });
 
 
-app.use('/api/v1/wallet', walletRouter);
-app.use('/api/v1/user', userRouter);
-app.use('/api/v1/loan', loanRouter); 
+app.use('/api/v1/wallets', walletRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/loans', loanRouter); 
 
 
 app.listen(PORT, () => {
