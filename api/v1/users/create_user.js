@@ -33,6 +33,7 @@ async function createUser(email, password) {
     });
 
     if (rpcError) {
+        console.log("teaaa");
         throw new Error('Error: Loading wallet to DB: ' + rpcError.message);
     }
 

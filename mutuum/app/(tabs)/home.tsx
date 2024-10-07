@@ -82,8 +82,8 @@ const Home = () => {
 
 	React.useEffect(() => {
 		const fetchWalletBalance = async () => {
-			
-			const { amount, token } = await getWalletBalance(UserStore.userId
+
+			const { amount, token } = await getWalletBalance(UserStore.walletId
 			);
 			setWallet({ balance: amount, coin: token });
 		};

@@ -23,7 +23,7 @@ describe('User API Tests', () => {
                 expect(res.body).to.have.property('user');
                 done();
             });
-    }).timeout(5000);
+    });
 
     it('should login a user, if it exists', (done) => {
         request(app)
