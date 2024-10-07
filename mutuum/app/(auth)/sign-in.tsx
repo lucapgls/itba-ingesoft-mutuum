@@ -13,6 +13,7 @@ import CustomTextInput from "../../components/CustomTextInput";
 import theme from '@theme/theme';
 
 import API_BASE_URL from "../../api/api_temp";
+import UserStore from "store/UserStore";
 
 // Sign in the user with email and password
 export const signInUser = async (email: string, password: string) => {
@@ -31,6 +32,8 @@ export const signInUser = async (email: string, password: string) => {
 	  	}
   
 	  	const data = await response.json();
+		UserStore.setUserId(data.user.id);
+		UserStore.setWalletId(data.user.wallet_id);
 	  	return data;
 	} catch (error) {
 	  console.error("Error: ", error);

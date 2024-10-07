@@ -15,6 +15,7 @@ import CustomTextInput from "../../components/CustomTextInput";
 import { supabase } from "./SupabaseConfig";
 import API_BASE_URL from "../../api/api_temp";
 import theme from "@theme/theme";
+import UserStore from "store/UserStore";
 
 export const signUpUser = async (email: string, password: string) => {
 	try {
@@ -31,6 +32,9 @@ export const signUpUser = async (email: string, password: string) => {
 		}
 
 		const data = await response.json();
+	
+		UserStore.setUserId(data.user.id);
+		UserStore.setWalletId(data.user.wallet_id);
 		return data;
 	} catch (error) {
 		console.error("Error: ", error);
@@ -69,7 +73,7 @@ const SignUp = () => {
 			<CustomTextInput
 					placeholder="miusuario"
 					value={username}
-					onChangeText={()=>{}}
+					onChangeText={setUsername}
 					title="Nombre de usuario"
 				/>
 				<View style={{ height: 15 }} />

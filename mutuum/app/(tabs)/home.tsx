@@ -19,6 +19,7 @@ import Carousel from "react-native-reanimated-carousel";
 import ParallaxCarousel from "@components/ParallaxCarousel";
 import NoLoansBubble from "@components/NoLoansBubble";
 import { router } from "expo-router";
+import UserStore from "store/UserStore";
 
 const Home = () => {
 	const loans: Loan[] = [
@@ -81,8 +82,8 @@ const Home = () => {
 
 	React.useEffect(() => {
 		const fetchWalletBalance = async () => {
-			const { amount, token } = await getWalletBalance(
-				"35ba7ec3-f2e7-5033-b6e1-014c7c24142c"
+			
+			const { amount, token } = await getWalletBalance(UserStore.userId
 			);
 			setWallet({ balance: amount, coin: token });
 		};

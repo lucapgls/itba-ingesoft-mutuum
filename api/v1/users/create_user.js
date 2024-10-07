@@ -36,7 +36,16 @@ async function createUser(email, password) {
         throw new Error('Error: Loading wallet to DB: ' + rpcError.message);
     }
 
-    return { user, wallet_id };
+    const displayName = "temp";
+    return { 
+        success: true, 
+        user: {
+            id: user.id,
+            email: user.email,
+            displayname: displayName, // temp
+            wallet_id: wallet_id // temp 
+        }
+    };
 }
 
 export { createUser };

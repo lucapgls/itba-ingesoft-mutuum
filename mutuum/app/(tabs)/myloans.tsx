@@ -17,6 +17,7 @@ import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import theme from "@theme/theme";
+import UserStore from "store/UserStore";
 
 const MyLoans = () => {
 	const [loans, setLoans] = useState<any[]>([]);
@@ -62,12 +63,8 @@ const MyLoans = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const {
-				data: { user },
-				error,
-			} = await supabase.auth.getUser();
-			const userId = user?.id;
-	
+			const userId = UserStore.userId;
+
 			if (userId) {
 				const loansArray = await getLoansByUserId(userId);
 				setLoans(loansArray ?? []);

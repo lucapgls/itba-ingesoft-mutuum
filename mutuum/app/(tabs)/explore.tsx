@@ -8,7 +8,6 @@ import {
 	Modal,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { supabase } from "../(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";

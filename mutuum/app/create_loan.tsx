@@ -18,6 +18,7 @@ import API_BASE_URL from "../api/api_temp";
 import theme from '@theme/theme';
 import { createLendingPostAndRequirements } from "api/loan";
 import { addLoan } from "store/LoanStore";
+import UserStore from "store/UserStore";
 
 
 // Function to create a new lending post
@@ -27,7 +28,7 @@ export const createLendingPost = async (
 	interest: number, // Interest rate for the loan
 	deadline: string // Deadline for loan repayment (formatted as string)
 ) => {
-	// Insert into the lending_post table
+	// TODO: ESTO DEBE ESTAR EN EL BACK!!!
 	const { data, error } = await supabase.from("lending_post").insert([
 		{
 			lender_id: lenderId, // Lender's ID from auth.users.id
@@ -82,11 +83,7 @@ const CreateLoan: React.FC = () => {
 	};
 
 	const handleCreateLoan  = async () => {
-		const {
-			data: { user },
-			error,
-		} = await supabase.auth.getUser();
-		const userId = user?.id;
+		const userId = UserStore.userId;	
 
 		if (!userId) {
 			Alert.alert("Error", "Debe iniciar sesion para publicar un prestamo");
