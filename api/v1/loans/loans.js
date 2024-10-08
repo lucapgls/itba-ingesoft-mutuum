@@ -67,26 +67,31 @@ export const fetchLoanRequirements = async (lendingPostId) => {
 };
 
 
-export const createLendingPost = async (lenderId, initialAmount, interest, deadline, emailRequired, phoneRequired) => {
+export const createLendingPost = async (lenderId, initialAmount, availableAmount, interest, deadline) => {
+  const createdAt = new Date().toISOString();
   try {
-    const { data, error } = await supabase.rpc('create_lending_post', {
-      _lender_id: lenderId,
-      _initial_amount: initialAmount,
-      _interest: interest,
-      _deadline: deadline,
-      _email_required: emailRequired,
-      _phone_required: phoneRequired,
-    });
+    const { data, error } = await supabase
+      .from('lending_post')
+      .insert([{
+        lender_id: lenderId,
+        initial_amount: initialAmount,
+        available_amount: availableAmount,
+        interest: interest,
+        dead_line: deadline,
+        created_at: createdAt,
+       
+      }])
+      .select();
 
+      
     if (error) {
-      console.error('Error creating lending post:', error.message);
-      return null;
+      console.error('Error creating lending post:', error);
+      throw error;
     }
-
-    return data; // Return the created lending post's ID
+    return data?.[0]?.id || null;
   } catch (error) {
-    console.error('Error creating lending post:', error.message);
-    return null;
+    console.error('Error:', error);
+    throw error;
   }
 };
 

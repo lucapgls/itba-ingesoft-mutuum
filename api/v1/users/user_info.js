@@ -20,11 +20,14 @@ export const getUserInfo = async (user_id) => {
 
 export const setEmail = async (user_id, email) => {
     const { data, error } = await supabase
-        .rpc('set_email', {
-            p_user_id: user_id,
-            p_email: email
-        });
+    .from('users_info')
+    .upsert([{
+        id: user_id,
+        email: email
+    }])
+    .select();
 
+    console.log(data);
     if (error) {
         throw new Error('Error setting email');
     }
@@ -33,11 +36,14 @@ export const setEmail = async (user_id, email) => {
 
 export const setDisplayName = async (user_id, display_name) => {
     const { data, error } = await supabase
-        .rpc('set_display_name', {
-            p_user_id: user_id,
-            p_display_name: display_name
-        })
+    .from('users_info')
+    .upsert([{
+        id: user_id,
+        display_name: display_name
+    }])
+    .select();
 
+    console.log(data);
     if (error) {
         throw new Error('Error setting display name');
     }

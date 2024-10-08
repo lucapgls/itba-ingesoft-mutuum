@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -17,6 +17,7 @@ import theme from '@theme/theme';
 import NotificationDialog from './NotificationDialog';
 import { getWalletID, postWalletTransaction } from "api/wallet";
 import UserStore from "store/UserStore";
+import { fetchUser } from "api/user";
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -52,6 +53,10 @@ const LoanCard: React.FC<LoanCardProps> = ({
 	const bottomSheetRef = useRef<BottomSheet>(null);
 	const snapPoints = useMemo(() => ["60%"], []);
 	const [dialogVisible, setDialogVisible] = useState(false);
+	const [currentUser, setCurrentUser] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+
 
 	const openBottomSheet = () => {
 		setModalVisible(true);
@@ -107,6 +112,26 @@ const LoanCard: React.FC<LoanCardProps> = ({
 		Number(term)
 	);
 
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const user = await fetchUser(id);
+                console.log("User data: ", user);
+                setCurrentUser(user[0]);
+            } catch (error) {
+                console.error('Failed to fetch user:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        getUser();
+    }, [id]);
+
+    if (isLoading) {
+        return <Text>Loading...</Text>; // Use <Text> component for loading indicator
+    }
+
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<TouchableOpacity style={styles.card} onPress={openBottomSheet}>
@@ -117,7 +142,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 					style={styles.avatar}
 				/>
 				<View style={styles.details}>
-					<Text style={styles.name}>Nombre</Text>
+					<Text style={styles.name}>{currentUser.display_name}</Text>
 					<View style={styles.currencyRow}>
 						<Text style={styles.currencyText}>${currency}</Text>
 						<Text style={styles.amountText}>{amount}</Text>

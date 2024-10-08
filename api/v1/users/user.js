@@ -11,7 +11,7 @@ async function getWalletId(userID) {
     }
 
     if (!walletData) {
-        console.error('Wallet data is null for user ID:', userIDd);
+        console.error('Wallet data is null for user ID:', userID);
         return { success: false, error: 'Wallet data not found' };
     }
 
