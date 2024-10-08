@@ -6,7 +6,7 @@ import app from '../server.js';
 
 describe('User API Tests', () => {
     let randomEmail = "testing_" + faker.internet.email();
-
+    let display_name = faker.name.findName();
     it('should create a new user, if it doesnt exist', (done) => {
         // Increase timeout for supabase to respond
         request(app)
@@ -14,7 +14,8 @@ describe('User API Tests', () => {
             .send(
                 { 
                     'email': randomEmail, 
-                    'password': '!MutuumFTW2024' 
+                    'password': '!MutuumFTW2024',
+                    'display_name': display_name,
                 }
             )
             .end((err, res) => {

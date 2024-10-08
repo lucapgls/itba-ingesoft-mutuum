@@ -33,7 +33,7 @@ export const setEmail = async (user_id, email) => {
 
 export const setDisplayName = async (user_id, display_name) => {
     const { data, error } = await supabase
-        .rpc('set_display_name',{
+        .rpc('set_display_name', {
             p_user_id: user_id,
             p_display_name: display_name
         })
