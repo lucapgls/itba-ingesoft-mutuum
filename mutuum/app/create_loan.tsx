@@ -3,10 +3,12 @@ import {
 	View,
 	ScrollView,
 	Alert,
-	Modal,
-	TouchableOpacity,
 	Text,
 	StyleSheet,
+	KeyboardAvoidingView,
+	Platform,
+	Modal,
+	TouchableOpacity,
 } from "react-native";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomButton from "../components/CustomButton";
@@ -14,12 +16,11 @@ import CustomChip from "../components/CustomChip";
 import { Picker } from "@react-native-picker/picker";
 import { supabase } from "./(auth)/SupabaseConfig";
 import { router } from "expo-router";
-import API_BASE_URL from "../api/api_temp"; 
-import theme from '@theme/theme';
+import API_BASE_URL from "../api/api_temp";
+import theme from "@theme/theme";
 import { createLendingPostAndRequirements } from "api/loan";
 import { addLoan } from "store/LoanStore";
 import UserStore from "store/UserStore";
-
 
 // Function to create a new lending post
 export const createLendingPost = async (
@@ -52,11 +53,12 @@ const CreateLoan: React.FC = () => {
 	const [amount, setAmount] = useState("");
 	const [quotas, setQuotas] = useState("");
 	const [interests, setInterests] = useState("");
+	const [description, setDescription] = useState("");
 	const [isEmailEnabled, setIsEmailEnabled] = useState(false);
 	const [isPhoneNumberEnabled, setIsPhoneNumberEnabled] = useState(false);
 	const [isIdEnabled, setIsIdEnabled] = useState(false);
 	const [isFaceIdEnabled, setIsFaceIdEnabled] = useState(false);
-	const [isPickerVisible, setPickerVisible] = useState(false);
+
 	const [selectedValue, setSelectedValue] = useState("0");
 
 	const handleChipPress = (chipType: string) => {
@@ -78,15 +80,14 @@ const CreateLoan: React.FC = () => {
 		}
 	};
 
-	const togglePicker = () => {
-		setPickerVisible(!isPickerVisible);
-	};
-
-	const handleCreateLoan  = async () => {
-		const userId = UserStore.userId;	
+	const handleCreateLoan = async () => {
+		const userId = UserStore.userId;
 
 		if (!userId) {
-			Alert.alert("Error", "Debe iniciar sesion para publicar un prestamo");
+			Alert.alert(
+				"Error",
+				"Debe iniciar sesion para publicar un prestamo"
+			);
 			return;
 		}
 
@@ -100,128 +101,103 @@ const CreateLoan: React.FC = () => {
 		];
 
 		try {
-			await addLoan(userId, initialAmount, initialAmount, interest, deadline, requirements);
-
+			await addLoan(
+				userId,
+				initialAmount,
+				initialAmount,
+				interest,
+				deadline,
+				requirements
+			);
 
 			router.replace("/explore");
 			Alert.alert("Success", "Lending post created successfully!");
 		} catch (error) {
 			Alert.alert("Error", "Failed to create lending post.");
 		}
-	
 	};
-
+	const [email, setEmail] = useState("");
 	return (
-		<ScrollView style={styles.container}>
-			<CustomTextInput
-				placeholder="0"
-				value={amount}
-				onChangeText={setAmount}
-				title="Valor (ETH)"
-				keyboardType="numeric"
-			/>
-			<View style={{ height: 14 }} />
-			<CustomTextInput
-				placeholder="00%"
-				value={interests}
-				onChangeText={setInterests}
-				title="Interes (%)"
-				keyboardType="numeric"
-				maxLength={2}
-			/>
-			<View style={{ height: 14 }} />
+		<KeyboardAvoidingView
+			style={{
+				flex: 1,
+				flexDirection: "column",
+				justifyContent: "flex-start",
+			}}
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			enabled
+		>
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<View style={{ padding: 20 }}>
+					<CustomTextInput
+						placeholder="0"
+						value={amount}
+						onChangeText={setAmount}
+						title="Valor (ETH)"
+						keyboardType="numeric"
+					/>
+					<View style={{ height: 14 }} />
+					<CustomTextInput
+						placeholder="00%"
+						value={interests}
+						onChangeText={setInterests}
+						title="Interes (%)"
+						keyboardType="numeric"
+						maxLength={2}
+					/>
+					<View style={{ height: 14 }} />
 
-			<Text style={{ fontSize: 15 }}>Requerimientos</Text>
-			<View style={{ height: 10 }} />
-			<View style={styles.chipContainer}>
-				<CustomChip
-					text="E-mail"
-					enabled={isEmailEnabled}
-					onPress={() => handleChipPress("email")}
-				/>
-				<CustomChip
-					text="Telefono"
-					enabled={isPhoneNumberEnabled}
-					onPress={() => handleChipPress("phone")}
-				/>
-				<CustomChip
-					text="DNI"
-					enabled={isIdEnabled}
-					onPress={() => handleChipPress("id")}
-				/>
-				<CustomChip
-					text="Face ID"
-					enabled={isFaceIdEnabled}
-					onPress={() => handleChipPress("faceId")}
-				/>
-			</View>
-			<View style={{ height: 8 }} />
-			<View>
-				<Text style={{ fontSize: 15 }}>Plazo (Meses)</Text>
-				<View style={{ height: 10 }} />
-				<TouchableOpacity onPress={togglePicker}>
-					<View style={styles.pickerValue}>
-						<Text style={{ fontSize: 16, paddingStart: 14 }}>
-							{selectedValue}
-						</Text>
+					<Text style={{ fontSize: 15 }}>Requerimientos</Text>
+					<View style={{ height: 10 }} />
+					<View style={styles.chipContainer}>
+						<CustomChip
+							text="E-mail"
+							enabled={isEmailEnabled}
+							onPress={() => handleChipPress("email")}
+						/>
+						<CustomChip
+							text="Telefono"
+							enabled={isPhoneNumberEnabled}
+							onPress={() => handleChipPress("phone")}
+						/>
+						<CustomChip
+							text="DNI"
+							enabled={isIdEnabled}
+							onPress={() => handleChipPress("id")}
+						/>
+						<CustomChip
+							text="Face ID"
+							enabled={isFaceIdEnabled}
+							onPress={() => handleChipPress("faceId")}
+						/>
 					</View>
-				</TouchableOpacity>
+					<View style={{ height: 8 }} />
 
-				<Modal
-					visible={isPickerVisible}
-					transparent={true}
-					animationType="fade"
-					onRequestClose={togglePicker}
-				>
-					<View style={styles.modalContainer}>
-						<View style={styles.pickerContainer}>
-							<View style={{ alignItems: "center" }}>
-								<Text
-									style={{
-										fontSize: 18,
-										fontWeight: "600",
-										marginBottom: 20,
-									}}
-								>
-									Meses
-								</Text>
-							</View>
-							<Picker
-								selectedValue={selectedValue}
-								onValueChange={(itemValue) =>
-									setSelectedValue(itemValue)
-								}
-							>
-								{Array.from({ length: 25 }, (_, i) => (
-									<Picker.Item
-										key={i}
-										label={i.toString()}
-										value={i.toString()}
-									/>
-								))}
-							</Picker>
+					<CustomTextInput
+						placeholder="00"
+						value={quotas}
+						onChangeText={setQuotas}
+						title="Plazo (Meses)"
+						keyboardType="numeric"
+					/>
 
-							<View
-								style={{
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-							>
-								<TouchableOpacity onPress={togglePicker}>
-									<Text style={styles.closeButton}>
-										Aceptar
-									</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-				</Modal>
-			</View>
+					<View style={{ height: 14 }} />
+					<CustomTextInput
+						placeholder="Descripcion"
+						value={description}
+						onChangeText={setDescription}
+						title="Descripcion"
+					/>
 
-			<View style={{ height: 30 }} />
+					<View style={{ height: 30 }} />
 
-			<CustomButton text="Crear préstamo" onPress={handleCreateLoan } />
-		</ScrollView>
+					<CustomButton
+						text="Crear préstamo"
+						onPress={handleCreateLoan}
+					/>
+				</View>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	);
 };
 
@@ -235,7 +211,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		flexWrap: "wrap",
 	},
-	
+
 	input: {
 		height: 40,
 		borderColor: theme.colors.borderGray,

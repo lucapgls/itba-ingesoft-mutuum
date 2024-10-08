@@ -63,15 +63,15 @@ const LoanCard: React.FC<LoanCardProps> = ({
 	};
 
 	// Handle prestamo
-	const handlePressIn = () => {
-		// closeBottomSheet();
-		// setDialogVisible(true);
-		// const fromWalletID = await getWalletID(id);
-		// const toWalletID = UserStore.walletId;
-		// const amount = totalAmount;
+	const handlePressIn = async() => {
+		closeBottomSheet();
+		setDialogVisible(true);
+		const fromWalletID = await getWalletID(id);
+		const toWalletID = UserStore.walletId;
+		const amount = totalAmount;
 
-		// const response = postWalletTransaction(fromWalletID, toWalletID, amount);
-		// console.log(response);
+		const response = postWalletTransaction(fromWalletID, toWalletID, amount);
+		console.log(response);
 
 	};
 
