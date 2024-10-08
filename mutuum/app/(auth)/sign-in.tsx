@@ -3,7 +3,9 @@ import {
 	Text,
 	StyleSheet,
 	TouchableOpacity,
-	ScrollView
+	ScrollView,
+	KeyboardAvoidingView,
+	Platform
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import CustomButton from "../../components/CustomButton";
@@ -50,6 +52,7 @@ const SignIn = () => {
 	const handleSignIn = async () => {
 		const data = await signInUser(email, password);
 		if (data) {
+			console.log("a");
 			router.push('/home');
 			// TODO: set the user in the global state
 		  }
@@ -60,14 +63,22 @@ const SignIn = () => {
 	};
 
 	return (
-		<View style={styles.safeArea}>
+		<KeyboardAvoidingView
+			style={{
+				flex: 1,
+				flexDirection: "column",
+				justifyContent: "flex-start",
+			}}
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			enabled
+		>
 			<View style={styles.rectangle}>
 				<View style={{ height: 30 }} />
 				<Text style={styles.title}>Bienvenido a</Text>
 				<Text style={styles.mutuum}>Mutuum</Text>
 			</View>
 
-			<ScrollView style={{ padding: 20 }}>
+			<ScrollView style={{ padding: 20 }} showsVerticalScrollIndicator={false}>
 				
 				<CustomTextInput
 					placeholder="example@mail.com"
@@ -115,7 +126,7 @@ const SignIn = () => {
 					</Text>
 				</Link>
 			</ScrollView>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 

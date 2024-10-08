@@ -23,4 +23,27 @@ const getConvertToARS = async (fromAmount: number, fromToken: string) => {
     return { amount, token };
 };
 
-export { getWalletBalance, getConvertToARS };
+const postWalletTransaction = async (fromWalletID: string, toWalletID: string, amount: number) => {
+    const response = await fetch(API_SLUG(`/transaction`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fromWalletID,
+            toWalletID,
+            amount
+        })
+    });
+    const data = await response.json();
+    return data;
+}
+
+
+const getWalletID = async (userId: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/v1/users/walletID?userID=${userId}`);
+    const data = await response.json();
+    return data.walletID;
+}
+
+export { getWalletBalance, getConvertToARS, postWalletTransaction, getWalletID };

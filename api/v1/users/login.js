@@ -1,4 +1,5 @@
 import { supabase } from '../../supabase_config.js';
+import { getWalletId } from './user.js';
 
 async function loginUser(email, password) {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -13,21 +14,8 @@ async function loginUser(email, password) {
 
     const user = data.user;
 
-    const { data: walletData, error: walletError } = await supabase.rpc('get_user_wallet_id', {
-        _user_id: user.id,
-    });
-
-    if (walletError) {
-        console.error('Error fetching wallet id:', walletError.message);
-        return { success: false, error: walletError.message };
-    }
-
-    if (!walletData) {
-        console.error('Wallet data is null for user ID:', user.id);
-        return { success: false, error: 'Wallet data not found' };
-    }
-
-    user.wallet_id = walletData;
+    const walletID = await getWalletId(user.id);
+    user.wallet_id = walletID;
 
     return { 
         success: true, 

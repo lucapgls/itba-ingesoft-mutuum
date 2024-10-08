@@ -6,15 +6,19 @@ import theme from '@theme/theme';
 interface NotificationCardProps {
   title: string;
   description: string;
+  date: string;
   icon: keyof typeof Ionicons.glyphMap;
 }
 
-const NotificationCard: React.FC<NotificationCardProps> = ({ title, description, icon }) => {
+const NotificationCard: React.FC<NotificationCardProps> = ({ title, description, date, icon }) => {
   return (
     <View style={[styles.card, theme.shadowAndroid, theme.shadowIOS]}>
       <Ionicons name={icon} size={24} style={styles.icon} />
       <View style={styles.textContainer}>
+        <View style={ styles.titleContainer } >
         <Text style={styles.title}>{title}</Text>
+        <Text style={{color: theme.colors.textGray, fontSize: 14}}>{date}</Text>
+        </View>
         <View style={{ height: 2 }} />
         <Text style={styles.description}>{description}</Text>
       </View>
@@ -44,7 +48,11 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: 'gray',
+    color: theme.colors.textGray,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

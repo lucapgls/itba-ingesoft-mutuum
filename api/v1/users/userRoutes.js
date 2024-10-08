@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { createUser } from './create_user.js';
+import { getWalletId } from './user.js';
 import loginUser from './login.js';
 import { getUserInfo } from './user_info.js';
 const router = express.Router();

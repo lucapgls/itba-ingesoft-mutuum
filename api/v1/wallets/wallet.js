@@ -25,9 +25,6 @@ async function createWallet() {
         const response = await fetch(url, options);
         const json = await response.json();
         
-        // Log the full response for debugging
-        console.log('Create Wallet Response:', JSON.stringify(json, null, 2));
-
         // Check if the response contains wallets
         if (json.data && json.data.wallets) {
             return json.data.wallets.map(wallet => wallet.id);
