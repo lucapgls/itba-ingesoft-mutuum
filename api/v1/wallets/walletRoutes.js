@@ -3,6 +3,7 @@ import { generateCiphertext } from './ciphertext.js';
 import { createWallet } from './wallet.js';
 import { getWalletBalanceValue } from './balance.js';
 import { convertTokenToARS } from './convert.js';
+import { createTransaction } from './transaction.js';
 
 const router = express.Router();
 
@@ -93,5 +94,35 @@ router.get('/convert' , async (req, res) => {
     }
 });
 
+/*
+ * @POST /api/wallet/transaction
+ *
+ * brief: Create a transaction
+ * 
+ * Example request:
+ * /api/wallet/transaction
+ * 
+ * Request body:
+ * {
+ *   "fromWalletId": "1234",
+ *   "toWalletId": "5678",
+ *   "amount": 100
+ * }
+ */
+router.post('/transaction', async (req, res) => {
+    const { fromWalletId, toWalletId, amount } = req.body;
+
+    if (!fromWalletId || !toWalletId || !amount) {
+        return res.status(400).json({ error: 'fromWalletId, toWalletId, and amount are required' });
+    }
+
+    try {
+        const ans = await createTransaction(fromWalletId, toWalletId, amount);
+
+        res.status(200).json(ans);
+    } catch (error) {
+        res.status(500).json({ error: 'Error creating transaction', details: error.message });
+    }
+});
 
 export default router;
