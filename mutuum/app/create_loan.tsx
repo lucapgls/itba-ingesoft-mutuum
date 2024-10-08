@@ -58,7 +58,7 @@ const CreateLoan: React.FC = () => {
   const [isPhoneNumberEnabled, setIsPhoneNumberEnabled] = useState(false);
   const [isIdEnabled, setIsIdEnabled] = useState(false);
   const [isFaceIdEnabled, setIsFaceIdEnabled] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedValue, setSelectedValue] = useState("0");
 
   const handleChipPress = (chipType: string) => {
@@ -81,6 +81,7 @@ const CreateLoan: React.FC = () => {
   };
 
   const handleCreateLoan = async () => {
+    setIsLoading(true);
     const userId = UserStore.userId;
 
     if (!userId) {
@@ -111,7 +112,10 @@ const CreateLoan: React.FC = () => {
       Alert.alert("Success", "Lending post created successfully!");
     } catch (error) {
       Alert.alert("Error", "Failed to create lending post.");
-    }
+    } finally {
+			setIsLoading(false);
+		}
+
   };
   const [email, setEmail] = useState("");
   return (
@@ -188,7 +192,7 @@ const CreateLoan: React.FC = () => {
 
           <View style={{ height: 30 }} />
 
-          <CustomButton text="Crear préstamo" onPress={handleCreateLoan} />
+          <CustomButton text="Crear préstamo" onPress={handleCreateLoan} disabled={isLoading}/>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

@@ -18,6 +18,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import theme from "@theme/theme";
 import UserStore from "store/UserStore";
+import { Skeleton } from "moti/skeleton";
 
 const MyLoans = () => {
 	const [loans, setLoans] = useState<any[]>([]);
@@ -29,6 +30,7 @@ const MyLoans = () => {
 	});
 	const [tempField, setTempField] = useState("initial_amount");
 	const [tempOrder, setTempOrder] = useState("asc");
+	const [isLoading, setIsLoading] = useState(true);
 
 	const sortLoans = (field: any, order: any) => {
 		const sortedLoans = [...loans].sort((a, b) => {
@@ -61,8 +63,9 @@ const MyLoans = () => {
 		closeModal();
 	};
 
-	useEffect(() => {
-		const fetchData = async () => {
+	const fetchData = async () => {
+		setIsLoading(true);
+		try {
 			const userId = UserStore.userId;
 
 			if (userId) {
@@ -72,7 +75,14 @@ const MyLoans = () => {
 			} else {
 				console.error("User ID is undefined");
 			}
-		};
+		} catch (error) {
+			console.error("Failed to fetch user:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	useEffect(() => {
 		fetchData();
 	}, []);
 
@@ -101,7 +111,6 @@ const MyLoans = () => {
 							onChangeText={setSearchText}
 						/>
 					</View>
-				
 				</View>
 			</View>
 
@@ -110,10 +119,24 @@ const MyLoans = () => {
 
 				<View style={{ height: 10 }} />
 
-				{loans.map((loan) => (
+				{isLoading ? (
+					Array.from({ length: 4 }).map((_, index) => (
+						<View key={index}>
+						  <View style={[theme.shadowIOS, theme.shadowAndroid]}>
+							<Skeleton
+							  height={100}
+							  width={"100%"}
+							  colorMode="light"
+							  radius={20}
+							/>
+						  </View>
+						  <View style={{ height: 16 }} />
+						</View>))
+				) : (
+				loans.map((loan) => (
 					<View style={styles.card} key={loan.id}>
 						<LoanCard
-							id= {loan.lender_id}
+							id={loan.lender_id}
 							currency={loan.currency ?? "USD"}
 							amount={loan.initial_amount ?? 0}
 							interest={loan.interest ?? 0}
@@ -125,13 +148,14 @@ const MyLoans = () => {
 							}
 						/>
 					</View>
-				))}
+				))
+			)}
 				<View style={{ height: 8 }} />
-                <CustomButton
-                    text="Crear préstamo"
-                    onPress={() => router.push("/create_loan")}
-                />
-                <View style={{ height: 20 }} />
+				<CustomButton
+					text="Crear préstamo"
+					onPress={() => router.push("/create_loan")}
+				/>
+				<View style={{ height: 20 }} />
 			</ScrollView>
 
 			<Modal
@@ -189,7 +213,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingHorizontal: 20,
-		
 	},
 	searchSection: {
 		flexDirection: "row",
@@ -200,8 +223,6 @@ const styles = StyleSheet.create({
 		width: "100%",
 		marginVertical: 15,
 		backgroundColor: "white",
-
-		
 	},
 	searchIcon: {
 		marginRight: 10,
@@ -213,7 +234,6 @@ const styles = StyleSheet.create({
 	},
 	scrollContainer: {
 		paddingHorizontal: 20,
-		
 	},
 	title: {
 		fontSize: 18,

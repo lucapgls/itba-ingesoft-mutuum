@@ -48,14 +48,22 @@ export const signInUser = async (email: string, password: string) => {
 const SignIn = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSignIn = async () => {
+		setIsLoading(true);
+		try {
 		const data = await signInUser(email, password);
 		if (data) {
-			console.log("a");
+			
 			router.push('/home');
 			// TODO: set the user in the global state
 		  }
+		} catch (error) {
+			console.error("Failed to fetch user:", error);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const handleGoogleSignIn = async () => {
@@ -97,7 +105,7 @@ const SignIn = () => {
 					title="Contraseña"
 				/>
 				<View style={{ height: 25 }} />
-				<CustomButton onPress={handleSignIn} text="Iniciar sesión" />
+				<CustomButton onPress={handleSignIn} text="Iniciar sesión" disabled={isLoading} />
 				<Text
 					style={{ textAlign: "center", marginTop: 20, fontSize: 15 }}
 				>

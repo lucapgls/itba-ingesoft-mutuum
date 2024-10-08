@@ -6,13 +6,15 @@ interface CustomButtonProps {
   onPress: () => void;
   text: string;
   outlined?: boolean;
+  disabled?: boolean;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ onPress, text, outlined = false }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({ onPress, text, outlined = false, disabled = false }) => {
   return (
     <TouchableOpacity
-      style={[styles.button, outlined && styles.outlinedButton]}
+      style={[styles.button, outlined && styles.outlinedButton, disabled && { opacity: 0.5 }]}
       onPress={onPress}
+      disabled={disabled}
     >
       <Text style={[styles.text, outlined && styles.outlinedText]}>{text}</Text>
     </TouchableOpacity>

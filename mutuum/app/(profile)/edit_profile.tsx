@@ -10,19 +10,39 @@ import {
 import { Link, router, Redirect } from "expo-router";
 import CustomTextInput from "@components/CustomTextInput";
 import CustomButton from "@components/CustomButton";
+import UserStore from "store/UserStore";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-const EditProfile = () => {
-	const [email, setEmail] = useState("miusuario@example.com");
-	const [dni, setDni] = useState("12345678");
-	const [telefono, setTelefono] = useState("+54123456789");
+
+const EditProfile = observer(() => {
+	
+	const [email, setEmail] = useState("");
+	const [dni, setDni] = useState("");
+	const [telefono, setTelefono] = useState("");
 	const [contrasena, setContrasena] = useState("********");
-
+	
 	const handleSave = () => {
 		// Handle save logic here
 		console.log("Profile updated:", { email, dni, telefono, contrasena });
 		router.replace("/profile");
 	};
 
+	useEffect(() => {
+		const fetchData = async () => {
+			if (UserStore.userId) {
+				// await UserStore.fetchUserInfo();
+				const userInfo = UserStore.getUserInfo();
+				// Set individual states based on the fetched user information
+				setEmail(userInfo.email ? userInfo.email : "");
+				setDni(userInfo.dni ? userInfo.dni : "");
+				setTelefono(userInfo.phoneNumber ? userInfo.phoneNumber : "");
+				// Password could stay the same unless it's fetched or changed
+				setContrasena("");
+			}
+		};
+		fetchData();
+	}, [UserStore.userId]);
 	return (
 		<View style={styles.container}>
 			<ScrollView showsVerticalScrollIndicator={false}>
@@ -31,7 +51,7 @@ const EditProfile = () => {
 					value={email}
 					onChangeText={setEmail}
 					keyboardType="email-address"
-					placeholder="a"
+					placeholder="usuario@ejemplo.com"
 					title="Email"
 				/>
 				<View style={{ height: 15 }} />
@@ -62,7 +82,7 @@ const EditProfile = () => {
 			</ScrollView>
 		</View>
 	);
-};
+});
 
 const styles = StyleSheet.create({
 	container: {

@@ -46,8 +46,10 @@ const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [username, setUsername] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSignUp = async () => {
+		setIsLoading(true);
 		try {
 			await signUpUser(email, password, username);
 
@@ -58,6 +60,9 @@ const SignUp = () => {
 		} catch (error: any) {
 			Alert.alert("Error", error.message);
 			console.log(error);
+		}
+		finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -103,7 +108,7 @@ const SignUp = () => {
 					
 
 					<View style={{ height: 25 }} />
-					<CustomButton onPress={handleSignUp} text="Registrarse" />
+					<CustomButton onPress={handleSignUp} text="Registrarse" disabled={isLoading}/>
 					<View style={styles.separator} />
 					<Link
 						href="/sign-in"

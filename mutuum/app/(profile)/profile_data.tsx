@@ -32,10 +32,10 @@ const ProfileData = observer(() => {
                 //await UserStore.fetchUserInfo();
                 const userInfo = UserStore.getUserInfo();
                 setProfileInfo([
-                    { title: "Nombre", value: userInfo.displayName },
-                    { title: "Email", value: userInfo.email },
-                    { title: "DNI", value: userInfo.dni },
-                    { title: "Teléfono", value: userInfo.phoneNumber },
+                    { title: "Nombre", value: userInfo.displayName? userInfo.displayName : "---" },
+                    { title: "Email", value: userInfo.email? userInfo.email : "---" },
+                    { title: "DNI", value: userInfo.dni? userInfo.dni : "---" },
+                    { title: "Teléfono", value: userInfo.phoneNumber? userInfo.phoneNumber : "---" },
                     { title: "Contraseña", value: "********" },
                 ]);
             }

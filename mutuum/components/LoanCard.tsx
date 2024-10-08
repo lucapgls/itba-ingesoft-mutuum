@@ -13,8 +13,8 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "./CustomButton";
-import theme from '@theme/theme';
-import NotificationDialog from './NotificationDialog';
+import theme from "@theme/theme";
+import NotificationDialog from "./NotificationDialog";
 import { getWalletID, postWalletTransaction } from "api/wallet";
 import UserStore from "store/UserStore";
 import { fetchUser } from "api/user";
@@ -27,7 +27,6 @@ interface Requirement {
 }
 
 interface LoanCardProps {
-	
 	id: string;
 	currency: "ETH" | "ARS";
 	amount: string | number;
@@ -39,7 +38,6 @@ interface LoanCardProps {
 }
 
 const LoanCard: React.FC<LoanCardProps> = ({
-	
 	id,
 	currency,
 	amount,
@@ -54,9 +52,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 	const snapPoints = useMemo(() => ["60%"], []);
 	const [dialogVisible, setDialogVisible] = useState(false);
 	const [currentUser, setCurrentUser] = useState<any>(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-
+	const [isLoading, setIsLoading] = useState(true);
 
 	const openBottomSheet = () => {
 		setModalVisible(true);
@@ -64,25 +60,27 @@ const LoanCard: React.FC<LoanCardProps> = ({
 
 	const closeBottomSheet = () => {
 		setModalVisible(false);
-		
 	};
 
 	// Handle prestamo
-	const handlePressIn = async() => {
+	const handlePressIn = async () => {
 		closeBottomSheet();
 		setDialogVisible(true);
 		const fromWalletID = await getWalletID(id);
 		const toWalletID = UserStore.walletId;
 		const amount = totalAmount;
 
-		const response = postWalletTransaction(fromWalletID, toWalletID, amount);
+		const response = postWalletTransaction(
+			fromWalletID,
+			toWalletID,
+			amount
+		);
 		console.log(response);
-
 	};
 
 	const closeDialog = () => {
 		setDialogVisible(false);
-	  };
+	};
 
 	const calculateTotalAmount = (
 		amount: number,
@@ -112,25 +110,22 @@ const LoanCard: React.FC<LoanCardProps> = ({
 		Number(term)
 	);
 
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                const user = await fetchUser(id);
-                setCurrentUser(user[0]);
-            } catch (error) {
-                console.error('Failed to fetch user:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+	useEffect(() => {
+		const getUser = async () => {
+			try {
+				const user = await fetchUser(id);
+				setCurrentUser(user[0]);
+			} catch (error) {
+				console.error("Failed to fetch user:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
 
-        getUser();
-    }, [id]);
+		getUser();
+	}, [id]);
 
-    if (isLoading) {
-        return <Text>Loading...</Text>; // Use <Text> component for loading indicator
-    }
-
+	
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<TouchableOpacity style={styles.card} onPress={openBottomSheet}>
@@ -141,7 +136,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 					style={styles.avatar}
 				/>
 				<View style={styles.details}>
-					<Text style={styles.name}>{currentUser.display_name}</Text>
+					<Text style={styles.name}>{currentUser ? currentUser.display_name : ""}</Text>
 					<View style={styles.currencyRow}>
 						<Text style={styles.currencyText}>${currency}</Text>
 						<Text style={styles.amountText}>{amount}</Text>
@@ -360,7 +355,7 @@ const styles = StyleSheet.create({
 		borderBottomColor: theme.colors.borderGray,
 		marginVertical: 16,
 	},
-	
+
 	buttonText: {
 		color: "#fff",
 		fontSize: 16,

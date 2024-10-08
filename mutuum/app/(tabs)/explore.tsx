@@ -16,6 +16,8 @@ import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import theme from "@theme/theme";
+import { Skeleton } from "moti/skeleton";
+
 
 const Explore = () => {
 	const [loans, setLoans] = useState<any[]>([]);
@@ -27,6 +29,7 @@ const Explore = () => {
 	});
 	const [tempField, setTempField] = useState("initial_amount");
 	const [tempOrder, setTempOrder] = useState("asc");
+	const [isLoading, setIsLoading] = useState(true);
 
 	const sortLoans = (field: any, order: any) => {
 		const sortedLoans = [...loans].sort((a, b) => {
@@ -58,21 +61,25 @@ const Explore = () => {
 		sortLoans(tempField, tempOrder);
 		closeModal();
 	};
-
-	useEffect(() => {
-		const fetchData = async () => {
-			//TODO: ponerlo en un archivo de inicio
+	const fetchData = async () => {
+		setIsLoading(true);
+		try {
 			await loadLoans();
 			const loansArray = getLoans();
 			setLoans(loansArray);
-			
-		};
+		} catch (error) {
+			console.error("Failed to fetch user:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	useEffect(() => {
 		fetchData();
 	}, []);
 
 	return (
 		<View style={styles.safeArea}>
-			
 			<View style={styles.container}>
 				<View style={{ height: 50 }} />
 
@@ -113,24 +120,40 @@ const Explore = () => {
 				<Text style={styles.title}>Explorar préstamos</Text>
 
 				<View style={{ height: 10 }} />
+				
+				{isLoading ? (
+					Array.from({ length: 4 }).map((_, index) => (
+						<View key={index}>
+						  <View style={[theme.shadowIOS, theme.shadowAndroid]}>
+							<Skeleton
+							  height={100}
+							  width={"100%"}
+							  colorMode="light"
+							  radius={20}
+							/>
+						  </View>
+						  <View style={{ height: 16 }} />
+						</View>))
+				) : (
+					loans.map((loan) => (
+						<View style={styles.card} key={loan.id}>
+							<LoanCard
+								id={loan.lender_id}
+								currency={loan.currency ?? "USD"}
+								amount={loan.initial_amount ?? 0}
+								interest={loan.interest ?? 0}
+								term={loan.term ?? 0}
+								requirements={loan.requirements ?? []}
+								onPress={() =>
+									console.log(`Pressed loan ${loan.id}`)
+								}
+							/>
+						</View>
+					))
+				)}
 
-				{loans.map((loan) => (
-					<View style={styles.card} key={loan.id}>
-						<LoanCard
-							id= {loan.lender_id}
-							currency={loan.currency ?? "USD"}
-							amount={loan.initial_amount ?? 0}
-							interest={loan.interest ?? 0}
-							term={loan.term ?? 0}
-							// maxCuotas={loan.maxCuotas ?? 0}
-							requirements={loan.requirements ?? []}
-							onPress={() =>
-								console.log(`Pressed loan ${loan.id}`)
-							}
-						/>
-					</View>
-				))}
 				<View style={{ height: 8 }} />
+				<CustomButton onPress={fetchData} text="Actualizar" disabled={isLoading}/>
 			</ScrollView>
 
 			<Modal
@@ -188,7 +211,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingHorizontal: 20,
-		
 	},
 	searchSection: {
 		flexDirection: "row",
@@ -199,8 +221,6 @@ const styles = StyleSheet.create({
 		width: "85%",
 		marginVertical: 15,
 		backgroundColor: "white",
-
-		
 	},
 	searchIcon: {
 		marginRight: 10,
