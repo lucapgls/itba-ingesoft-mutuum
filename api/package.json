@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --timeout 10000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@circle-fin/circle-sdk": "^2.9.0",
+    "@circle-fin/developer-controlled-wallets": "^4.5.1",
+    "@supabase/supabase-js": "^2.45.4",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "faker": "^5.5.3",
+    "node-forge": "^1.3.1",
+    "supabase": "^1.200.3",
+    "uuid": "^10.0.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
+  }
+}
