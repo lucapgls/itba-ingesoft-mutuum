@@ -69,7 +69,7 @@ export const fetchLoanRequirements = async (lendingPostId) => {
 
 export const createLendingPost = async (lenderId, initialAmount, interest, deadline, emailRequired, phoneRequired) => {
   try {
-    const { data, error } = await supabase.rpc('create_lending_post_with_requirements', {
+    const { data, error } = await supabase.rpc('create_lending_post', {
       _lender_id: lenderId,
       _initial_amount: initialAmount,
       _interest: interest,
