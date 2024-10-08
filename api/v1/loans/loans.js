@@ -3,19 +3,20 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export const fetchLoans = async () => {
+
   try {
     const { data, error } = await supabase
       .from('lending_post')
       .select('*');
 
     if (error) {
-      console.error('Error fetching loans:', error);
+      console.error('Error fetching loans:', error.message);
       throw error;
     }
     
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error.message);
     throw error;
   }
 };
@@ -66,35 +67,29 @@ export const fetchLoanRequirements = async (lendingPostId) => {
 };
 
 
-export const createLendingPost = async (lenderId, initialAmount, availableAmount, interest, deadline) => {
-  const createdAt = new Date().toISOString();
-
-
+export const createLendingPost = async (lenderId, initialAmount, interest, deadline, emailRequired, phoneRequired) => {
   try {
-    const { data, error } = await supabase
-      .from('lending_post')
-      .insert([{
-        lender_id: lenderId,
-        initial_amount: initialAmount,
-        available_amount: availableAmount,
-        interest: interest,
-        dead_line: deadline,
-        created_at: createdAt,
-       
-      }])
-      .select();
+    const { data, error } = await supabase.rpc('create_lending_post', {
+      _lender_id: lenderId,
+      _initial_amount: initialAmount,
+      _interest: interest,
+      _deadline: deadline,
+      _email_required: emailRequired,
+      _phone_required: phoneRequired,
+    });
 
     if (error) {
-      console.error('Error creating lending post:', error);
-      throw error;
+      console.error('Error creating lending post:', error.message);
+      return null;
     }
 
-    return data?.[0]?.id || null;
+    return data; // Return the created lending post's ID
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    console.error('Error creating lending post:', error.message);
+    return null;
   }
 };
+
 
 export const createLoanRequirements = async (lendingPostId, requirements) => {
   try {
@@ -125,17 +120,11 @@ export const createLoanRequirements = async (lendingPostId, requirements) => {
 // Function to create a loan
 export const createLoan = async (lendingPostId, borrowerId, loanAmount) => {
   try {
-    // Insert the loan into the loan table
-    const { data, error } = await supabase
-      .from('loan')
-      .insert([
-        {
-          lending_post_id: lendingPostId,
-          borrower_id: borrowerId,
-          loan_amount: loanAmount,
-          is_paid: false, // New column to track loan payment status
-        },
-      ]);
+    const { data, error } = await supabase.rpc('create_loan', {
+      _lending_post_id: lendingPostId,
+      _borrower_id: borrowerId,
+      _loan_amount: loanAmount,
+    });
 
     if (error) {
       console.error('Error creating loan:', error.message);
@@ -148,3 +137,23 @@ export const createLoan = async (lendingPostId, borrowerId, loanAmount) => {
     return null;
   }
 };
+
+// TODO: Implement router.
+// export const getMatchingLendingPosts = async (userId) => {
+//   try {
+//     // Call the SQL function 'get_matching_lending_posts' using supabase.rpc()
+//     const { data, error } = await supabase.rpc('get_matching_lending_posts', {
+//       _user_id: userId,
+//     });
+
+//     if (error) {
+//       console.error('Error fetching matching lending posts:', error.message);
+//       throw error;
+//     }
+
+//     return data;
+//   } catch (error) {
+//     console.error('Error:', error.message);
+//     throw error;
+//   }
+// };
