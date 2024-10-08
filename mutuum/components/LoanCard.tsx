@@ -15,6 +15,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "./CustomButton";
 import theme from '@theme/theme';
 import NotificationDialog from './NotificationDialog';
+import { getWalletID, postWalletTransaction } from "api/wallet";
+import UserStore from "store/UserStore";
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -60,9 +62,16 @@ const LoanCard: React.FC<LoanCardProps> = ({
 		
 	};
 
+	// Handle prestamo
 	const handlePressIn = () => {
-		closeBottomSheet();
-		setDialogVisible(true);
+		// closeBottomSheet();
+		// setDialogVisible(true);
+		// const fromWalletID = await getWalletID(id);
+		// const toWalletID = UserStore.walletId;
+		// const amount = totalAmount;
+
+		// const response = postWalletTransaction(fromWalletID, toWalletID, amount);
+		// console.log(response);
 
 	};
 
