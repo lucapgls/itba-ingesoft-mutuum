@@ -116,7 +116,6 @@ const LoanCard: React.FC<LoanCardProps> = ({
         const getUser = async () => {
             try {
                 const user = await fetchUser(id);
-                console.log("User data: ", user);
                 setCurrentUser(user[0]);
             } catch (error) {
                 console.error('Failed to fetch user:', error);
