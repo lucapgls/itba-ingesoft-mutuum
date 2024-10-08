@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TextInputProps, Text, KeyboardTypeOptions, TouchableOpacity } from 'react-native';
 import theme from '@theme/theme';
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CustomTextInputProps extends TextInputProps {
     placeholder: string;
@@ -12,7 +12,9 @@ interface CustomTextInputProps extends TextInputProps {
     keyboardType?: KeyboardTypeOptions;
     maxLength?: number;
     password?: boolean;
+    expand?: boolean;
 }
+
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
     placeholder,
     value,
@@ -21,15 +23,16 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
     title,
     keyboardType,
     maxLength,
+    expand = false,
     ...props
 }) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   
     return (
-      <View>
+      <View style={{flex: 1}}>
         <Text style={styles.text}>{title}</Text>
-        <View style={[styles.border, isFocused && styles.focusedBorder]}>
+        <View style={[styles.border, isFocused && styles.focusedBorder, expand && styles.expandedBorder]}>
           <TextInput
             placeholder={placeholder}
             value={value}
@@ -37,7 +40,10 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
             secureTextEntry={secureTextEntry && !isPasswordVisible}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            style={styles.input}
+            style={[styles.input, expand && styles.expandedInput]}
+            keyboardType={keyboardType}
+            multiline={expand}
+            maxLength={maxLength}
             {...props}
           />
           {secureTextEntry && (
@@ -46,7 +52,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
               onPress={() => setIsPasswordVisible(!isPasswordVisible)}
             >
               <Ionicons
-                name={isPasswordVisible ? 'eye-off' : 'eye'}
+                name={!isPasswordVisible ? 'eye-off' : 'eye'}
                 size={20}
                 color={theme.colors.iconGray}
               />
@@ -68,14 +74,21 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
       flexDirection: 'row',
       alignItems: 'center',
     },
+    expandedBorder: {
+      height: 'auto',
+    },
     focusedBorder: {
       borderColor: theme.colors.primary,
     },
     input: {
       flex: 1,
-      height: 40,
+      height: 80,
       fontSize: 16,
       paddingStart: 14,
+    },
+    expandedInput: {
+      height: 'auto',
+      paddingVertical: 14,      
     },
     iconContainer: {
       padding: 10,
@@ -84,7 +97,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
     text: {
       color: 'black',
       fontSize: 15,
-        marginBottom: 5,
+      marginBottom: 5,
     },
   });
 

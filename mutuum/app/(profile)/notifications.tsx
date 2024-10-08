@@ -4,23 +4,27 @@ import NotificationCard from "@components/NotificationCard";
 import { Ionicons } from '@expo/vector-icons';
 import theme from "@theme/theme"; // Assuming you have a theme file
 
-const notifications: { title: string; description: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+const notifications: { title: string; description: string; date: string, icon: keyof typeof Ionicons.glyphMap }[] = [
     {
 		title: "Recordatorio",
 		description:
 			"En 10 días tenes que abonar la cuota numero 3 del prestamo de Nombre.",
+			date: "Hoy",
 		icon: "alarm",
+
 	},
     {
 		title: "Solicitud aceptada",
 		description:
 			"Nombre aceptó tu solicitud de prestamo. Ya podes comenzar a usar el dinero.",
+			date: "7/10",
 		icon: "checkmark-circle",
 	},
 	{
 		title: "Solicitud enviada",
 		description:
 			"Solicitaste el prestamo de Nombre. Te notificaremos cuando el prestamista acepte tu solicitud.",
+			date: "6/10",
 		icon: "mail",
 	},
 	
@@ -38,6 +42,7 @@ const NotificationScreen: React.FC = () => {
 						title={notification.title}
 						description={notification.description}
 						icon={notification.icon}
+						date={notification.date}
 					/>
 				))}
 			</ScrollView>

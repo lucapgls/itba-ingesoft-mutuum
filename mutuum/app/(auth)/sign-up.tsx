@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import {
 	View,
-	TextInput,
-	Button,
 	Alert,
 	StyleSheet,
 	Text,
 	ScrollView,
+
+	Platform,
+	KeyboardAvoidingView,
+
 } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { router, Link } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import CustomTextInput from "../../components/CustomTextInput";
-import { supabase } from "./SupabaseConfig";
 import API_BASE_URL from "../../api/api_temp";
 import theme from "@theme/theme";
 import UserStore from "store/UserStore";
+
 
 export const signUpUser = async (email: string, password: string) => {
 	try {
@@ -32,7 +33,7 @@ export const signUpUser = async (email: string, password: string) => {
 		}
 
 		const data = await response.json();
-	
+
 		UserStore.setUserId(data.user.id);
 		UserStore.setWalletId(data.user.wallet_id);
 		return data;
@@ -41,6 +42,7 @@ export const signUpUser = async (email: string, password: string) => {
 		throw error;
 	}
 };
+
 const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -49,9 +51,6 @@ const SignUp = () => {
 	const handleSignUp = async () => {
 		try {
 			await signUpUser(email, password);
-
-			// await createUserWithEmailAndPassword(auth, email, password);
-			// await addDoc(collection(firestore, "Users"), { email: email });
 			Alert.alert("Exito!", "Se creo el usuario correctamente!");
 			router.replace("/home");
 		} catch (error: any) {
@@ -61,61 +60,69 @@ const SignUp = () => {
 	};
 
 	return (
-		<View style={styles.safeArea}>
-			<StatusBar backgroundColor="theme.colors.primary" />
+		<KeyboardAvoidingView
+			style={{
+				flex: 1,
+				flexDirection: "column",
+				justifyContent: "flex-start",
+			}}
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			enabled
+		>
 			<View style={styles.rectangle}>
 				<View style={{ height: 30 }} />
 				<Text style={styles.title}>Registrate en</Text>
 				<Text style={styles.mutuum}>Mutuum</Text>
 			</View>
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<View style={{ padding: 20 }}>
+					<CustomTextInput
+						placeholder="miusuario"
+						value={username}
+						onChangeText={setUsername}
+						title="Nombre de usuario"
+					/>
+					<View style={{ height: 15 }} />
+					<CustomTextInput
+						placeholder="miusuario@mail.com"
+						value={email}
+						onChangeText={setEmail}
+						title="Email"
+					/>
+					<View style={{ height: 15 }} />
 
-			<ScrollView style={{ padding: 20 }}>
-			<CustomTextInput
-					placeholder="miusuario"
-					value={username}
-					onChangeText={setUsername}
-					title="Nombre de usuario"
-				/>
-				<View style={{ height: 15 }} />
-				<CustomTextInput
-					placeholder="miusuario@mail.com"
-					value={email}
-					onChangeText={setEmail}
-					title="Email"
-				/>
-				<View style={{ height: 15 }} />
+					<CustomTextInput
+						placeholder="********"
+						value={password}
+						onChangeText={setPassword}
+						secureTextEntry
+						title="Contraseña"
+					/>
+					
 
-				<CustomTextInput
-					placeholder="********"
-					value={password}
-					onChangeText={setPassword}
-					secureTextEntry
-					title="Contraseña"
-				/>
-				<View style={{ height: 15 }} />
-
-				
-
-
-
-				<View style={{ height: 25 }} />
-				<CustomButton onPress={handleSignUp} text="Resgistrarse" />
-				<View style={styles.separator} />
-				<Link href="/sign-in" style={{ textAlign: "center" }} replace>
-					<Text style={{ textAlign: "center", fontSize: 15 }}>
-						Ya tenes una cuenta?{" "}
-						<Text
-							style={{
-								color: theme.colors.primary,
-								fontWeight: 600,
-							}}
-						>
-							Iniciar sesión
+					<View style={{ height: 25 }} />
+					<CustomButton onPress={handleSignUp} text="Registrarse" />
+					<View style={styles.separator} />
+					<Link
+						href="/sign-in"
+						style={{ textAlign: "center" }}
+						replace
+					>
+						<Text style={{ textAlign: "center", fontSize: 15 }}>
+							Ya tenes una cuenta?{" "}
+							<Text
+								style={{
+									color: theme.colors.primary,
+									fontWeight: 600,
+								}}
+							>
+								Iniciar sesión
+							</Text>
 						</Text>
-					</Text>
-				</Link>
+					</Link>
+				</View>
 			</ScrollView>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 

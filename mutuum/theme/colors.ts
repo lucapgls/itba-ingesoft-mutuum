@@ -14,7 +14,7 @@ const colors = {
     // Text colors
     textWhite: '#FFFFFF', // White text (used on buttons, for example)
     textBlack: '#000000', // Black text
-    textGray: '#666666', // Gray text color
+    textGray: '#6e6e6e', // Gray text color
     
     // Border and outline colors
     borderGray: '#CBCBCB', // Light gray for borders (e.g., around inputs)

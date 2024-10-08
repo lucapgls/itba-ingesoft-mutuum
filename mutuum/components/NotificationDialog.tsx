@@ -18,7 +18,7 @@ const NotificationDialog: React.FC<NotificationDialogProps> = ({ visible, onClos
     >
       <View style={styles.overlay}>
         <View style={styles.dialog}>
-          <Text style={styles.message}>Solicitud Enviada!</Text>
+          <Text style={styles.message}>Solicitud Enviada</Text>
           <View style={{ height: 12 }} />
             <Text style={styles.message2}>Te notificaremos cuando el prestamista acepte tu solicitud</Text>
             <View style={{ height: 18 }} />
