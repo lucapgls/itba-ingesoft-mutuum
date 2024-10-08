@@ -6,22 +6,31 @@ import {
 	ScrollView,
 	TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import BubbleProfile from "../../components/BubbleProfileInfo";
 import ProfileBubble from "../../components/ProfileBubble";
 import { router, Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import theme from "@theme/theme";
+import UserStore from "store/UserStore";
+import { observer } from "mobx-react-lite";
 
-const Profile = ({
-	dni,
-	email,
-	phoneNumber,
-}: {
-	dni: string;
-	email: string;
-	phoneNumber: string;
-}) => {
+
+
+const Profile = observer(() => {
+	
+	useEffect(() => {
+		const fetchData = async () => {
+			if (UserStore.userId) {
+				await UserStore.fetchUserInfo();
+			}
+			
+		};
+		fetchData();
+	}, [UserStore.userId]);
+
+	const aux = UserStore.getUserInfo();
+
 	return (
 		<LinearGradient
 			// Background Linear Gradient
@@ -38,7 +47,7 @@ const Profile = ({
 						style={styles.circle}
 					/>
 					<View style={{ height: 20 }} />
-					<Text style={styles.text}>Nombre</Text>
+					<Text style={styles.text}>{ aux.displayName }</Text>
 				</View>
 				<View style={{ height: 20 }} />
 
@@ -87,7 +96,7 @@ const Profile = ({
 			</ScrollView>
 		</LinearGradient>
 	);
-};
+});
 
 export default Profile;
 

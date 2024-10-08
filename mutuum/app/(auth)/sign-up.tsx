@@ -17,14 +17,14 @@ import API_BASE_URL from "../../api/api_temp";
 import theme from "@theme/theme";
 import UserStore from "store/UserStore";
 
-export const signUpUser = async (email: string, password: string) => {
+export const signUpUser = async (email: string, password: string, display_name: string) => {
 	try {
 		const response = await fetch(`${API_BASE_URL}/api/v1/users/create`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ email, password }),
+			body: JSON.stringify({ email, password, display_name }),
 		});
 
 		if (!response.ok) {
@@ -48,7 +48,7 @@ const SignUp = () => {
 
 	const handleSignUp = async () => {
 		try {
-			await signUpUser(email, password);
+			await signUpUser(email, password, username);
 
 			// await createUserWithEmailAndPassword(auth, email, password);
 			// await addDoc(collection(firestore, "Users"), { email: email });

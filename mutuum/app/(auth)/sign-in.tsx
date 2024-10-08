@@ -34,6 +34,7 @@ export const signInUser = async (email: string, password: string) => {
 	  	const data = await response.json();
 		UserStore.setUserId(data.user.id);
 		UserStore.setWalletId(data.user.wallet_id);
+		const aux = await UserStore.fetchUserInfo();
 	  	return data;
 	} catch (error) {
 	  console.error("Error: ", error);

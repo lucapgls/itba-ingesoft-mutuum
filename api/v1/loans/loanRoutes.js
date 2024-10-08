@@ -22,6 +22,7 @@ router.get('/', async (req, res) => {
         } else {
             loans = await fetchLoans();
         }
+    
         res.status(200).json({ loans });
     } catch (error) {
         res.status(500).json({ error: 'Error fetching loans', details: error.message });

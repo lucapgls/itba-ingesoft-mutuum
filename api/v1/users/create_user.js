@@ -1,7 +1,8 @@
 import { createWallet } from '../wallets/wallet.js';
 import { supabase } from '../../supabase_config.js';
+import { setDisplayName, setEmail } from './user_info.js';
 
-async function createUser(email, password) {
+async function createUser(email, password, display_name) {
     // Sign up the user
     const { data, error: signUpError } = await supabase.auth.signUp({
         email,
@@ -32,6 +33,9 @@ async function createUser(email, password) {
         new_wallet_id: wallet_id,
     });
 
+    await setDisplayName(user.id, display_name);
+    await setEmail(user.id, email);
+
     if (rpcError) {
         console.log("teaaa");
         throw new Error('Error: Loading wallet to DB: ' + rpcError.message);
@@ -48,5 +52,7 @@ async function createUser(email, password) {
         }
     };
 }
+
+
 
 export { createUser };

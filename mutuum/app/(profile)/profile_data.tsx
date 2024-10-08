@@ -10,15 +10,39 @@ import {
 import { Link, router, Redirect } from "expo-router";
 import theme from "@theme/theme";
 import CustomButton from "@components/CustomButton";
+import UserStore from "store/UserStore";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
 
-const ProfileData = () => {
-	const profileInfo = [
-		{ title: "Nombre", value: "Nombre" },
-		{ title: "Email", value: "miusuario@example.com" },
-		{ title: "DNI", value: "12345678" },
-		{ title: "Teléfono", value: "+54123456789" },
-		{ title: "Contraseña", value: "********" },
-	];
+
+const ProfileData = observer(() => {
+
+	const [profileInfo, setProfileInfo] = useState([
+        { title: "Nombre", value: "" },
+        { title: "Email", value: "" },
+        { title: "DNI", value: "" },
+        { title: "Teléfono", value: "" },
+        { title: "Contraseña", value: "********" },
+    ]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (UserStore.userId) {
+                //await UserStore.fetchUserInfo();
+                const userInfo = UserStore.getUserInfo();
+                setProfileInfo([
+                    { title: "Nombre", value: userInfo.displayName },
+                    { title: "Email", value: userInfo.email },
+                    { title: "DNI", value: userInfo.dni },
+                    { title: "Teléfono", value: userInfo.phoneNumber },
+                    { title: "Contraseña", value: "********" },
+                ]);
+            }
+        };
+        fetchData();
+    }, [UserStore.userId, UserStore.displayName, UserStore.email, UserStore.dni, UserStore.phoneNumber]);
+
 
 	const renderItem = ({
 		item,
@@ -57,7 +81,7 @@ const ProfileData = () => {
 			<View style={{ height: 20 }} />
 		</View>
 	);
-};
+});
 
 const styles = StyleSheet.create({
 	container: {
