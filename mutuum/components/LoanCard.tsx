@@ -28,6 +28,7 @@ interface Requirement {
 
 interface LoanCardProps {
 	id: string;
+	lender_name: string;
 	currency: "ETH" | "ARS";
 	amount: string | number;
 	interest: string | number;
@@ -39,6 +40,7 @@ interface LoanCardProps {
 
 const LoanCard: React.FC<LoanCardProps> = ({
 	id,
+	lender_name,
 	currency,
 	amount,
 	interest,
@@ -136,7 +138,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 					style={styles.avatar}
 				/>
 				<View style={styles.details}>
-					<Text style={styles.name}>{currentUser ? currentUser.display_name : ""}</Text>
+					<Text style={styles.name}>{lender_name}</Text>
 					<View style={styles.currencyRow}>
 						<Text style={styles.currencyText}>${currency}</Text>
 						<Text style={styles.amountText}>{amount}</Text>

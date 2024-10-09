@@ -10,11 +10,23 @@ interface WalletBalance {
 }
 
 const getWalletBalance = async (userId: string): Promise<WalletBalance> => {
-    const response = await fetch(API_SLUG(`/balance?walletID=${userId}`));
-    const data = await response.json();
-    const { amount, token } = data.balances[0];
-    return { amount, token };
-}
+    try {
+        const response = await fetch(API_SLUG(`/balance?walletID=${userId}`));
+        const data = await response.json();
+
+        // Check if balances exist and if there's at least one entry
+        if (!data.balances || data.balances.length === 0) {
+            throw new Error("No balances available");
+        }
+
+        const { amount, token } = data.balances[0];
+        return { amount, token };
+    } catch (error) {
+        console.error("Error fetching wallet balance:", error);
+        throw error; // or return a default balance object, e.g., { amount: 0, token: 'N/A' }
+    }
+};
+
 
 const getConvertToARS = async (fromAmount: number, fromToken: string) => {
     const response = await fetch(API_SLUG(`/convert?amount=${fromAmount}&token=${fromToken}`));
