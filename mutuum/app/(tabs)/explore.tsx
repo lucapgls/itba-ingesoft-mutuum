@@ -6,6 +6,7 @@ import {
 	TextInput,
 	ScrollView,
 	Modal,
+	RefreshControl
 } from "react-native";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
@@ -116,7 +117,10 @@ const Explore = () => {
 				</View>
 			</View>
 
-			<ScrollView contentContainerStyle={styles.scrollContainer}>
+			<ScrollView contentContainerStyle={styles.scrollContainer}
+			refreshControl={
+				<RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+			  }>
 				<Text style={styles.title}>Explorar préstamos</Text>
 
 				<View style={{ height: 10 }} />
@@ -153,7 +157,7 @@ const Explore = () => {
 				)}
 
 				<View style={{ height: 8 }} />
-				<CustomButton onPress={fetchData} text="Actualizar" disabled={isLoading}/>
+				
 			</ScrollView>
 
 			<Modal

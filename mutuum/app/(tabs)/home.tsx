@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -6,6 +6,7 @@ import {
 	Animated,
 	Dimensions,
 	Image,
+	RefreshControl
 } from "react-native";
 import HomeRectangle from "@components/HomeRectangle";
 import HomeBubble from "@components/HomeBubble";
@@ -79,6 +80,7 @@ const Home = () => {
 	const ScrollOffsetY = useRef(new Animated.Value(0)).current;
 
 	const [wallet, setWallet] = React.useState({ balance: 0, coin: "" });
+	const [isLoading, setIsLoading] = useState(false);
 
 	React.useEffect(() => {
 		const fetchWalletBalance = async () => {
@@ -93,6 +95,12 @@ const Home = () => {
 	const [convertedBalance, setConvertedBalance] = React.useState<
 		number | null
 	>(null);
+
+
+	const fetchData = async () => {
+		setIsLoading(false)
+	}
+
 
 	React.useEffect(() => {
 		const convertBalance = async () => {
@@ -127,8 +135,12 @@ const Home = () => {
 				colors={[theme.colors.primary, "#fff"]}
 				style={styles.container}
 			>
-				<ScrollView showsVerticalScrollIndicator={false}>
-					<View style={{ height: 10 }} />
+				<View style={{ height: 10 }} />
+				<ScrollView showsVerticalScrollIndicator={false}
+				refreshControl={
+					<RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+				  }>
+					
 					<HomeRectangle
 						coin={wallet.coin}
 						balance={wallet.balance}

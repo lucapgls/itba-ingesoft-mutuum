@@ -6,6 +6,7 @@ import {
 	TextInput,
 	ScrollView,
 	Modal,
+	RefreshControl
 } from "react-native";
 import { useEffect, useState } from "react";
 import { supabase } from "../(auth)/SupabaseConfig";
@@ -114,7 +115,10 @@ const MyLoans = () => {
 				</View>
 			</View>
 
-			<ScrollView contentContainerStyle={styles.scrollContainer}>
+			<ScrollView contentContainerStyle={styles.scrollContainer}
+			refreshControl={
+				<RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+			  }>
 				<Text style={styles.title}>Mis préstamos</Text>
 
 				<View style={{ height: 10 }} />
