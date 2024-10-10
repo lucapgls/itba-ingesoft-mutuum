@@ -35,7 +35,7 @@ const notifications: { title: string; description: string; date: string, icon: k
 const NotificationScreen: React.FC = () => {
 	return (
 		<View style={styles.container}>
-			<ScrollView contentContainerStyle={styles.scrollContainer}>
+			<ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
 				{notifications.map((notification, index) => (
 					<NotificationCard
 						key={index}

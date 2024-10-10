@@ -98,7 +98,7 @@ const LoanBottomSheet: React.FC<LoanBottomSheetProps> = ({
                                                                     : "close-outline"
                                                             }
                                                             size={22}
-                                                            color="black"
+                                                            color={theme.colors.textGray}
                                                         />
                                                     </View>
                                                 )

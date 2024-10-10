@@ -130,6 +130,7 @@ const MyLoans = () => {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
             refreshControl={
                 <RefreshControl refreshing={isLoading} onRefresh={fetchData} />
               }>

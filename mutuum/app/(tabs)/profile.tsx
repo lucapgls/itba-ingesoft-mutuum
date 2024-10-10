@@ -33,7 +33,7 @@ const Profile = observer(() => {
 			colors={[theme.colors.primary, "#fff"]}
 			style={styles.container}
 		>
-			<ScrollView>
+			<ScrollView showsVerticalScrollIndicator={false}>
 				<View style={styles.rectangle}>
 					<View style={{ height: 80 }} />
 					<Image
