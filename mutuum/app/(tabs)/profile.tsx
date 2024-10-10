@@ -15,16 +15,12 @@ import theme from "@theme/theme";
 import UserStore from "store/UserStore";
 import { observer } from "mobx-react-lite";
 
-
-
 const Profile = observer(() => {
-	
 	useEffect(() => {
 		const fetchData = async () => {
 			if (UserStore.userId) {
 				await UserStore.fetchUserInfo();
 			}
-			
 		};
 		fetchData();
 	}, [UserStore.userId]);
@@ -47,14 +43,20 @@ const Profile = observer(() => {
 						style={styles.circle}
 					/>
 					<View style={{ height: 20 }} />
-					<Text style={styles.text}>{ aux.displayName }</Text>
+					<Text style={styles.text}>{aux.displayName}</Text>
 				</View>
 				<View style={{ height: 20 }} />
 
 				<View style={styles.options}>
 					<ProfileBubble
-						title="Mis datos"
+						title="Mi perfil"
 						icon="person"
+						onPress={() => router.push("/public_profile")}
+					/>
+					<View style={{ height: 15 }} />
+					<ProfileBubble
+						title="Mis datos"
+						icon="reader"
 						onPress={() => router.push("/profile_data")}
 					/>
 
@@ -77,11 +79,8 @@ const Profile = observer(() => {
 						onPress={() => {}}
 					/>
 					<View style={{ height: 15 }} />
-					<ProfileBubble
-						title="Ayuda"
-						icon="accessibility"
-						onPress={() => {}}
-					/>
+					
+
 					<View style={{ height: 30 }} />
 					<TouchableOpacity>
 						<Link href="/sign-in" asChild replace>

@@ -71,6 +71,7 @@ const LoanBottomSheet: React.FC<LoanBottomSheetProps> = ({
                                             <Text style={styles.infoText}>
                                                 Plazo: {term} meses
                                             </Text>
+                                            <View style={{ height: 8 }} />
                                             <Text style={styles.infoText}>
                                                 Intereses: {interest}%
                                             </Text>
@@ -113,6 +114,7 @@ const LoanBottomSheet: React.FC<LoanBottomSheetProps> = ({
                                                 Monto por mes: {currency}{" "}
                                                 {monthlyAmount}
                                             </Text>
+                                            <View style={{ height: 8 }} />
                                             <Text style={styles.infoText}>
                                                 Monto total: {currency}{" "}
                                                 {totalAmount}
@@ -160,8 +162,8 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     sectionTitle: {
-        fontSize: 16,
-        fontWeight: "bold",
+        fontSize: 18,
+		fontWeight: "500",
         marginBottom: 8,
     },
     requirementRow: {
@@ -178,8 +180,8 @@ const styles = StyleSheet.create({
         marginVertical: 16,
     },
     infoText: {
-        fontSize: 14,
-        color: "gray",
+        fontSize: 15,
+        color: theme.colors.textGray,
     },
 });
 

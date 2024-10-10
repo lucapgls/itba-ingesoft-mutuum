@@ -77,6 +77,29 @@ const AuthLayout = () => {
 					),
 				  }}
 				/>
+				<Stack.Screen
+				name="public_profile"
+				options={{
+					title: "Mi Perfil",
+					headerStyle: {
+					  backgroundColor: theme.colors.background,
+					},
+					headerShadowVisible: false,
+					headerTintColor: theme.colors.textBlack,
+					headerLeft: () => (
+					  <View style={styles.buttonContainer}>
+						<TouchableOpacity onPress={router.back} style={styles.button}>
+						  <Ionicons
+							name="arrow-back"
+							size={24}
+							color={theme.colors.textBlack}
+		
+						  />
+						</TouchableOpacity>
+					  </View>
+					),
+				  }}
+				/>
 			</Stack>
 		</>
 	);
