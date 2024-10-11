@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 
 import walletRouter from './v1/wallets/walletRoutes.js';
 import userRouter from './v1/users/userRoutes.js';
-import loanRouter from './v1/loans/loanRoutes.js';
+import lendingPostRouter from './v1/lendingPost/lendingPostRoutes.js';
 
 // Load environment variables
 config();
@@ -25,7 +25,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/v1/wallets', walletRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/loans', loanRouter); 
+app.use('/api/v1/lendingPost', lendingPostRouter); 
 
 
 app.listen(PORT, () => {

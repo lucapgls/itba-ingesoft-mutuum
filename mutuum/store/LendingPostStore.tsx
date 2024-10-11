@@ -1,12 +1,12 @@
-import { fetchLoans, fetchLoanRequirements, createLendingPostAndRequirements, fetchLoansByUserId } from "api/loan";
+import { fetchLendingPosts, fetchLendingPostRequirements, createLendingPostAndRequirements, fetchLendingPostsByUserId } from "api/lendingPost";
 
 let loansArray: Array<any> = [];
 
 export const loadLoans = async () => {
-  const loans = await fetchLoans();
+  const loans = await fetchLendingPosts();
   if (Array.isArray(loans)) {
     for (const loan of loans) {
-      const requirements = await fetchLoanRequirements(loan.id);
+      const requirements = await fetchLendingPostRequirements(loan.id);
       loan.requirements = requirements; 
     }
     setLoans(loans);
@@ -35,11 +35,11 @@ export const addLoan = async (
 
 };
 
-export const getLoansByUserId = async (userId: string) => {
-  const loans = await fetchLoansByUserId(userId);
+export const getLendingPostsByUserId = async (userId: string) => {
+  const loans = await fetchLendingPostsByUserId(userId);
   if (Array.isArray(loans)) {
     for (const loan of loans) {
-      const requirements = await fetchLoanRequirements(loan.id);
+      const requirements = await fetchLendingPostRequirements(loan.id);
       loan.requirements = requirements;
     }
     return loans;

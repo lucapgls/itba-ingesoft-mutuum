@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";
-import { getLoans, loadLoans } from "../../store/LoanStore";
+import { getLoans, loadLoans } from "../../store/LendingPostStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";

@@ -13,7 +13,7 @@ import { supabase } from "../(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import LoanCard from "../../components/LoanCard";
 import CustomButton from "../../components/CustomButton";
-import { getLoansByUserId } from "../../store/LoanStore";
+import { getLendingPostsByUserId } from "../../store/LendingPostStore";
 import CustomTextInput from "../../components/CustomTextInput";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
@@ -72,7 +72,7 @@ const MyLoans = () => {
             const userId = UserStore.userId;
 
             if (userId) {
-                const loansArray = await getLoansByUserId(userId);
+                const loansArray = await getLendingPostsByUserId(userId);
                 setLoans(loansArray ?? []);
 
                 const lenderPromises = (loansArray ?? []).map(async (loan) => {

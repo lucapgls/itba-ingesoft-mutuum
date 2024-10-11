@@ -1,10 +1,10 @@
 import API_BASE_URL from "./api_temp"
 
 const API_SLUG = (slug: string) => {
-    return `${API_BASE_URL}/api/v1/loans${slug}`
+    return `${API_BASE_URL}/api/v1/lendingPost${slug}`
 };
 
-export const fetchLoans = async () => {
+export const fetchLendingPosts = async () => {
     try {
       const response = await fetch(API_SLUG('/'), {
         method: 'GET',
@@ -25,7 +25,7 @@ export const fetchLoans = async () => {
     }
   };
   
-  export const fetchLoanRequirements = async (lendingPostId: string) => {
+  export const fetchLendingPostRequirements = async (lendingPostId: string) => {
     try {
       const response = await fetch(API_SLUG(`/requirements?lendingPostId=${lendingPostId}`), {
         method: 'GET',
@@ -45,7 +45,7 @@ export const fetchLoans = async () => {
     }
   };
 
-  export const fetchLoansByUserId = async (userId: string) => {
+  export const fetchLendingPostsByUserId = async (userId: string) => {
     try {
       const response = await fetch(API_SLUG(`?userId=${userId}`), {
         method: 'GET',

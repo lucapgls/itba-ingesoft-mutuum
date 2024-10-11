@@ -1,16 +1,16 @@
     import express from 'express';
-    import { fetchLoans, fetchLoansById, createLendingPost, createLoanRequirements,fetchLoanRequirements } from './loans.js';
+    import { fetchLendingPost, fetchLendingPostById, createLendingPost, createLendingPostRequirements,fetchLendingPostRequirements } from './lendingPost.js';
 
     const router = express.Router();
 
 /*
-* @GET /api/loans
+* @GET /api/lendingPost
 *
 * brief: Fetch all loans or loans by user ID
 * 
 * Example request:
-* /api/loans
-* /api/loans?userId=123
+* /api/lendingPost
+* /api/lendingPost?userId=123
 */
 router.get('/', async (req, res) => {
     const { userId } = req.query;
@@ -18,9 +18,9 @@ router.get('/', async (req, res) => {
     try {
         let loans;
         if (userId) {
-            loans = await fetchLoansById(userId);
+            loans = await fetchLendingPostById(userId);
         } else {
-            loans = await fetchLoans();
+            loans = await fetchLendingPost();
         }
     
         res.status(200).json({ loans });
@@ -30,12 +30,12 @@ router.get('/', async (req, res) => {
 });
 
     /*
-     * @GET /api/loan/requirements
+     * @GET /api/lendingPost/requirements
      * 
      * brief: Fetch loan requirements by lending post ID
      * 
      * Example request:
-     * /api/loan/requirements?lendingPostId=123
+     * /api/lendingPost/requirements?lendingPostId=123
      */
     router.get('/requirements', async (req, res) => {
         const { lendingPostId } = req.query;
@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
         }
 
         try {
-            const requirements = await fetchLoanRequirements(lendingPostId);
+            const requirements = await fetchLendingPostRequirements(lendingPostId);
             res.status(200).json({ requirements });
         } catch (error) {
             res.status(500).json({ error: 'Error fetching loan requirements', details: error.message });
@@ -53,11 +53,11 @@ router.get('/', async (req, res) => {
     });
 
     /*
-    * @POST /api/loan
+    * @POST /api/lendingPost
     * brief: Create a new lending post and its requirementsa
     * 
     * Example request:
-    * /api/loan/create
+    * /api/lendingPost/create
     * 
     * Example body:
     * {
@@ -84,7 +84,7 @@ router.get('/', async (req, res) => {
             const lendingPostId = await createLendingPost(lenderId, initialAmount, availableAmount, interest, deadline);
 
             if (lendingPostId) {
-                const createdRequirements = await createLoanRequirements(lendingPostId, requirements);
+                const createdRequirements = await createLendingPostRequirements(lendingPostId, requirements);
                 res.status(201).json({ lendingPostId, createdRequirements });
             } else {
                 res.status(400).json({ error: 'Failed to create lending post' });

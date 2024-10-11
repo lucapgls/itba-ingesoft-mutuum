@@ -17,7 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import LoanCard from "@components/LoanCard";
 import { Skeleton } from "moti/skeleton";
 import { fetchUser } from "api/user";
-import { getLoansByUserId } from "../../store/LoanStore";
+import { getLendingPostsByUserId } from "../../store/LendingPostStore";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 
 const PublicProfile = observer(() => {
@@ -55,7 +55,7 @@ const PublicProfile = observer(() => {
 			const userId = UserStore.userId;
 
 			if (userId) {
-				const loansArray = await getLoansByUserId(userId);
+				const loansArray = await getLendingPostsByUserId(userId);
 				setLoans(loansArray ?? []);
 
 				const lenderPromises = (loansArray ?? []).map(async (loan) => {

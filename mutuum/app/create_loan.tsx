@@ -18,8 +18,8 @@ import { supabase } from "./(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import API_BASE_URL from "../api/api_temp";
 import theme from "@theme/theme";
-import { createLendingPostAndRequirements } from "api/loan";
-import { addLoan } from "store/LoanStore";
+import { createLendingPostAndRequirements } from "api/lendingPost";
+import { addLoan } from "store/LendingPostStore";
 import UserStore from "store/UserStore";
 
 // Function to create a new lending post

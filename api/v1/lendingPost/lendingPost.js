@@ -2,7 +2,7 @@ import { supabase } from '../../supabase_config.js';
 import { v4 as uuidv4 } from 'uuid';
 
 
-export const fetchLoans = async () => {
+export const fetchLendingPost = async () => {
 
   try {
     const { data, error } = await supabase
@@ -10,7 +10,7 @@ export const fetchLoans = async () => {
       .select('*');
 
     if (error) {
-      console.error('Error fetching loans:', error.message);
+      console.error('Error fetching lending posts:', error.message);
       throw error;
     }
     
@@ -22,7 +22,7 @@ export const fetchLoans = async () => {
 };
 
 
-export const fetchLoansById = async (userId) => {
+export const fetchLendingPostById = async (userId) => {
   try {
     const { data, error } = await supabase
       .from('lending_post')
@@ -30,7 +30,7 @@ export const fetchLoansById = async (userId) => {
       .eq('lender_id', userId);
 
     if (error) {
-      console.error(`Error fetching loans for user ${userId}:`, error);
+      console.error(`Error fetching lending post for user ${userId}:`, error);
       throw error;
     }
 
@@ -42,7 +42,7 @@ export const fetchLoansById = async (userId) => {
 };
 
 
-export const fetchLoanRequirements = async (lendingPostId) => {
+export const fetchLendingPostRequirements = async (lendingPostId) => {
   try {
     const { data, error } = await supabase
       .from('loan_requirements')
@@ -96,7 +96,7 @@ export const createLendingPost = async (lenderId, initialAmount, availableAmount
 };
 
 
-export const createLoanRequirements = async (lendingPostId, requirements) => {
+export const createLendingPostRequirements = async (lendingPostId, requirements) => {
   try {
     const formattedRequirements = {
       lending_post_id: lendingPostId,
