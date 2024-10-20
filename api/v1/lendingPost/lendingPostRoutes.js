@@ -78,10 +78,10 @@ router.get('/', async (req, res) => {
     * 
     */
     router.post('/create', async (req, res) => {
-        const { lenderId, initialAmount, availableAmount, interest, deadline, requirements } = req.body;
+        const { lenderId, initialAmount, availableAmount, interest, deadline, requirements, quotas } = req.body;
 
         try {
-            const lendingPostId = await createLendingPost(lenderId, initialAmount, availableAmount, interest, deadline);
+            const lendingPostId = await createLendingPost(lenderId, initialAmount, availableAmount, interest, deadline, quotas);
 
             if (lendingPostId) {
                 const createdRequirements = await createLendingPostRequirements(lendingPostId, requirements);
@@ -94,44 +94,5 @@ router.get('/', async (req, res) => {
         }
     });
 
-    
-    /*
-    * @POST /api/loan/create
-    * brief: Create a loan based on lending post and borrower request
-    * 
-    * Example request:
-    * /api/loan/create
-    */
-    // router.post('/create', async (req, res) => {
-    //     const { lendingPostId, borrowerId, loanAmount } = req.body;
-
-    //     try {
-    //         // Fetch the lending post to check the available amount
-    //         const lendingPost = await getLendingPostById(lendingPostId);
-
-    //         if (!lendingPost) {
-    //             return res.status(404).json({ error: 'Lending post not found' });
-    //         }
-
-    //         const availableAmount = lendingPost.available_amount;
-
-    //         // Check if the loan amount can be borrowed
-    //         if (loanAmount > availableAmount) {
-    //             return res.status(400).json({ error: 'Loan amount exceeds available budget' });
-    //         }
-
-    //         // Create the loan
-    //         const newLoan = await createLoan(lendingPostId, borrowerId, loanAmount);
-
-    //         if (!newLoan) {
-    //             return res.status(500).json({ error: 'Failed to create loan' });
-    //         }
-
-    //         res.status(201).json({ loan: newLoan, message: 'Loan created successfully' });
-    //     } catch (error) {
-    //         res.status(500).json({ error: 'Error creating loan', details: error.message });
-    //     }
-    // });
-    
-
+ 
     export default router;

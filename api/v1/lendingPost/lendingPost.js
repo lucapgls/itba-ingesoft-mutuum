@@ -1,5 +1,5 @@
 import { supabase } from '../../supabase_config.js';
-import { v4 as uuidv4 } from 'uuid';
+
 
 
 export const fetchLendingPost = async () => {
@@ -67,7 +67,7 @@ export const fetchLendingPostRequirements = async (lendingPostId) => {
 };
 
 
-export const createLendingPost = async (lenderId, initialAmount, availableAmount, interest, deadline) => {
+export const createLendingPost = async (lenderId, initialAmount, availableAmount, interest, deadline, installments) => {
   const createdAt = new Date().toISOString();
   try {
     const { data, error } = await supabase
@@ -79,6 +79,7 @@ export const createLendingPost = async (lenderId, initialAmount, availableAmount
         interest: interest,
         dead_line: deadline,
         created_at: createdAt,
+        quotas: installments,
        
       }])
       .select();

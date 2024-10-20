@@ -27,9 +27,10 @@ export const addLoan = async (
   availableAmount: number,
   interest: number,
   deadline: string,
-  requirements: Array<{ name: string; completed: boolean }>
+  requirements: Array<{ name: string; completed: boolean }>,
+  quotas: number
 ) => {
-  await createLendingPostAndRequirements(lenderId, initialAmount, availableAmount, interest, deadline, requirements);
+  await createLendingPostAndRequirements(lenderId, initialAmount, availableAmount, interest, deadline, requirements, quotas);
   await loadLoans();
   console.log('Loan added successfully:');
 

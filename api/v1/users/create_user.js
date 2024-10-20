@@ -33,8 +33,8 @@ async function createUser(email, password, display_name) {
         new_wallet_id: wallet_id,
     });
 
-    await setDisplayName(user.id, display_name);
-    await setEmail(user.id, email);
+    const dataDisplayName = await setDisplayName(user.id, display_name);
+    const dataEmail = await setEmail(user.id, email);
 
     if (rpcError) {
         console.log("teaaa");
@@ -46,7 +46,7 @@ async function createUser(email, password, display_name) {
         user: {
             id: user.id,
             email: user.email,
-            display_name: display_name, // temp
+            display_name: dataDisplayName.display_name, 
             wallet_id: wallet_id // temp 
         }
     };

@@ -92,6 +92,7 @@ const CreateLoan: React.FC = () => {
     const initialAmount = parseFloat(amount);
     const interest = parseFloat(interests);
     const deadline = new Date().toISOString(); // Update this with the actual value
+    const loanQuotas = parseInt(quotas);
 
     const requirements = [
       { name: "Email Required", completed: isEmailEnabled },
@@ -106,6 +107,7 @@ const CreateLoan: React.FC = () => {
         interest,
         deadline,
         requirements,
+        loanQuotas,
       );
 
       router.replace("/explore");

@@ -3,7 +3,7 @@ import express from 'express';
 import { createUser } from './create_user.js';
 import { getWalletId } from './user.js';
 import loginUser from './login.js';
-import { getUserInfo } from './user_info.js';
+import { getUserInfo, setPhoneNumber, setDni } from './user_info.js';
 const router = express.Router();
 
 /*
@@ -93,5 +93,29 @@ router.get('/info', async (req, res) => {
     }
 });
 
+router.put('/updateInfo', async (req, res) => {
+    const { userId, phoneNumber, dni } = req.body;
+
+    if(!userId) {
+        return res.status(400).json({ error: 'userId query parameter is required' });
+    }
+
+    if(!phoneNumber && !dni) {
+        return res.status(400).json({ error: 'phoneNumber or dni is required' });
+    }
+
+    
+    try {
+        if(phoneNumber) {
+            const data_phone = await setPhoneNumber(userId, phoneNumber);
+        }
+        if(dni) {
+            const data_dni = await setDni(userId, dni);
+        }
+        res.status(200).json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating user info', details: error.message });
+    }
+});
 
 export default router;

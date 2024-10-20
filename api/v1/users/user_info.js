@@ -26,11 +26,11 @@ export const setEmail = async (user_id, email) => {
         email: email
     }])
     .select();
-
-    console.log(data);
+    
     if (error) {
         throw new Error('Error setting email');
     }
+    return data;
 };
 
 
@@ -43,8 +43,38 @@ export const setDisplayName = async (user_id, display_name) => {
     }])
     .select();
 
-    console.log(data);
     if (error) {
         throw new Error('Error setting display name');
     }
+    return data;
+}
+
+export const setDni = async (user_id, dni) => {
+    const { data, error } = await supabase
+    .from('users_info')
+    .upsert([{
+        id: user_id,
+        dni: dni
+    }])
+    .select();
+
+    if (error) {
+        throw new Error('Error setting dni');
+    }
+    return data;
+}
+
+export const setPhoneNumber = async (user_id, phone_number) => {
+    const { data, error } = await supabase
+    .from('users_info')
+    .upsert([{
+        id: user_id,
+        phone: phone_number
+    }])
+    .select();
+
+    if (error) {
+        throw new Error('Error setting phone number');
+    }
+    return data;
 }

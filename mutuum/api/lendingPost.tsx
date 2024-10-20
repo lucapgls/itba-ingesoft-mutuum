@@ -73,7 +73,8 @@ export const fetchLendingPosts = async () => {
     availableAmount: number,
     interest: number,
     deadline: string,
-    requirements: Array<{ name: string; completed: boolean }>
+    requirements: Array<{ name: string; completed: boolean }>,
+    quotas: number
   ) => {
     try {
       const response = await fetch(API_SLUG("/create"), {
@@ -88,17 +89,18 @@ export const fetchLendingPosts = async () => {
           interest,
           deadline,
           requirements,
+          quotas,
         }),
       });
   
       if (!response.ok) {
-        throw new Error('Error al crear el préstamo');
+        throw new Error('Error creating lending post');
       }
   
       const data = await response.json();
       return { lendingPostId: data.lendingPostId, createdRequirements: data.createdRequirements };
     } catch (error) {
-      console.error('Error al crear el préstamo:', error);
+      console.error('Error creating lending post:', error);
       throw error;
     }
 };

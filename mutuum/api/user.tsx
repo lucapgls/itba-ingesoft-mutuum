@@ -24,3 +24,51 @@ export const fetchUser = async (userId: string) => {
         throw error;
     }
 }
+
+export const updatePhoneNumber = async (userId: string, phoneNumber: string) => {
+    try {
+        const response = await fetch(API_SLUG(`/updateInfo`), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId,
+                phoneNumber,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error updating phone number');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const updateDni = async (userId: string, dni: string) => {
+    try {
+        const response = await fetch(API_SLUG(`/updateInfo`), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId,
+                dni,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error updating DNI');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
