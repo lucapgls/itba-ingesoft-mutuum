@@ -54,12 +54,21 @@ export const fetchLendingPostRequirements = async (lendingPostId) => {
       throw error;
     }
 
-    const requirements = data.map(req => ({
-      name: req.email_required ? 'Email Required' : 'Phone Required',
-      completed: req.email_required || req.phone_required,
-    }));
-  
-    return requirements;
+   
+const requirements = data.map(req => {
+  const requirementNames = [];
+  if (req.email_required) requirementNames.push('Email Required');
+  if (req.phone_required) requirementNames.push('Phone Required');
+  if (req.dni_required) requirementNames.push('DNI Required');
+
+  return {
+    name: requirementNames.join(', '),
+    completed: req.email_required || req.phone_required || req.dni_required,
+  };
+});
+
+return requirements;
+
   } catch (error) {
     console.error('Error:', error);
     throw error;
@@ -103,6 +112,7 @@ export const createLendingPostRequirements = async (lendingPostId, requirements)
       lending_post_id: lendingPostId,
       email_required: requirements.find(req => req.name === 'Email Required')?.completed || false,
       phone_required: requirements.find(req => req.name === 'Phone Required')?.completed || false,
+      dni_required: requirements.find(req => req.name === 'DNI Required')?.completed || false,
     };
 
     const { data, error } = await supabase

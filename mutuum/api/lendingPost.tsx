@@ -76,6 +76,7 @@ export const fetchLendingPosts = async () => {
     requirements: Array<{ name: string; completed: boolean }>,
     quotas: number
   ) => {
+    
     try {
       const response = await fetch(API_SLUG("/create"), {
         method: 'POST',

@@ -160,7 +160,7 @@ const MyLoans = () => {
                             currency={loan.currency ?? "USD"}
                             amount={loan.initial_amount ?? 0}
                             interest={loan.interest ?? 0}
-                            term={loan.term ?? 0}
+                            term={loan.quotas ?? 0}
                             requirements={loan.requirements ?? []}
                             onPress={() =>
                                 console.log(`Pressed loan ${loan.id}`)

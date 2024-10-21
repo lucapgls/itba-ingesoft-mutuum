@@ -97,6 +97,7 @@ const CreateLoan: React.FC = () => {
     const requirements = [
       { name: "Email Required", completed: isEmailEnabled },
       { name: "Phone Required", completed: isPhoneNumberEnabled },
+      { name: "DNI Required", completed: isIdEnabled },
     ];
 
     try {

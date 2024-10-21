@@ -84,6 +84,7 @@ router.get('/', async (req, res) => {
             const lendingPostId = await createLendingPost(lenderId, initialAmount, availableAmount, interest, deadline, quotas);
 
             if (lendingPostId) {
+                console.log(requirements)
                 const createdRequirements = await createLendingPostRequirements(lendingPostId, requirements);
                 res.status(201).json({ lendingPostId, createdRequirements });
             } else {
