@@ -11,6 +11,7 @@ interface WalletBalance {
 
 const getWalletBalance = async (userId: string): Promise<WalletBalance> => {
     try {
+        console.log('Fetching wallet balance for user:', userId);
         const response = await fetch(API_SLUG(`/balance?walletID=${userId}`));
         const data = await response.json();
 

@@ -1,35 +1,41 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { User } from "../models/User"; // Assuming you have a User model
 import theme from "@theme/theme";
 
-const RecentUsersBubble = ({ Users }: { Users: User[] }) => {
-	return (
-		<View style={styles.container}>
-			<View style={[styles.rectangle, theme.shadowAndroid, theme.shadowIOS]}>
-				<View style={styles.header}>
-					<Text style={styles.title}>Conexiones recientes</Text>
-					<TouchableOpacity>
-						<Text style={styles.buttonText}>Ver más</Text>
-					</TouchableOpacity>
-				</View>
-				<View style={{ height: 15 }} />
-				<View style={styles.UsersContainer}>
-					{Users.map((User) => (
-						<View key={User.id} style={styles.UserCard}>
-							<Image
-								source={{
-									uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=",
-								}}
-								style={styles.profilePicture}
-							/>
-							<Text style={styles.UserName}>{User.userName}</Text>
-						</View>
-					))}
-				</View>
-			</View>
-		</View>
-	);
+// FIX
+const RecentUsersBubble = ({ Users }: { Users: { [key: string]: any } }) => {
+    console.log('Users:', Users);
+
+    return (
+        <View style={styles.container}>
+            <View style={[styles.rectangle, theme.shadowAndroid, theme.shadowIOS]}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>Conexiones recientes</Text>
+                    <TouchableOpacity>
+                        <Text style={styles.buttonText}>Ver más</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ height: 15 }} />
+                <View style={styles.UsersContainer}>
+                    {Object.values(Users).map((User) => {
+                        console.log('User:', User);
+                        return (
+                            <View key={User.id} style={styles.UserCard}>
+                                <Image
+                                    source={{
+                                        uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=",
+                                    }}
+                                    style={styles.profilePicture}
+                                />
+                                <Text style={styles.UserName}>{User.display_name}</Text>
+                            </View>
+                        );
+                    })}
+                </View>
+            </View>
+        </View>
+    );
 };
 
 export default RecentUsersBubble;

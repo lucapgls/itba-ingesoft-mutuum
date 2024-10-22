@@ -21,68 +21,21 @@ import ParallaxCarousel from "@components/ParallaxCarousel";
 import NoLoansBubble from "@components/NoLoansBubble";
 import { router } from "expo-router";
 import UserStore from "store/UserStore";
+import { getLendingPostsByUserId, setLoans } from "store/LendingPostStore";
+import { fetchUser } from "api/user";
 
 const Home = () => {
-	const loans: Loan[] = [
-		{
-			role: "borrower",
-			userId: "1",
-			amount: 3.8,
-			coinType: "ETH",
-			interests: 5,
-			quotas: 1,
-		},
-		{
-			role: "borrower",
-			userId: "2",
-			amount: 3.8,
-			coinType: "ETH",
-			interests: 5,
-			quotas: 1,
-		},
-		{
-			role: "borrower",
-			userId: "3",
-			amount: 3.8,
-			coinType: "ETH",
-			interests: 5,
-			quotas: 1,
-		},
-	];
 
-	const Users: User[] = [
-		{
-			id: "1",
-			profilePicture: "",
-			userName: "Nombre",
-			email: "",
-		},
-		{
-			id: "2",
-			profilePicture: "",
-			userName: "Nombre",
-			email: "",
-		},
-		{
-			id: "3",
-			profilePicture: "",
-			userName: "Nombre",
-			email: "",
-		},
-		{
-			id: "4",
-			profilePicture: "",
-			userName: "Nombre",
-			email: "",
-		},
-	];
 
 	const ScrollOffsetY = useRef(new Animated.Value(0)).current;
 
 	const [wallet, setWallet] = React.useState({ balance: 0, coin: "" });
 	const [isLoading, setIsLoading] = useState(false);
+	const [loans, setLoans] = useState<Loan[]>([]);
+	const [lenders, setLenders] = useState<{ [key: string]: any }>({});
 
 	React.useEffect(() => {
+		fetchMyLoans();
 		const fetchWalletBalance = async () => {
 
 			const { amount, token } = await getWalletBalance(UserStore.walletId
@@ -99,8 +52,44 @@ const Home = () => {
 
 	const fetchData = async () => {
 		setIsLoading(false)
+		const { amount, token } = await getWalletBalance(UserStore.walletId
+		);
+		setWallet({ balance: amount, coin: token });
+		fetchMyLoans();
 	}
 
+	// TODO: Move to loan api and set it up for the store
+	const fetchMyLoans = async () => {
+		setIsLoading(true);
+		try {
+			const userId = UserStore.userId;
+
+			if (userId) {
+				const loansArray = await getLendingPostsByUserId(userId);
+				setLoans(loansArray ?? []);
+
+				const lenderPromises = (loansArray ?? []).map(async (loan) => {
+					const user = await fetchUser(loan.lender_id);
+					return { lender_id: loan.lender_id, display_name: user[0].display_name };
+				});
+
+				const lenderData = await Promise.all(lenderPromises);
+				const lenderMap = lenderData.reduce((acc: { [key: string]: string }, lender) => {
+					acc[lender.lender_id] = lender.display_name;
+					return acc;
+				}, {});
+
+				setLenders(lenderMap);
+			} else {
+				console.error("User ID is undefined");
+			}
+		} catch (error) {
+			console.error("Failed to fetch user:", error);
+		} finally {
+			setIsLoading(false);
+
+		}
+	};
 
 	React.useEffect(() => {
 		const convertBalance = async () => {
@@ -128,7 +117,12 @@ const Home = () => {
 		},
 	];
 
+	// Format the ars balance so that it has 2 decimal places
+	const arsBalance = convertedBalance
+		? convertedBalance.toFixed(2).toString()
+		: "0.00";
 	return (
+
 		<View style={styles.container}>
 			<LinearGradient
 				// Background Linear Gradient
@@ -137,14 +131,14 @@ const Home = () => {
 			>
 				<View style={{ height: 10 }} />
 				<ScrollView showsVerticalScrollIndicator={false}
-				refreshControl={
-					<RefreshControl refreshing={isLoading} onRefresh={fetchData} />
-				  }>
-					
+					refreshControl={
+						<RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+					}>
+
 					<HomeRectangle
 						coin={wallet.coin}
 						balance={wallet.balance}
-						ars={convertedBalance ?? 0}
+						ars={arsBalance}
 					/>
 
 					<View style={{ height: 20 }} />
@@ -152,17 +146,28 @@ const Home = () => {
 					<ParallaxCarousel />
 
 					<View style={{ paddingHorizontal: 20 }}>
-					<View style={{ height: 20 }} />
-					{/* NoLoansBubble se usan cuando todavía no se solicitó/creó ningun prestamo */}
-						<NoLoansBubble text="Todavía no tenes tu prestamo?" buttonText="Explorar prestamos" 
-						onPress={() => router.replace("/explore")}/>
 						<View style={{ height: 20 }} />
-						<NoLoansBubble text="Queres hacer rendir tu plata?" buttonText="Crear prestamo" 
-						onPress={() => router.push("/create_loan")}/>
+						{/* NoLoansBubble se usan cuando todavía no se solicitó/creó ningun prestamo */}
+						<NoLoansBubble text="Todavía no tenes tu prestamo?" buttonText="Explorar prestamos"
+							onPress={() => router.replace("/explore")} />
+						{!loans.length ?
+						(
+							<>
 						<View style={{ height: 20 }} />
-						<RecentUsersBubble Users={Users} />
-						<View style={{ height: 20 }} />
-						<HomeBubble loans={loans} />
+						<NoLoansBubble text="Queres hacer rendir tu plata?" buttonText="Crear prestamo"
+							onPress={() => router.push("/create_loan")} />
+							</>
+						) : null}
+						{loans.length ? (
+							<>
+								{/* <View style={{ height: 20 }} /> */}
+								{/* <RecentUsersBubble Users={lenders} /> */}
+								{/* <View style={{ height: 20 }} /> */}
+								{/* <HomeBubble loans={loans} /> */}
+							</>
+						) : null}
+
+						{/* <HomeBubble loans={loans} /> */}
 					</View>
 					<View style={{ height: 20 }} />
 				</ScrollView>
@@ -192,3 +197,7 @@ const styles = StyleSheet.create({
 });
 
 export default Home;
+function setLenders(lenderMap: { [key: string]: string; }) {
+	throw new Error("Function not implemented.");
+}
+
