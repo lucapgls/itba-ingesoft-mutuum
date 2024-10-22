@@ -16,7 +16,8 @@ const getWalletBalance = async (userId: string): Promise<WalletBalance> => {
 
         // Check if balances exist and if there's at least one entry
         if (!data.balances || data.balances.length === 0) {
-            throw new Error("No balances available");
+            console.log("No balances available");
+            return { amount: 0, token: 'USDC' };
         }
 
         const { amount, token } = data.balances[0];

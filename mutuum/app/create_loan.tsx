@@ -14,7 +14,6 @@ import CustomTextInput from "../components/CustomTextInput";
 import CustomButton from "../components/CustomButton";
 import CustomChip from "../components/CustomChip";
 import { Picker } from "@react-native-picker/picker";
-import { supabase } from "./(auth)/SupabaseConfig";
 import { router } from "expo-router";
 import API_BASE_URL from "../api/api_temp";
 import theme from "@theme/theme";
@@ -22,31 +21,6 @@ import { createLendingPostAndRequirements } from "api/lendingPost";
 import { addLoan } from "store/LendingPostStore";
 import UserStore from "store/UserStore";
 
-// Function to create a new lending post
-export const createLendingPost = async (
-  lenderId: string, // ID of the lender (from auth.users.id)
-  initialAmount: number, // Total amount for the lending post
-  interest: number, // Interest rate for the loan
-  deadline: string, // Deadline for loan repayment (formatted as string)
-) => {
-  // TODO: ESTO DEBE ESTAR EN EL BACK!!!
-  const { data, error } = await supabase.from("lending_post").insert([
-    {
-      lender_id: lenderId, // Lender's ID from auth.users.id
-      initial_amount: initialAmount, // Total loan amount
-      available_amount: initialAmount, // Initially available amount is the total amount
-      interest: interest, // Interest rate for the loan
-      dead_line: deadline, // Deadline for repayment (must be a valid date string)
-    },
-  ]);
-
-  if (error) {
-    console.error("Error creating lending post:", error.message);
-    throw error;
-  }
-
-  return data;
-};
 
 const CreateLoan: React.FC = () => {
   const [coinType, setCoinType] = useState("");
