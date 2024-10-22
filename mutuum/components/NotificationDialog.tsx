@@ -10,7 +10,7 @@ interface NotificationDialogProps {
   title?: string;
 }
 
-const NotificationDialog: React.FC<NotificationDialogProps> = ({ title ="Solicitud enviada", text= "Te notificaremos cuando el prestamista acepte tusolicitud.", onClose, visible}) => {
+const NotificationDialog: React.FC<NotificationDialogProps> = ({ title ="Notificacion", text= "Descripcion", onClose, visible}) => {
   return (
     <Modal
       transparent={true}

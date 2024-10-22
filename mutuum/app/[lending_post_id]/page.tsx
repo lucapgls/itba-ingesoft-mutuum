@@ -13,7 +13,7 @@ import {
 	useRouter,
 	useLocalSearchParams,
 	useGlobalSearchParams,
-    router,
+	router,
 } from "expo-router";
 import { askForLoan, getAsking } from "api/lendingPost";
 import UserStore from "store/UserStore";
@@ -21,7 +21,6 @@ import CustomButton from "@components/CustomButton";
 import { fetchUser } from "api/user";
 import NotificationDialog from "@components/NotificationDialog";
 import { getWalletID, postWalletTransaction } from "api/wallet";
-
 
 interface Requirement {
 	params: {
@@ -34,26 +33,24 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 	const [loanDetails, setLoanDetails] = useState<any>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [askingIds, setAskingIds] = useState<string[]>([]);
-    const [userNames, setUserNames] = useState<{ id: string; name: string }[]>(
-        []
-    );
+	const [userNames, setUserNames] = useState<{ id: string; name: string }[]>(
+		[]
+	);
 	const currentUser = UserStore.getUserInfo();
 	const [user, setUser] = useState<any>(null);
 	const [dialogVisible, setDialogVisible] = useState(false);
-    const [dialogVisible2, setDialogVisible2] = useState(false);
+	const [dialogVisible2, setDialogVisible2] = useState(false);
 
 	const closeDialog = () => {
 		setDialogVisible(false);
 	};
-    
-        const closeDialog2 = () => {
-            setDialogVisible2(false);
-        };
+
+	const closeDialog2 = () => {
+		setDialogVisible2(false);
+	};
 
 	const handleAskForLoan = async () => {
-		
 		try {
-			
 			askForLoan(currentUser.userId, String(lending_post_id));
 		} catch (error) {
 			console.error("Error al solicitar préstamo:", error);
@@ -63,23 +60,22 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 	};
 
 	const fetchUserNames = async () => {
-        try {
-            const names = await Promise.all(
-                askingIds.map(async (id) => {
-                    const user = await fetchUser(id);
-                    return { id, name: user[0].display_name };
-                })
-            );
-            setUserNames(names);
-        } catch (error) {
-            console.error("Error al obtener nombres de usuario:", error);
-        }
-    };
+		try {
+			const names = await Promise.all(
+				askingIds.map(async (id) => {
+					const user = await fetchUser(id);
+					return { id, name: user[0].display_name };
+				})
+			);
+			setUserNames(names);
+		} catch (error) {
+			console.error("Error al obtener nombres de usuario:", error);
+		}
+	};
 
 	useEffect(() => {
 		const getLoanDetails = async () => {
 			try {
-				
 				if (lending_post_id) {
 					const details = await getLendingPostByLendingPostId(
 						String(lending_post_id)
@@ -95,17 +91,19 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 			}
 		};
 
-        const fetchAskingIds = async () => {
-            try {
-                if (lending_post_id) {
-                    const data = await getAsking(String(lending_post_id));
-                    setAskingIds(data);
-                }
-            } catch (error) {
-                console.error("Error al obtener solicitudes de préstamo:", error);
-            }
-        };
-        
+		const fetchAskingIds = async () => {
+			try {
+				if (lending_post_id) {
+					const data = await getAsking(String(lending_post_id));
+					setAskingIds(data);
+				}
+			} catch (error) {
+				console.error(
+					"Error al obtener solicitudes de préstamo:",
+					error
+				);
+			}
+		};
 
 		getLoanDetails();
 		fetchAskingIds();
@@ -135,32 +133,30 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 		);
 	}
 
-    const onAccept = async (toUserId: string) => {
-        console.log("TEST");
-        try {
-            const toWalletId = await getWalletID(toUserId);
-            console.log("toWalletId", toWalletId);
+	const onAccept = async (toUserId: string) => {
+		console.log("TEST");
+		try {
+			const toWalletId = await getWalletID(toUserId);
+			console.log("toWalletId", toWalletId);
 
-            // Assuming you have a function to perform the transaction
-            const lenderWalletId = currentUser.walletId;
-            console.log("lenderWalletId", lenderWalletId);
-            const amount = loanDetails.initial_amount;
-            console.log("amount", amount);
+			// Assuming you have a function to perform the transaction
+			const lenderWalletId = currentUser.walletId;
+			console.log("lenderWalletId", lenderWalletId);
+			const amount = loanDetails.initial_amount;
+			console.log("amount", amount);
 
-            await postWalletTransaction(lenderWalletId, toWalletId, amount);
-            console.log(`Transaction of ${amount} from ${lenderWalletId} to ${toWalletId} completed.`);
-         
-            
-        } catch (error) {
-            console.error("Error accepting loan request:", error);
-        } finally {
+			await postWalletTransaction(lenderWalletId, toWalletId, amount);
+			console.log(
+				`Transaction of ${amount} from ${lenderWalletId} to ${toWalletId} completed.`
+			);
+		} catch (error) {
+			console.error("Error accepting loan request:", error);
+		} finally {
 			setDialogVisible2(true);
 		}
-    };
+	};
 
-    
-
-    return (
+	return (
 		<ScrollView contentContainerStyle={styles.scrollContainer}>
 			<View
 				style={[
@@ -207,31 +203,37 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 					<View style={{ height: 20 }} />
 					<Text style={styles.title}>Solicitudes</Text>
 					{userNames.map(({ id, name }, index) => (
-                <View key={index} style={styles.infoRow}>
-                    <Text style={styles.askingId}>{name}</Text>
-                    <TouchableOpacity
-                        onPress={() => onAccept(id)}
-                        style={styles.button}
-                    >
-                        <Text style={{ color: theme.colors.textWhite }}>
-                            Aceptar
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            ))}
-                <NotificationDialog 
-                visible={dialogVisible2}
-                onClose={closeDialog2}
-                title="Préstamo enviado"
-                text={"Su prestamo se envió al cliente con exito."} />
+						<View key={index} style={styles.askingRow}>
+							<Text style={styles.askingId}>{name}</Text>
+							<TouchableOpacity
+								onPress={() => onAccept(id)}
+								
+							>
+								<Text style={{ color: theme.colors.primary }}>
+									Aceptar
+								</Text>
+							</TouchableOpacity>
+						</View>
+					))}
+					<NotificationDialog
+						visible={dialogVisible2}
+						onClose={closeDialog2}
+						title="Préstamo enviado"
+						text={"Su prestamo se envió al cliente con exito."}
+					/>
 				</>
 			) : (
 				<>
-				<CustomButton
-					text="Solicitar"
-					onPress={() => handleAskForLoan()}
-				/>
-			    <NotificationDialog visible={dialogVisible} onClose={closeDialog2} text="" />
+					<CustomButton
+						text="Solicitar"
+						onPress={() => handleAskForLoan()}
+					/>
+					<NotificationDialog
+						visible={dialogVisible}
+						onClose={closeDialog}
+						text={"Te notificaremos cuando el prestamista acepte tusolicitud."}
+						title ="Solicitud enviada"
+					/>
 				</>
 			)}
 		</ScrollView>
@@ -263,6 +265,12 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		marginBottom: 18,
 	},
+	askingRow: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		marginBottom: 12,
+	},
 	label: {
 		color: theme.colors.textBlack,
 		fontWeight: "500",
@@ -289,16 +297,13 @@ const styles = StyleSheet.create({
 	askingId: {
 		fontSize: 15,
 		color: theme.colors.textBlack,
-		marginTop: 8,
+		marginTop: 0,
 	},
-    button: {
-        backgroundColor: theme.colors.primary,
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        borderRadius: 20,
-        alignItems: "center",
-        marginTop: 0,
-    }
+	button: {
+		
+		alignItems: "center",
+		justifyContent: "center",
+	},
 });
 
 export default LoanDetailsScreen;

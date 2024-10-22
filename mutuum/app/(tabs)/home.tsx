@@ -51,7 +51,7 @@ const Home = () => {
 
 
 	const fetchData = async () => {
-		setIsLoading(false)
+		setIsLoading(true)
 		const { amount, token } = await getWalletBalance(UserStore.walletId
 		);
 		setWallet({ balance: amount, coin: token });
@@ -129,8 +129,8 @@ const Home = () => {
 				colors={[theme.colors.primary, "#fff"]}
 				style={styles.container}
 			>
-				<View style={{ height: 10 }} />
-				<ScrollView showsVerticalScrollIndicator={false}
+				<View style={{ height: 60 }} />
+				<ScrollView showsVerticalScrollIndicator={false} 
 					refreshControl={
 						<RefreshControl refreshing={isLoading} onRefresh={fetchData} />
 					}>

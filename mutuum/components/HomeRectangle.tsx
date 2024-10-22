@@ -119,6 +119,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "transparent",
 		width: "90%",
 		alignSelf: "center",
-		marginTop: 50,
+		
 	},
 });
