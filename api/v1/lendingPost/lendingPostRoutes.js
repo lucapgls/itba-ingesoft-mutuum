@@ -1,6 +1,7 @@
 import express from 'express';
     import { fetchLendingPost, fetchLendingPostByLenderId, createLendingPost, createLendingPostRequirements,
         fetchLendingPostRequirements, fetchLendingPostById, fetchActiveLendingPosts } from './lendingPost.js';
+    import { askForLoan, getAskForLoanIds } from './askForLoan.js';
 
     const router = express.Router();
 
@@ -38,6 +39,54 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Error fetching loans', details: error.message });
     }
 });
+
+    /*
+    * @GET /api/lendingPost/ask?userId=123&lendingPostId=123
+    *
+    * brief: Ask for a loan
+    * 
+    * Example request:
+    * /api/lendingPost/ask?userId=123&lendingPostId=123
+    */
+    router.put('/ask', async (req, res) => {
+        const { userId, lending_post_id } = req.query;
+
+        if (!userId || !lending_post_id) {
+            return res.status(400).json({ error: 'userId and lendingPostId query parameters are required' });
+        }
+
+        try {
+            const data = await askForLoan(userId, lending_post_id);
+            res.status(200).json({ data });
+        } catch (error) {
+            res.status(500).json({ error: 'Error asking for loan', details: error.message });
+        }
+    });
+
+
+    /*
+    * @GET /api/lendingPost/asking
+    *
+    * brief: Fetch user ids requesting the loan by lending post ID
+    * 
+    * Example request:
+    * /api/lendingPost/asking?lendingPostId=123
+    * 
+    */
+    router.get('/asking', async (req, res) => {
+        const { id } = req.query;
+
+        if (!id) {
+            return res.status(400).json({ error: 'lendingPostId query parameter is required' });
+        }
+
+        try {
+            const askingForLoanIds = await getAskForLoanIds(id);
+            res.status(200).json(askingForLoanIds);
+        } catch (error) {
+            res.status(500).json({ error: 'Error fetching asking for loan ids', details: error.message });
+        }
+    });
 
 
     /*
