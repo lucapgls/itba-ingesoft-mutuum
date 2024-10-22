@@ -34,7 +34,7 @@ export const updatePhoneNumber = async (userId: string, phoneNumber: string) => 
             },
             body: JSON.stringify({
                 userId,
-                phoneNumber,
+                phone_number: phoneNumber,
             }),
         });
 
@@ -58,7 +58,7 @@ export const updateDni = async (userId: string, dni: string) => {
             },
             body: JSON.stringify({
                 userId,
-                dni,
+                dni: dni,
             }),
         });
 
@@ -72,3 +72,27 @@ export const updateDni = async (userId: string, dni: string) => {
         throw error;
     }
 };
+
+export const updateProfilePicture = async (userId: string, profilePicture: string) => {
+    try {
+        const response = await fetch(API_SLUG(`/updateInfo`), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId,
+                profile_picture: profilePicture,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error updating profile picture');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}

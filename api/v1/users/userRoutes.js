@@ -3,7 +3,7 @@ import express from 'express';
 import { createUser } from './create_user.js';
 import { getWalletId } from './user.js';
 import loginUser from './login.js';
-import { getUserInfo, setPhoneNumber, setDni } from './user_info.js';
+import { getUserInfo, setPhoneNumber, setDni, setProfilePicture } from './user_info.js';
 const router = express.Router();
 
 /*
@@ -94,23 +94,26 @@ router.get('/info', async (req, res) => {
 });
 
 router.put('/updateInfo', async (req, res) => {
-    const { userId, phoneNumber, dni } = req.body;
+    const { user_id, phone_number, dni, profile_picture } = req.body;
 
-    if(!userId) {
+    if(!user_id) {
         return res.status(400).json({ error: 'userId query parameter is required' });
     }
 
-    if(!phoneNumber && !dni) {
+    if(!phone_number && !dni && !profile_picture) {
         return res.status(400).json({ error: 'phoneNumber or dni is required' });
     }
 
     
     try {
-        if(phoneNumber) {
-            const data_phone = await setPhoneNumber(userId, phoneNumber);
+        if(phone_number) {
+            const data_phone = await setPhoneNumber(user_id, phone_number);
         }
         if(dni) {
-            const data_dni = await setDni(userId, dni);
+            const data_dni = await setDni(user_id, dni);
+        }
+        if(profile_picture){
+            const data_profile_picture = await setProfilePicture(user_id, profile_picture);
         }
         res.status(200).json({ success: true });
     } catch (error) {

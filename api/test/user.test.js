@@ -43,4 +43,28 @@ describe('User API Tests', () => {
             });
     });
 
+  
+
+    let user_id = "2704ea76-34a5-4eb8-822e-22cd520734ec";
+    
+    it('should edit profile info', (done) => {
+        request(app)
+            .put('/api/v1/users/updateInfo')
+            .send(
+                { 
+                    'user_id': user_id,
+                    'display_name': display_name,
+                    'dni': '12345678',
+                    'phone_number': '23456781',
+                    
+                }
+            )
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res.status).to.equal(200);
+                done();
+            });
+    })
+
 });
+

@@ -78,3 +78,18 @@ export const setPhoneNumber = async (user_id, phone_number) => {
     }
     return data;
 }
+
+export const setProfilePicture = async (user_id, profile_picture) => {
+    const { data, error } = await supabase
+    .upsert('users_info', [{
+        id: user_id,
+        profile_picture: profile_picture
+    }])
+    .select();
+
+    if (error) {
+        throw new Error('Error setting profile picture');
+    }
+    return data;
+};
+
