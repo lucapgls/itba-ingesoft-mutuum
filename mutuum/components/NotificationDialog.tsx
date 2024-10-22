@@ -6,9 +6,11 @@ import theme from '@theme/theme';
 interface NotificationDialogProps {
   visible: boolean;
   onClose: () => void;
+  text?: string;
+  title?: string;
 }
 
-const NotificationDialog: React.FC<NotificationDialogProps> = ({ visible, onClose }) => {
+const NotificationDialog: React.FC<NotificationDialogProps> = ({ title ="Solicitud enviada", text= "Te notificaremos cuando el prestamista acepte tusolicitud.", onClose, visible}) => {
   return (
     <Modal
       transparent={true}
@@ -18,9 +20,9 @@ const NotificationDialog: React.FC<NotificationDialogProps> = ({ visible, onClos
     >
       <View style={styles.overlay}>
         <View style={styles.dialog}>
-          <Text style={styles.message}>Solicitud Enviada</Text>
+          <Text style={styles.message}>{title}</Text>
           <View style={{ height: 12 }} />
-            <Text style={styles.message2}>Te notificaremos cuando el prestamista acepte tu solicitud</Text>
+            <Text style={styles.message2}>{text}</Text>
             <View style={{ height: 18 }} />
           <TouchableOpacity  onPress={onClose}  >
             

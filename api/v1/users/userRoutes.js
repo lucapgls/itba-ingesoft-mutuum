@@ -39,6 +39,32 @@ router.post('/create', async (req, res) => {
 });
 
 /*
+ *
+ * @GET /api/v1/users/walletID?userId=123
+ *
+ * brief: Fetch walletID of a user
+ * 
+ * Example request:
+ * /api/v1/users/walletID?userId=123
+ */
+router.get('/walletId', async (req, res) => {
+    const { userId } = req.query;
+
+    if (!userId) {
+        return res.status(400).json({ error: 'userId query parameter is required' });
+    }   
+
+    console.log("userId: ", userId);
+    try {
+        const wallet_id = await getWalletId(userId);
+        
+        console.log(wallet_id);
+        res.status(200).json({ wallet_id });
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching walletID', details: error.message });
+    }
+});
+/*
  * @POST /api/user/login
  *
  * brief: Login a user

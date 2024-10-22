@@ -66,7 +66,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 
     // Handle prestamo
     const handlePressIn = async () => {
-        console.log('press in');
+      
         router.push({
             pathname: "/[lending_post_id]/page",
             params: { lending_post_id },
@@ -146,7 +146,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
                 />
                 <View style={styles.details}>
                     <Text style={styles.name}>{lender_name}</Text>
-                    <Text >{lending_post_id}</Text>
+                    
                     <View style={styles.currencyRow}>
                         <Text style={styles.currencyText}>${currency}</Text>
                         <Text style={styles.amountText}>{amount}</Text>
@@ -175,7 +175,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
                 handlePressIn={handlePressIn}
             />
 
-            {/* <NotificationDialog visible={dialogVisible} onClose={closeDialog} /> */}
+            
         </GestureHandlerRootView>
     );
 };

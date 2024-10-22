@@ -123,7 +123,7 @@ const LoanBottomSheet: React.FC<LoanBottomSheetProps> = ({
 
                                         <View style={{ height: 14 }} />
                                         <CustomButton
-                                            text="Solicitar préstamo"
+                                            text="Ver más"
                                             onPress={handlePressIn}
                                         />
                                     </View>

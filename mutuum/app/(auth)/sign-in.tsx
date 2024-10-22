@@ -89,7 +89,7 @@ const SignIn = () => {
 			<ScrollView style={{ padding: 20 }} showsVerticalScrollIndicator={false}>
 				
 				<CustomTextInput
-					placeholder="example@mail.com"
+					placeholder="mi_usuario@mail.com"
 					value={email}
 					onChangeText={setEmail}
 					title="Email"
@@ -125,14 +125,14 @@ const SignIn = () => {
 					</Text>
 				</Link>
 
-				<Link href="/home" style={{ textAlign: "center", marginTop:20 }} replace>
+				{/* <Link href="/home" style={{ textAlign: "center", marginTop:20 }} replace>
 					<Text style={{ textAlign: "center", fontSize: 15 }}>
 						Continuar como{" "}
 						<Text style={{ color: theme.colors.primary, fontWeight: 600 }}>
 							invitado
 							</Text>
 					</Text>
-				</Link>
+				</Link> */}
 			</ScrollView>
 		</KeyboardAvoidingView>
 	);

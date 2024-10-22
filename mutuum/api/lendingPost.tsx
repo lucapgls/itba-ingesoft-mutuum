@@ -127,3 +127,51 @@ export const fetchLendingPosts = async () => {
       throw error;
     }
 };
+
+ 
+// Example:
+// localhost:3000/api/v1/lendingPost/ask?userId=b2a740c4-d47d-4117-860d-a0cd247038c8&lending_post_id=869aae17-fb91-411c-9a1c-cf59a329ca3e
+export const askForLoan = async (userId: string, lendingPostId: string) => {
+  try {
+    const response = await fetch(API_SLUG(`/ask?userId=${userId}&lending_post_id=${lendingPostId}`), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al solicitar préstamo');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al solicitar préstamo:', error);
+    throw error;
+  }
+};
+
+// Example:
+// localhost:3000/api/v1/lendingPost/asking?id=869aae17-fb91-411c-9a1c-cf59a329ca3e
+export const getAsking = async (lendingPostId: string) => {
+  try {
+    const response = await fetch(API_SLUG(`/asking?id=${lendingPostId}`), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al obtener solicitudes de préstamo');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener solicitudes de préstamo:', error);
+    throw error;
+  }
+};
+
