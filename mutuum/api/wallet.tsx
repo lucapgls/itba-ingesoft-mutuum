@@ -11,12 +11,14 @@ interface WalletBalance {
 
 const getWalletBalance = async (userId: string): Promise<WalletBalance> => {
     try {
+        console.log('Fetching wallet balance for user:', userId);
         const response = await fetch(API_SLUG(`/balance?walletID=${userId}`));
         const data = await response.json();
 
         // Check if balances exist and if there's at least one entry
         if (!data.balances || data.balances.length === 0) {
-            throw new Error("No balances available");
+            console.log("No balances available");
+            return { amount: 0, token: 'USDC' };
         }
 
         const { amount, token } = data.balances[0];

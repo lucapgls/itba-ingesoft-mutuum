@@ -19,8 +19,8 @@ const HomeRectangle = ({
 	ars,
 }: {
 	coin: string;
-	balance: number;
-	ars: number;
+	balance: number | string;
+	ars: number | string;
 }) => {
 	return (
 		<View style={styles.container}>

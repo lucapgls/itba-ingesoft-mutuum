@@ -6,7 +6,7 @@ const API_SLUG = (slug: string) => {
 
 export const fetchLendingPosts = async () => {
     try {
-      const response = await fetch(API_SLUG('/'), {
+      const response = await fetch(API_SLUG('?active=true'), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
