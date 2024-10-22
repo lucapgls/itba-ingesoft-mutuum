@@ -26,6 +26,7 @@ interface Requirement {
 }
 
 interface LoanCardProps {
+    lending_post_id: string,
     id: string;
     lender_name: string;
     currency: "ETH" | "ARS";
@@ -38,6 +39,7 @@ interface LoanCardProps {
 }
 
 const LoanCard: React.FC<LoanCardProps> = ({
+    lending_post_id,
     id,
     lender_name,
     currency,
@@ -64,18 +66,24 @@ const LoanCard: React.FC<LoanCardProps> = ({
 
     // Handle prestamo
     const handlePressIn = async () => {
+        console.log('press in');
+        router.push({
+            pathname: "/[lending_post_id]/page",
+            params: { lending_post_id },
+        });
         closeBottomSheet();
-        setDialogVisible(true);
-        const fromWalletID = await getWalletID(id);
-        const toWalletID = UserStore.walletId;
-        const amount = totalAmount;
+        // setDialogVisible(true);
+        // const fromWalletID = await getWalletID(id);
+        // const toWalletID = UserStore.walletId;
+        // const amount = totalAmount;
 
-        const response = postWalletTransaction(
-            fromWalletID,
-            toWalletID,
-            amount
-        );
-        console.log(response);
+        // const response = postWalletTransaction(
+        //     fromWalletID,
+        //     toWalletID,
+        //     amount
+        // );
+        
+        
     };
 
     const closeDialog = () => {
@@ -129,7 +137,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <TouchableOpacity style={styles.card} onPress={openBottomSheet}>
+            <TouchableOpacity style={[styles.card, theme.shadowIOS, theme.shadowAndroid]} onPress={openBottomSheet}>
                 <Image
                     source={{
                         uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=",
@@ -138,6 +146,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
                 />
                 <View style={styles.details}>
                     <Text style={styles.name}>{lender_name}</Text>
+                    <Text >{lending_post_id}</Text>
                     <View style={styles.currencyRow}>
                         <Text style={styles.currencyText}>${currency}</Text>
                         <Text style={styles.amountText}>{amount}</Text>
@@ -166,7 +175,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
                 handlePressIn={handlePressIn}
             />
 
-            <NotificationDialog visible={dialogVisible} onClose={closeDialog} />
+            {/* <NotificationDialog visible={dialogVisible} onClose={closeDialog} /> */}
         </GestureHandlerRootView>
     );
 };
@@ -179,13 +188,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         flexDirection: "row",
         alignItems: "center",
-        // Shadow for iOS
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3.84,
-        // Elevation for Android
-        elevation: 4,
+      
     },
     avatar: {
         width: 65,

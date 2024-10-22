@@ -65,6 +65,28 @@ export const fetchLendingPosts = async () => {
       throw error;
     }
   };
+
+  export const fetchLendingPostByLendingPostId = async (lendingPostId: string) => {
+    try {
+      // console.log("fetchLendingPostByLendingPostId", lendingPostId)
+      const response = await fetch(API_SLUG(`?Id=${lendingPostId}`), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error al obtener préstamo con ID ${lendingPostId}`);
+      }
+
+      const data = await response.json();
+      return data.loans[0];
+    } catch (error) {
+      console.error(`Error al obtener préstamo con ID ${lendingPostId}:`, error);
+      throw error;
+    }
+  }
   
   
   export const createLendingPostAndRequirements = async (

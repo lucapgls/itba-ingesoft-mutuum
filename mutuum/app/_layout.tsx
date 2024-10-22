@@ -14,6 +14,8 @@ const RootLayout = () => {
 			/>
 			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
 			<Stack.Screen name="(profile)" options={{ headerShown: false }} />
+			<Stack.Screen name="[lending_post_id]" options={{ headerShown: false }} />
+
 			<Stack.Screen
 		  name="create_loan"
 		  options={{
@@ -37,6 +39,7 @@ const RootLayout = () => {
 			),
 		  }}
 		/>
+		
 	  </Stack>
 	);
   };

@@ -240,6 +240,7 @@ const PublicProfile = observer(() => {
 							: loans.map((loan) => (
 									<View key={loan.id}>
 										<LoanCard
+											lending_post_id={loan.id}
 											lender_name={
 												lenders[loan.lender_id] ||
 												"Lender Name"

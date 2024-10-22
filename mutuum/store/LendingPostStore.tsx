@@ -1,4 +1,4 @@
-import { fetchLendingPosts, fetchLendingPostRequirements, createLendingPostAndRequirements, fetchLendingPostsByUserId } from "api/lendingPost";
+import { fetchLendingPosts, fetchLendingPostRequirements, createLendingPostAndRequirements, fetchLendingPostsByUserId, fetchLendingPostByLendingPostId } from "api/lendingPost";
 
 let loansArray: Array<any> = [];
 
@@ -49,5 +49,15 @@ export const getLendingPostsByUserId = async (userId: string) => {
   }
 }
 
+export const getLendingPostByLendingPostId = async (lendingPostId: string) => {
+  const loan = await fetchLendingPostByLendingPostId(lendingPostId);
+  if (loan) {
+    const requirements = await fetchLendingPostRequirements(loan.id);
+    loan.requirements = requirements;
+    return loan;
+  } else {
+    console.log('No loan available or an error occurred.', loan);
+  }
+}
 
 export const getLoans = () => loansArray;

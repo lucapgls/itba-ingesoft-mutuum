@@ -155,6 +155,7 @@ const MyLoans = () => {
                 loans.map((loan) => (
                     <View style={styles.card} key={loan.id}>
                         <LoanCard
+                            lending_post_id={loan.id}
                             lender_name={lenders[loan.lender_id] || "Lender Name"}
                             id={loan.lender_id}
                             currency={loan.currency ?? "USD"}
