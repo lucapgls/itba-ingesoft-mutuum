@@ -21,8 +21,44 @@ export const fetchLendingPost = async () => {
   }
 };
 
+export const fetchLendingPostById = async (id) => {
 
-export const fetchLendingPostById = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from('lending_post')
+      .select('*')
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error fetching lending posts:', error.message);
+      throw error;
+      }
+    return data;
+  }
+  catch (error) {
+    console.error('Error:', error.message);
+    throw error;
+  }
+};
+
+
+export const fetchActiveLendingPosts = async () => {
+  try {
+    // Step 1: Fetch all lending_post_ids that have active loans
+    const { data, error } = await supabase
+  .rpc('get_active_lending_posts');
+
+  if (error) {
+  console.error('Error fetching active lending posts:', error);
+} 
+    return data;
+  } catch (error) {
+    console.error('Error:', error.message);  // Provide a more informative error message
+    throw error;
+  }
+};
+
+export const fetchLendingPostByLenderId = async (userId) => {
   try {
     const { data, error } = await supabase
       .from('lending_post')
