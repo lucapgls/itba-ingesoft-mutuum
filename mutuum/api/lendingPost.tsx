@@ -24,7 +24,8 @@ export const fetchLendingPosts = async () => {
       throw error;
     }
   };
-  
+    
+
   export const fetchLendingPostRequirements = async (lendingPostId: string) => {
     try {
       const response = await fetch(API_SLUG(`/requirements?lendingPostId=${lendingPostId}`), {

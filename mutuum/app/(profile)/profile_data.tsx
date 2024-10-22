@@ -31,6 +31,7 @@ const ProfileData = observer(() => {
             if (UserStore.userId) {
                 //await UserStore.fetchUserInfo();
                 const userInfo = UserStore.getUserInfo();
+				console.log("User info fetched successfully", userInfo);
                 setProfileInfo([
                     { title: "Nombre", value: userInfo.displayName? userInfo.displayName : "---" },
                     { title: "Email", value: userInfo.email? userInfo.email : "---" },

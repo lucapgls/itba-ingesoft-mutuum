@@ -33,7 +33,7 @@ export const updatePhoneNumber = async (userId: string, phoneNumber: string) => 
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId,
+                user_id: userId,
                 phone_number: phoneNumber,
             }),
         });
@@ -57,7 +57,7 @@ export const updateDni = async (userId: string, dni: string) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId,
+                user_id: userId,
                 dni: dni,
             }),
         });
@@ -81,7 +81,7 @@ export const updateProfilePicture = async (userId: string, profilePicture: strin
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId,
+                user_id: userId,
                 profile_picture: profilePicture,
             }),
         });

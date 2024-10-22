@@ -6,6 +6,8 @@ import {
 	Button,
 	StyleSheet,
 	ScrollView,
+	Image,
+	TouchableOpacity,
 } from "react-native";
 import { Link, router, Redirect } from "expo-router";
 import CustomTextInput from "@components/CustomTextInput";
@@ -13,7 +15,7 @@ import CustomButton from "@components/CustomButton";
 import UserStore from "store/UserStore";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-
+import * as ImagePicker from 'expo-image-picker';
 
 const EditProfile = observer(() => {
 	
@@ -21,10 +23,37 @@ const EditProfile = observer(() => {
 	const [dni, setDni] = useState("");
 	const [telefono, setTelefono] = useState("");
 	const [contrasena, setContrasena] = useState("********");
+	const [profilePicture, setProfilePicture] = useState("");
 	
-	const handleSave = () => {
+
+	const handleImagePick = async () => {
+		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+		if (status !== 'granted') {
+			alert('Se requieren permisos para acceder a la galería.');
+			return;
+		}
+
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+		});
+
+		if (!result.canceled) {
+			console.log(result.assets[0].uri);
+			setProfilePicture(result.assets[0].uri);
+		}
+	};
+
+
+
+
+	const handleSave = async () => {
 		// Handle save logic here
-		console.log("Profile updated:", { email, dni, telefono, contrasena });
+		await UserStore.updateUserInfo(dni, telefono);
+		await UserStore.updateProfilePicture(profilePicture);
+		console.log("Profile updated:", { dni, telefono, profilePicture });
 		router.replace("/profile");
 	};
 
@@ -37,6 +66,7 @@ const EditProfile = observer(() => {
 				setEmail(userInfo.email ? userInfo.email : "");
 				setDni(userInfo.dni ? userInfo.dni : "");
 				setTelefono(userInfo.phoneNumber ? userInfo.phoneNumber : "");
+				setProfilePicture(userInfo.profilePicture ? userInfo.profilePicture : "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=");
 				// Password could stay the same unless it's fetched or changed
 				setContrasena("");
 			}
@@ -47,6 +77,17 @@ const EditProfile = observer(() => {
 		<View style={styles.container}>
 			<ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ height: 20 }} />
+
+				<View style={{ height: 10 }} />
+				<TouchableOpacity onPress={handleImagePick} style={{ alignItems: "center" }}>
+					<Image
+						source={{
+							uri: profilePicture,
+						}}
+						style={styles.circle}
+					/>
+				</TouchableOpacity>
+			<View style={{ height: 10 }} />
 				<CustomTextInput
 					value={email}
 					onChangeText={setEmail}
@@ -100,6 +141,13 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 		paddingHorizontal: 10,
 	},
+	circle:{
+		width: 100,
+		height: 100,
+		borderRadius: 100,
+		justifyContent: "center",
+		alignItems: "center",
+	}
 });
 
 export default EditProfile;

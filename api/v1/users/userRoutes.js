@@ -101,7 +101,7 @@ router.put('/updateInfo', async (req, res) => {
     }
 
     if(!phone_number && !dni && !profile_picture) {
-        return res.status(400).json({ error: 'phoneNumber or dni is required' });
+        return res.status(400).json({ error: 'phone number or dni or profile picture is required' });
     }
 
     
