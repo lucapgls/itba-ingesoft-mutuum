@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --timeout 10000"
+    "test": "mocha",
+    "test:watch": "mocha 'test/**/*.test.js' --timeout 10000 --watch",
+    "test:markdown" : "mocha 'test/**/*.test.js' --timeout 10000 --reporter markdown > test-report.md",
+    "test:coverage": "nyc mocha --timeout 10000 'test/**/*.test.js'"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +26,9 @@
   },
   "type": "module",
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/register": "^7.25.9",
     "chai": "^5.1.1",
     "mocha": "^10.7.3",
     "supertest": "^7.0.0"

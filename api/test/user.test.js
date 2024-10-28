@@ -3,6 +3,8 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import faker from 'faker';
 import app from '../server.js';
+import { UserBuilder } from './helpers/userBuilder.js';
+import { UserMother } from './helpers/userMother.js';
 
 describe('User API Tests', () => {
     let randomEmail = "testing_" + faker.internet.email();
@@ -68,3 +70,86 @@ describe('User API Tests', () => {
 
 });
 
+
+describe('User API Tests with Patterns', () => {
+    // Patron AAA
+    it('should create and verify user using AAA pattern', async () => {
+        // Arrange
+        const userData = new UserBuilder()
+            .withEmail(`test_aaa_${faker.internet.email()}`)
+            .withDisplayName(`AAATest_${faker.name.findName()}`)
+            .build();
+
+        // Act
+        const createResponse = await request(app)
+            .post('/api/v1/users/create')
+            .send(userData);
+
+        // Assert
+        expect(createResponse.status).to.equal(201);
+        expect(createResponse.body).to.have.property('user');
+        // FIX: Ahora falla para la presentacion de TDD, podemos ponerlo en toLowerCase
+        // expect(createResponse.body.user.email).to.equal(userData.email.toLowerCase());
+        expect(createResponse.body.user.email).to.equal(userData.email);
+    });
+
+    // Patron Given-When-Then
+    it('should handle user login process', async () => {
+        // Given
+        const user = UserMother.newUser();
+        const createResponse = await request(app)
+            .post('/api/v1/users/create')
+            .send(user);
+
+        // When
+        const loginResponse = await request(app)
+            .post('/api/v1/users/login')
+            .send({
+                email: user.email,
+                password: user.password
+            });
+
+        // Then
+        expect(loginResponse.status).to.equal(201);
+    });
+
+    // Patron Object Mother
+    it('should create user with complete information', async () => {
+        const fullUser = UserMother.userWithFullInfo();
+        
+        const createResponse = await request(app)
+            .post('/api/v1/users/create')
+            .send(fullUser);
+
+        expect(createResponse.status).to.equal(201);
+        expect(createResponse.body).to.have.property('user');
+    });
+
+    // 5. Patron Fixture Setup
+    describe('User Profile Operations', () => {
+        let testUser;
+        let userId;
+
+        // Fixture Setup
+        beforeEach(async () => {
+            testUser = UserMother.newUser();
+            const createResponse = await request(app)
+                .post('/api/v1/users/create')
+                .send(testUser);
+            
+            userId = createResponse.body.user.user_id;
+        });
+
+        // Ejemplo de test adicional usando el mismo fixture
+        it('should allow user to login after creation', async () => {
+            const loginResponse = await request(app)
+                .post('/api/v1/users/login')
+                .send({
+                    email: testUser.email,
+                    password: testUser.password
+                });
+
+            expect(loginResponse.status).to.equal(201);
+        });
+    });
+});
