@@ -1,6 +1,6 @@
-const chai = require("chai");
-import chaiAsPromised from "chai-as-promised";
-import { signInUser } from "../app/(auth)/sign-in";
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import { signInUser } from '../app/(auth)/sign-in';
 
 // Configurar chai-as-promised
 chai.use(chaiAsPromised);

@@ -4,6 +4,6 @@
     "strict": true
   },
   "include": [
-    "testing/**/*.tsx"
+    "testing/**/*.js"
   ]
 }
