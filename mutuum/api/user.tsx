@@ -13,12 +13,13 @@ export const fetchUser = async (userId: string) => {
             },
         });
 
-        if (response.ok) {
-
-            const data = await response.json();
-            return data.user;
+        if (!response.ok) {
+            throw new Error('Error fetching user');
         }
 
+        const data = await response.json();
+       
+        return data.user;
     } catch (error) {
         throw error;
     }
