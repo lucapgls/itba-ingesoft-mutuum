@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Text, View, StyleSheet, StatusBar } from "react-native";
 import { Link, router, Redirect } from "expo-router";
 

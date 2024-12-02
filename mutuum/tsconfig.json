@@ -1,9 +1,11 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "module": "ESNext",
+    "jsx": "react-jsx"
   },
   "include": [
-    "testing/**/*.js"
+    "app/**/*.tsx", "testing/*.js"
   ]
 }

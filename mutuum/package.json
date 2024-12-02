@@ -22,7 +22,8 @@
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.23",
     "expo-status-bar": "~1.12.1",
-    "react": "18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-native": "0.74.5",
     "react-native-config": "^1.5.3",
     "react-native-crypto": "^2.2.0",
@@ -54,6 +55,7 @@
     "chai-as-promised": "^8.0.1",
     "mocha": "^10.8.2",
     "sinon": "^19.0.2",
+    "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.3.3"
   },
