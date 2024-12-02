@@ -2,13 +2,12 @@
   "name": "mutuum",
   "version": "1.0.0",
   "main": "expo-router/entry",
-  "type": "module",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "mocha"
+    "test": "mocha --loader ts-node/esm testing/*.js"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.4",
