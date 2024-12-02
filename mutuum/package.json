@@ -31,7 +31,6 @@
     "react-native": "0.76.3",
     "react-native-config": "^1.5.3",
     "react-native-crypto": "^2.2.0",
-    "react-native-dotenv": "^3.4.11",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-get-random-values": "^1.11.0",
@@ -48,6 +47,7 @@
     "@babel/core": "^7.20.0",
     "@react-native-community/datetimepicker": "^8.0.1",
     "@types/react": "~18.3.12",
+    "react-native-dotenv": "^3.4.11",
     "typescript": "~5.3.3"
   },
   "private": true

@@ -38,9 +38,13 @@ export const signInUser = async (email: string, password: string) => {
 		UserStore.setWalletId(data.user.wallet_id);
 		const aux = await UserStore.fetchUserInfo();
 	  	return data;
-	} catch (error) {
-	  console.error("Error: ", error);
-	  throw error;
+	} catch (err: unknown) {
+			
+		if (err instanceof Error) 	{
+			
+			console.error('Network or Client Error:', err.message, err);
+			throw err;
+		}
 	}
 };
 
@@ -59,10 +63,16 @@ const SignIn = () => {
 			router.push('/home');
 			// TODO: set the user in the global state
 		  }
-		} catch (error) {
-			console.error("Failed to fetch user:", error);
-		} finally {
-			setIsLoading(false);
+		} catch (err: unknown) {
+			
+			if (err instanceof Error) 	{
+
+			  console.error('Network or Client Error:', err.message, err);
+
+			} else {
+
+			  console.error('Unexpected Error:', err);
+			}
 		}
 	};
 
