@@ -1,4 +1,4 @@
-import { supabase } from "../../api/supabase_config";
+import { supabase } from "../app/(auth)/SupabaseConfig";
 
 export type User = {
     id: string;
