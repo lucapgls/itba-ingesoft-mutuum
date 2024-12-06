@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { CreateLoan } from '../app/create_loan.tsx';
+import { CreateLoan } from '../app/create_loan.js';
 
 // Configurar chai-as-promised
 chai.use(chaiAsPromised);
