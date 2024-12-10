@@ -9,7 +9,6 @@ interface IERC20 {
 contract ContractLendingPost {
     address public lender;          // Dirección del prestamista (blockchain)
     address public borrower;        // Dirección del prestatario (blockchain)
-    address public token;           // Dirección del token USDC en la blockchain
     uint256 public loanAmount;      // Monto del préstamo
     uint256 public interest;        // Interés del préstamo
     uint256 public deadline;        // Fecha límite en timestamp
@@ -21,13 +20,11 @@ contract ContractLendingPost {
     event ContractClosed();
 
     constructor(
-        address _token,
         uint256 _loanAmount,
         uint256 _interest,
         uint256 _deadline
     ) {
         lender = msg.sender; // El prestamista es quien despliega el contrato
-        token = _token;
         loanAmount = _loanAmount;
         interest = _interest;
         deadline = block.timestamp + _deadline; // Plazo en segundos
