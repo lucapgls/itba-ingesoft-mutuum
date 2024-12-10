@@ -1,57 +1,54 @@
-async function handleDepositContract(contractAddress, lenderWalletId, amount) {
-    // Transferir fondos desde la wallet Circle al contrato
-    await transferFunds({
-        sourceWalletId: lenderWalletId,
-        destinationBlockchainAddress: contractAddress,
-        amount: amount,
-        currency: "USD",
-    });
+import { createTransaction } from "../wallets/transaction.js";
+import { ethers } from "ethers";
 
-    // Confirmar depósito en el contrato
-    const contract = connectContract(contractAddress);
-    await contract.confirmDeposit(amount);
+// Función para desplegar un nuevo contrato
+async function deployContract(loanAmount, interest, deadline) {
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const signer = provider.getSigner();
+    const contractFactory = new ethers.ContractFactory(ContractLendingPost.abi, ContractLendingPost.bytecode, signer);
+
+    const contract = await contractFactory.deploy(loanAmount, interest, deadline);
+    await contract.deployed();
+
+    console.log(`Contrato desplegado en la dirección: ${contract.address}`);
+    return contract.address;
 }
 
-async function handleTakeLoanContract(contractAddress, borrowerBlockchainAddress) {
-    const contract = connectContract(contractAddress);
-    await contract.takeLoan(borrowerBlockchainAddress);
+// Función principal para crear un préstamo y desplegar el contrato
+async function createLoanContract(lenderWalletId, loanAmount, interest, deadline) {
+    // 1. Desplegar el contrato 
+    const contractAddress = await deployContract(loanAmount, interest, deadline);
+
+    // 2. Realizar la transferencia de fondos utilizando Circle API
+    const transaction = await createTransaction(lenderWalletId, contractAddress, loanAmount);
+
+    if (!transaction || transaction.status !== "pending") {
+        console.error("Error: La transferencia no se pudo completar correctamente.");
+        return;
+    }
+
+    console.log("Préstamo creado y fondos transferidos al contrato.");
+
+    return contractAddress;
 }
 
-async function handleCancelContract(contractAddress, lenderWalletId, amount) {
+// Función para que un prestatario tome un préstamo
+async function takeLoanContract(contractAddress, borrowerWalletId) {
     const contract = connectContract(contractAddress);
 
-    // Cancelar el contrato en la blockchain
-    await contract.cancelLoan();
+    // Confirmar que el prestatario puede tomar el préstamo
+    await contract.takeLoan(borrowerWalletId);
 
-    // Transferir fondos de vuelta al prestamista
-    await transferFunds({
-        sourceBlockchainAddress: contractAddress,
-        destinationWalletId: lenderWalletId,
-        amount: amount,
-        currency: "USD",
-    });
-
-    console.log("Contrato cancelado y fondos devueltos al prestamista.");
+    console.log(`Préstamo tomado por: ${borrowerWalletId}`);
 }
 
-async function getContractState(contractAddress) {
-    const contract = connectContract(contractAddress);
+// Conectar con el contrato
+function connectContract(contractAddress) {
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const signer = provider.getSigner();
 
-    const lender = await contract.lender();
-    const borrower = await contract.borrower();
-    const loanAmount = await contract.loanAmount();
-    const isLoanTaken = await contract.isLoanTaken();
-    const isClosed = await contract.isClosed();
-
-    return {
-        lender,
-        borrower,
-        loanAmount: loanAmount.toString(),
-        isLoanTaken,
-        isClosed,
-    };
+    return new ethers.Contract(contractAddress, ContractLendingPost.abi, signer);
 }
 
-
-
-export {handleDepositContract, handleTakeLoanContract, getContractState, handleCancelContract};
+// Exportar funciones
+export { createLoanContract, takeLoanContract };

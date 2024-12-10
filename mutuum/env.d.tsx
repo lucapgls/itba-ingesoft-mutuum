@@ -5,4 +5,5 @@ declare module '@env' {
     export const ENTITY_SECRET: string;
     export const WALLET_SET_ID: string;
     export const PUBLIC_KEY: string;
+    export const RPC_URL: string;
 }
