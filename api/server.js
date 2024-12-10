@@ -5,6 +5,8 @@ import walletRouter from './v1/wallets/walletRoutes.js';
 import userRouter from './v1/users/userRoutes.js';
 import lendingPostRouter from './v1/lendingPost/lendingPostRoutes.js';
 import loanRouter from './v1/loan/loanRoutes.js';
+import contractRoutes from './contractRoutes.js';
+
 
 // Load environment variables
 config();
@@ -28,6 +30,7 @@ app.use('/api/v1/wallets', walletRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/lendingPost', lendingPostRouter); 
 app.use('/api/v1/loan', loanRouter);
+app.use('/api/contracts', contractRoutes);
 
 
 app.listen(PORT, () => {
