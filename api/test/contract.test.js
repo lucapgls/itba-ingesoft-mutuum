@@ -30,8 +30,12 @@ describe('Contract API Tests', () => {
     });
 
     it('should take a loan from a contract', (done) => {
+
+        if (!contractAddress) {
+            return done(new Error('Contract address not set from previous test'));
+        }
         request(app)
-            .post('/api/v1/contracts/create')
+            .post('/api/v1/contracts/take')
             .send({
                 contractAddress: contractAddress, 
                 borrowerWalletId: myBorrowerWalletId,
