@@ -13,7 +13,7 @@ describe('Contract API Tests', () => {
 
     it('should create a new loan contract', (done) => {
         request(app)
-            .post('/api/contracts/create')
+            .post('/api/v1/contracts/create')
             .send({
                 lenderWalletId: myLenderWalletId,
                 loanAmount: 1000,
@@ -31,7 +31,7 @@ describe('Contract API Tests', () => {
 
     it('should take a loan from a contract', (done) => {
         request(app)
-            .post('/api/contracts/take')
+            .post('/api/v1/contracts/create')
             .send({
                 contractAddress: contractAddress, 
                 borrowerWalletId: myBorrowerWalletId,
