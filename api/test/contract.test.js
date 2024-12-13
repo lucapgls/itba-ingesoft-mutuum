@@ -4,12 +4,18 @@ import { describe } from 'mocha';
 
 import app from '../server.js';
 
+const myLenderWalletId = '8855cb91-e040-518b-920f-5220557fb2f9'
+const myBorrowerWalletId = '201a17b5-d10a-5181-9f46-94b9b1a4fc52'
+
 describe('Contract API Tests', () => {
+
+    let contractAddress; // Variable para almacenar el contractAddress
+
     it('should create a new loan contract', (done) => {
         request(app)
             .post('/api/contracts/create')
             .send({
-                lenderWalletId: '1234',
+                lenderWalletId: myLenderWalletId,
                 loanAmount: 1000,
                 interest: 5,
                 deadline: 86400,
@@ -18,6 +24,7 @@ describe('Contract API Tests', () => {
                 if (err) return done(err);
                 expect(res.status).to.equal(200);
                 expect(res.body).to.have.property('contractAddress');
+                contractAddress = res.body.contractAddress; 
                 done();
             });
     });
@@ -26,8 +33,8 @@ describe('Contract API Tests', () => {
         request(app)
             .post('/api/contracts/take')
             .send({
-                contractAddress: '0xContractAddress',
-                borrowerWalletId: '5678',
+                contractAddress: contractAddress, 
+                borrowerWalletId: myBorrowerWalletId,
             })
             .end((err, res) => {
                 if (err) return done(err);
