@@ -50,7 +50,7 @@ contract ContractLendingPost {
     }
 
     function transferToWallet(address payable recipient, uint256 amount) external {
-        require(msg.sender == owner, "Solo el propietario puede transferir fondos");
+        require(msg.sender == lender, "Solo el propietario puede transferir fondos");
         require(address(this).balance >= amount, "Fondos insuficientes en el contrato");
         require(recipient != address(0), "Direccion invalida");
 
