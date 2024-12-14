@@ -7,12 +7,12 @@ interface IERC20 {
 }
 
 contract ContractLendingPost {
-    address public lender;          // Dirección del prestamista (blockchain)
-    address public borrower;        // Dirección del prestatario (blockchain)
-    uint256 public loanAmount;      // Monto del préstamo
-    uint256 public interest;        // Interés del préstamo
-    uint256 public deadline;        // Fecha límite en timestamp
-    bool public isLoanTaken;        // Estado del préstamo
+    address public lender;          // Direccion del prestamista (blockchain)
+    address public borrower;        // Direccion del prestatario (blockchain)
+    uint256 public loanAmount;      // Monto del prestamo
+    uint256 public interest;        // Interes del prestamo
+    uint256 public deadline;        // Fecha limite en timestamp
+    bool public isLoanTaken;        // Estado del prestamo
     bool public isClosed;           // Estado del contrato
 
     event DepositConfirmed(address indexed lender, uint256 amount);
@@ -36,26 +36,23 @@ contract ContractLendingPost {
     }
 
     modifier isActive() {
-        require(!isClosed, "El contrato ya está cerrado");
+        require(!isClosed, "El contrato ya esta cerrado");
         _;
     }
 
     modifier loanNotTaken() {
-        require(!isLoanTaken, "El préstamo ya fue tomado");
+        require(!isLoanTaken, "El prestamo ya fue tomado");
         _;
     }
 
-
     function deposit() external payable {
-        
         require(msg.value > 0, "Debe enviar fondos mayores a 0");
     }
 
     function transferToWallet(address payable recipient, uint256 amount) external {
-        
         require(msg.sender == owner, "Solo el propietario puede transferir fondos");
         require(address(this).balance >= amount, "Fondos insuficientes en el contrato");
-        require(recipient != address(0), "Dirección inválida");
+        require(recipient != address(0), "Direccion invalida");
 
         recipient.transfer(amount);
     }
@@ -64,24 +61,23 @@ contract ContractLendingPost {
         return address(this).balance;
     }
 
-
-    // Confirmar depósito desde el backend después de la transferencia de Circle
+    // Confirmar deposito desde el backend despues de la transferencia de Circle
     function confirmDeposit(uint256 amount) external onlyLender isActive loanNotTaken {
-        require(amount == loanAmount, "El monto depositado debe ser igual al del préstamo");
+        require(amount == loanAmount, "El monto depositado debe ser igual al del prestamo");
 
         emit DepositConfirmed(msg.sender, amount);
     }
 
-    // Prestatario toma el préstamo
+    // Prestatario toma el prestamo
     function takeLoan(address _borrower) external isActive loanNotTaken {
-        require(_borrower != address(0), "El prestatario debe tener una dirección válida");
+        require(_borrower != address(0), "El prestatario debe tener una direccion valida");
         borrower = _borrower;
         isLoanTaken = true;
 
         emit LoanTaken(borrower, loanAmount);
     }
 
-    // Cancelar contrato si no se ha tomado el préstamo
+    // Cancelar contrato si no se ha tomado el prestamo
     function cancelLoan() external onlyLender isActive loanNotTaken {
         isClosed = true;
         emit ContractClosed();
