@@ -45,6 +45,26 @@ contract ContractLendingPost {
         _;
     }
 
+
+    function deposit() external payable {
+        
+        require(msg.value > 0, "Debe enviar fondos mayores a 0");
+    }
+
+    function transferToWallet(address payable recipient, uint256 amount) external {
+        
+        require(msg.sender == owner, "Solo el propietario puede transferir fondos");
+        require(address(this).balance >= amount, "Fondos insuficientes en el contrato");
+        require(recipient != address(0), "Dirección inválida");
+
+        recipient.transfer(amount);
+    }
+
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+
     // Confirmar depósito desde el backend después de la transferencia de Circle
     function confirmDeposit(uint256 amount) external onlyLender isActive loanNotTaken {
         require(amount == loanAmount, "El monto depositado debe ser igual al del préstamo");

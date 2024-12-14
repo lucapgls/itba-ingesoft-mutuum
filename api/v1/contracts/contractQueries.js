@@ -4,6 +4,8 @@ import { ethers } from "ethers";
 // Función para desplegar un nuevo contrato
 async function deployContract(loanAmount, interest, deadline) {
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    console.log('Provider initialized:', provider);
+
     const signer = provider.getSigner();
     const contractFactory = new ethers.ContractFactory(ContractLendingPost.abi, ContractLendingPost.bytecode, signer);
 
@@ -16,31 +18,56 @@ async function deployContract(loanAmount, interest, deadline) {
 
 // Función principal para crear un préstamo y desplegar el contrato
 async function createLoanContract(lenderWalletId, loanAmount, interest, deadline) {
-    // 1. Desplegar el contrato 
+    // 1. Desplegar el contrato
     const contractAddress = await deployContract(loanAmount, interest, deadline);
 
-    // 2. Realizar la transferencia de fondos utilizando Circle API
-    const transaction = await createTransaction(lenderWalletId, contractAddress, loanAmount);
-
-    if (!transaction || transaction.status !== "pending") {
-        console.error("Error: La transferencia no se pudo completar correctamente.");
+    if (!contractAddress) {
+        console.error("Error: deploy contract error.");
         return;
     }
 
-    console.log("Préstamo creado y fondos transferidos al contrato.");
+    // 2. Conectar con el contrato
+    const contract = connectContract(contractAddress);
 
+    try {
+        // Transferir los fondos desde la wallet del prestamista al contrato usando deposit()
+        const tx = await contract.deposit({ value: ethers.utils.parseEther(loanAmount.toString()) });
+        await tx.wait(); // Esperar la confirmación de la transacción
+        console.log(`Fondos transferidos al contrato desde el prestamista: ${lenderWalletId}, Monto: ${loanAmount}`);
+    } catch (error) {
+        console.error('Error al transferir los fondos al contrato:', error);
+        throw new Error('No se pudo completar la transferencia de fondos al contrato.');
+    }
+
+    console.log("Préstamo creado exitosamente con contrato desplegado y fondos transferidos.");
     return contractAddress;
 }
+
 
 // Función para que un prestatario tome un préstamo
 async function takeLoanContract(contractAddress, borrowerWalletId) {
     const contract = connectContract(contractAddress);
 
-    // Confirmar que el prestatario puede tomar el préstamo
-    await contract.takeLoan(borrowerWalletId);
+    try {
+        // Confirmar que el prestatario puede tomar el préstamo
+        await contract.takeLoan(borrowerWalletId);
 
-    console.log(`Préstamo tomado por: ${borrowerWalletId}`);
+        // Obtener el monto del préstamo desde el contrato
+        const loanAmount = await contract.getLoanAmount();
+        console.log(`Monto del préstamo obtenido: ${loanAmount}`);
+
+        // Transferir los fondos desde el contrato a la wallet del prestatario
+        const tx = await contract.transferToWallet(borrowerWalletId, loanAmount);
+        await tx.wait(); // Esperar la confirmación de la transacción
+        console.log(`Fondos transferidos al prestatario: ${borrowerWalletId}, Monto: ${loanAmount}`);
+    } catch (error) {
+        console.error('Error al procesar el préstamo:', error);
+        throw new Error('No se pudo completar el préstamo.');
+    }
+
+    console.log(`Préstamo tomado exitosamente por: ${borrowerWalletId}`);
 }
+
 
 // Conectar con el contrato
 function connectContract(contractAddress) {
