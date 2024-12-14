@@ -1,5 +1,9 @@
-import { createTransaction } from "../wallets/transaction.js";
+import { createTransaction, createWallet } from "../wallets/transaction.js";
 import { ethers } from "ethers";
+
+const adminWalletId = await createWallet(); // A esta cuenta se transfiere para deducir fondos de otra cuenta
+console.log(`Admin wallet creada: ${adminWalletId}`);
+
 
 // Función para desplegar un nuevo contrato
 async function deployContract(loanAmount, interest, deadline) {
@@ -13,6 +17,7 @@ async function deployContract(loanAmount, interest, deadline) {
     await contract.deployed();
 
     console.log(`Contrato desplegado en la dirección: ${contract.address}`);
+
     return contract.address;
 }
 
@@ -33,6 +38,9 @@ async function createLoanContract(lenderWalletId, loanAmount, interest, deadline
         // Transferir los fondos desde la wallet del prestamista al contrato usando deposit()
         const tx = await contract.deposit({ value: ethers.utils.parseEther(loanAmount.toString()) });
         await tx.wait(); // Esperar la confirmación de la transacción
+
+        await createTransaction(lenderWalletId, adminWalletId, loanAmount);  // deduccion de fondos
+
         console.log(`Fondos transferidos al contrato desde el prestamista: ${lenderWalletId}, Monto: ${loanAmount}`);
     } catch (error) {
         console.error('Error al transferir los fondos al contrato:', error);
