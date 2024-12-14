@@ -47,6 +47,7 @@ contract ContractLendingPost {
 
     function deposit() external payable {
         require(msg.value > 0, "Debe enviar fondos mayores a 0");
+        require(msg.value == loanAmount, "El monto enviado debe coincidir con el del préstamo");
     }
 
     function transferToWallet(address payable recipient, uint256 amount) external {
