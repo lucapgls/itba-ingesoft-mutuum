@@ -1,29 +1,29 @@
 import fetch from "node-fetch";
-import { createTransaction } from "../wallets/transaction.js";
-import { createWallet } from "../wallets/wallet.js";
 import { ethers } from "ethers";
+import fs from 'fs';
+
+// Lee el ABI y el bytecode del contrato
+const contractABI = JSON.parse(fs.readFileSync('./v1_contracts_ContractLendingPost_sol_ContractLendingPost.abi', 'utf8'));
+const contractBytecode = fs.readFileSync('./v1_contracts_ContractLendingPost_sol_ContractLendingPost.bin', 'utf8');
+
+
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, 
+        new ethers.JsonRpcProvider(process.env.RPC_URL));
 
 // Función para desplegar un nuevo contrato
 async function deployContract(loanAmount, interest, deadline) {
-    console.log("Inicializando proveedor con URL:", process.env.RPC_URL);
-
-    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-
-    console.log('Provider initialized:', provider);
-
-    const signer = await provider.getSigner();
     
     const contractFactory = new ethers.ContractFactory(
-        ContractLendingPost.abi,
-        ContractLendingPost.bytecode,
-        signer
+        contractABI,
+        contractBytecode,
+        wallet
     );
     const contract = await contractFactory.deploy(loanAmount, interest, deadline);
     console.log("Esperando que el contrato se despliegue...");
-    await contract.waitForDeployment(); // Cambió el método para esperar el despliegue
+    await contract.waitForDeployment(); 
     
 
-    console.log(`Contrato desplegado en la dirección: ${contract.address}`);
+    console.log(`Contrato desplegado en la dirección: ${contract.target}`);
 
     return contract.target;
 }
@@ -83,11 +83,10 @@ async function takeLoanContract(contractAddress, borrowerWalletId) {
 
 // Conectar con el contrato
 function connectContract(contractAddress) {
-    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider); // Requiere PRIVATE_KEY en .env
-
     return new ethers.Contract(contractAddress, ContractLendingPost.abi, wallet);
 }
+
+
 
 async function transferToContract(walletId, contractAddress, amount) {
     const url = "https://api.circle.com/v1/transfers";
