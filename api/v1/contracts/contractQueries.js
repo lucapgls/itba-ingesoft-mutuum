@@ -46,9 +46,6 @@ async function createLoanContract(lenderWalletId, loanAmount, interest, deadline
     const contract = connectContract(contractAddress);
 
     try {
-        // Transferir los fondos desde la wallet del prestamista al contrato usando deposit()
-        const tx = await contract.deposit({ value: ethers.parseEther(loanAmount.toString()) }); // `ethers.utils.parseEther` cambió a `ethers.parseEther`
-        await tx.wait();
 
         await transferToContract(lenderWalletId, contractAddress, loanAmount);
 
