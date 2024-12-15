@@ -3,10 +3,6 @@ import { createTransaction } from "../wallets/transaction.js";
 import { createWallet } from "../wallets/wallet.js";
 import { ethers } from "ethers";
 
-const adminWalletId = await createWallet(); // A esta cuenta se transfiere para deducir fondos de otra cuenta
-console.log(`Admin wallet creada: ${adminWalletId}`);
-
-
 // Función para desplegar un nuevo contrato
 async function deployContract(loanAmount, interest, deadline) {
     console.log("Inicializando proveedor con URL:", process.env.RPC_URL);
