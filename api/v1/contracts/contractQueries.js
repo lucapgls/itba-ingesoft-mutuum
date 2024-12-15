@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv";
+import { get } from "https";
 
 dotenv.config();
 
@@ -79,7 +80,8 @@ async function createLoanContract(lenderWalletId, loanAmount, interest, deadline
     console.log(`Contrato desplegado en la dirección: ${contractAddress}`);
 
     // 2. Inicializar el contrato
-    await initializeLoanContract(lenderWalletId, contractAddress, loanAmount);
+    await initializeLoanContract(lenderWalletId, 
+        contractAddress, loanAmount);
 
     return contractAddress;
 }
@@ -88,33 +90,48 @@ async function createLoanContract(lenderWalletId, loanAmount, interest, deadline
 
 // Función para que un prestatario tome un préstamo
 async function takeLoanContract(contractAddress, borrowerWalletId) {
+    if (!contractAddress || !borrowerWalletId) {
+        throw new Error('contractAddress y borrowerWalletId son requeridos.');
+    }
+
     const contract = connectContract(contractAddress);
 
     try {
+        // Obtener la dirección blockchain del prestatario
+        const borrowerWalletBlockchainAddress = await getWalletBlockchainAddress(borrowerWalletId);
+        
+        console.log(`Conectando al contrato ${contractAddress}...`);
+        console.log(`Dirección blockchain del prestatario: ${borrowerWalletBlockchainAddress}`);
+
         // Confirmar que el prestatario puede tomar el préstamo
-        await contract.takeLoan(borrowerWalletId);
+        const txTakeLoan = await contract.takeLoan(borrowerWalletBlockchainAddress);
+        await txTakeLoan.wait();
+        console.log(`Préstamo tomado en el contrato: ${contractAddress}`);
 
         // Obtener el monto del préstamo desde el contrato
         const loanAmount = await contract.getLoanAmount();
         console.log(`Monto del préstamo obtenido: ${loanAmount}`);
 
         // Transferir los fondos desde el contrato a la wallet del prestatario
-        const tx = await contract.transferToWallet(borrowerWalletId, loanAmount);
-        await tx.wait(); // Esperar la confirmación de la transacción
+        const txTransfer = await contract.transferToWallet(borrowerWalletId, loanAmount);
+        await txTransfer.wait(); // Esperar la confirmación de la transacción
         console.log(`Fondos transferidos al prestatario: ${borrowerWalletId}, Monto: ${loanAmount}`);
     } catch (error) {
-        console.error('Error al procesar el préstamo:', error);
+        console.error('Error al procesar el préstamo:', error.message);
         throw new Error('No se pudo completar el préstamo.');
     }
 
     console.log(`Préstamo tomado exitosamente por: ${borrowerWalletId}`);
 }
 
-
 // Conectar con el contrato
 function connectContract(contractAddress) {
+    if (!contractAddress) {
+        throw new Error('La dirección del contrato es requerida.');
+    }
     return new ethers.Contract(contractAddress, ContractLendingPost.abi, wallet);
 }
+
 
 
 
@@ -156,6 +173,34 @@ async function transferToContract(walletId, contractAddress, amount) {
     return data;
 }
 
+// Función para obtener la dirección de blockchain de una wallet en Circle
+async function getWalletBlockchainAddress(walletId) {
+    try {
+        const url = `https://api.circle.com/v1/wallets/${walletId}`;
+        const options = {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${process.env.CIRCLE_API_KEY}`,
+                "Content-Type": "application/json",
+            },
+        };
 
-// Exportar funciones
-export { initializeLoanContract, createLoanContract, takeLoanContract };
+        const response = await fetch(url, options);
+        const data = await response.json();
+
+        // Obtener la primera dirección de blockchain asociada
+        const blockchainAddress = data.data?.chainAddresses?.[0]?.address;
+
+        if (!blockchainAddress) {
+            throw new Error(`No blockchain address found for wallet ID: ${walletId}`);
+        }
+
+        console.log(`Blockchain address for wallet ${walletId}: ${blockchainAddress}`);
+        return blockchainAddress;
+    } catch (error) {
+        console.error(`Error fetching blockchain address for wallet ${walletId}:`, error.message);
+        throw error;
+    }
+}
+
+export { initializeLoanContract, createLoanContract, takeLoanContract, getWalletBlockchainAddress };
