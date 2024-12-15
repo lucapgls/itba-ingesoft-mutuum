@@ -1,14 +1,34 @@
 import fetch from "node-fetch";
 import { ethers } from "ethers";
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from "dotenv";
 
-// Lee el ABI y el bytecode del contrato
-const contractABI = JSON.parse(fs.readFileSync('./v1_contracts_ContractLendingPost_sol_ContractLendingPost.abi', 'utf8'));
-const contractBytecode = fs.readFileSync('./v1_contracts_ContractLendingPost_sol_ContractLendingPost.bin', 'utf8');
+dotenv.config();
 
+// Configuración de __dirname para ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, 
-        new ethers.JsonRpcProvider(process.env.RPC_URL));
+// Rutas absolutas para los archivos ABI y Bytecode
+const abiPath = path.resolve(__dirname, './v1_contracts_contractLendingPost_sol_ContractLendingPost.abi');
+const binPath = path.resolve(__dirname, './v1_contracts_contractLendingPost_sol_ContractLendingPost.bin');
+
+// Verificar que los archivos existen
+if (!fs.existsSync(abiPath) || !fs.existsSync(binPath)) {
+    throw new Error(`No se encontraron los archivos necesarios: ${abiPath}, ${binPath}`);
+}
+
+// Leer el ABI y el Bytecode
+const contractABI = JSON.parse(fs.readFileSync(abiPath, 'utf8'));
+const contractBytecode = fs.readFileSync(binPath, 'utf8').trim();
+
+// Configurar la wallet
+const wallet = new ethers.Wallet(
+    process.env.PRIVATE_KEY,
+    new ethers.JsonRpcProvider(process.env.RPC_URL) // Provider
+);
 
 // Función para desplegar un nuevo contrato
 async function deployContract(loanAmount, interest, deadline) {
@@ -28,6 +48,24 @@ async function deployContract(loanAmount, interest, deadline) {
     return contract.target;
 }
 
+async function initializeLoanContract(lenderWalletId, contractAddress, loanAmount) {
+    try {
+        // Conectar con el contrato
+        const contract = connectContract(contractAddress);
+
+        // Transferir fondos al contrato
+        await transferToContract(lenderWalletId, contractAddress, loanAmount);
+
+        console.log(`Fondos transferidos al contrato desde el prestamista: ${lenderWalletId}, Monto: ${loanAmount}`);
+        console.log("Contrato inicializado exitosamente.");
+        return contractAddress;
+    } catch (error) {
+        console.error('Error al inicializar el contrato:', error);
+        throw new Error('No se pudo inicializar el contrato.');
+    }
+}
+
+
 // Función principal para crear un préstamo y desplegar el contrato
 async function createLoanContract(lenderWalletId, loanAmount, interest, deadline) {
     // 1. Desplegar el contrato
@@ -38,22 +76,14 @@ async function createLoanContract(lenderWalletId, loanAmount, interest, deadline
         return;
     }
 
-    // 2. Conectar con el contrato
-    const contract = connectContract(contractAddress);
+    console.log(`Contrato desplegado en la dirección: ${contractAddress}`);
 
-    try {
+    // 2. Inicializar el contrato
+    await initializeLoanContract(lenderWalletId, contractAddress, loanAmount);
 
-        await transferToContract(lenderWalletId, contractAddress, loanAmount);
-
-        console.log(`Fondos transferidos al contrato desde el prestamista: ${lenderWalletId}, Monto: ${loanAmount}`);
-    } catch (error) {
-        console.error('Error al transferir los fondos al contrato:', error);
-        throw new Error('No se pudo completar la transferencia de fondos al contrato.');
-    }
-
-    console.log("Préstamo creado exitosamente con contrato desplegado y fondos transferidos.");
     return contractAddress;
 }
+
 
 
 // Función para que un prestatario tome un préstamo
@@ -128,4 +158,4 @@ async function transferToContract(walletId, contractAddress, amount) {
 
 
 // Exportar funciones
-export { createLoanContract, takeLoanContract };
+export { initializeLoanContract, createLoanContract, takeLoanContract };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { createLoanContract, takeLoanContract } from './contractQueries.js';
+import { createLoanContract, takeLoanContract, initializeLoanContract } from './contractQueries.js';
 
 const router = express.Router();
 
@@ -41,6 +41,27 @@ router.post('/take', async (req, res) => {
         res.status(200).json({ message: 'Loan taken successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Error taking loan', details: error.message });
+    }
+});
+
+/*
+ * @POST /api/contracts/initialize
+ *
+ * brief: Inicializar un contrato existente para un préstamo
+ */
+router.post('/initialize', async (req, res) => {
+    const { lenderWalletId, contractAddress, loanAmount } = req.body;
+
+    if (!lenderWalletId || !contractAddress || !loanAmount) {
+        return res.status(400).json({ error: 'lenderWalletId, contractAddress, and loanAmount are required' });
+    }
+
+    try {
+        await initializeLoanContract(lenderWalletId, contractAddress, loanAmount);
+        res.status(200).json({ message: 'Contract initialized successfully' });
+    } catch (error) {
+        console.error('Error en /api/contracts/initialize:', error.message, error.stack);
+        res.status(500).json({ error: 'Error initializing contract', details: error.message });
     }
 });
 
