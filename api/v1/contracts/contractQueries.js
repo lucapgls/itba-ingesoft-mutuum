@@ -1,4 +1,6 @@
-import { createTransaction, createWallet } from "../wallets/transaction.js";
+import fetch from "node-fetch";
+import { createTransaction } from "../wallets/transaction.js";
+import { createWallet } from "../wallets/wallet.js";
 import { ethers } from "ethers";
 
 const adminWalletId = await createWallet(); // A esta cuenta se transfiere para deducir fondos de otra cuenta
@@ -7,18 +9,27 @@ console.log(`Admin wallet creada: ${adminWalletId}`);
 
 // Función para desplegar un nuevo contrato
 async function deployContract(loanAmount, interest, deadline) {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    console.log("Inicializando proveedor con URL:", process.env.RPC_URL);
+
+    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+
     console.log('Provider initialized:', provider);
 
-    const signer = provider.getSigner();
-    const contractFactory = new ethers.ContractFactory(ContractLendingPost.abi, ContractLendingPost.bytecode, signer);
-
+    const signer = await provider.getSigner();
+    
+    const contractFactory = new ethers.ContractFactory(
+        ContractLendingPost.abi,
+        ContractLendingPost.bytecode,
+        signer
+    );
     const contract = await contractFactory.deploy(loanAmount, interest, deadline);
-    await contract.deployed();
+    console.log("Esperando que el contrato se despliegue...");
+    await contract.waitForDeployment(); // Cambió el método para esperar el despliegue
+    
 
     console.log(`Contrato desplegado en la dirección: ${contract.address}`);
 
-    return contract.address;
+    return contract.target;
 }
 
 // Función principal para crear un préstamo y desplegar el contrato
@@ -36,10 +47,10 @@ async function createLoanContract(lenderWalletId, loanAmount, interest, deadline
 
     try {
         // Transferir los fondos desde la wallet del prestamista al contrato usando deposit()
-        const tx = await contract.deposit({ value: ethers.utils.parseEther(loanAmount.toString()) });
-        await tx.wait(); // Esperar la confirmación de la transacción
+        const tx = await contract.deposit({ value: ethers.parseEther(loanAmount.toString()) }); // `ethers.utils.parseEther` cambió a `ethers.parseEther`
+        await tx.wait();
 
-        await createTransaction(lenderWalletId, adminWalletId, loanAmount);  // deduccion de fondos
+        await transferToContract(lenderWalletId, contractAddress, loanAmount);
 
         console.log(`Fondos transferidos al contrato desde el prestamista: ${lenderWalletId}, Monto: ${loanAmount}`);
     } catch (error) {
@@ -79,11 +90,50 @@ async function takeLoanContract(contractAddress, borrowerWalletId) {
 
 // Conectar con el contrato
 function connectContract(contractAddress) {
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
-    const signer = provider.getSigner();
+    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider); // Requiere PRIVATE_KEY en .env
 
-    return new ethers.Contract(contractAddress, ContractLendingPost.abi, signer);
+    return new ethers.Contract(contractAddress, ContractLendingPost.abi, wallet);
 }
+
+async function transferToContract(walletId, contractAddress, amount) {
+    const url = "https://api.circle.com/v1/transfers";
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.CIRCLE_API_KEY}`,
+        },
+        body: JSON.stringify({
+            source: {
+                type: "wallet",
+                id: walletId,
+            },
+            destination: {
+                type: "blockchain",
+                address: contractAddress,
+                chain: "ETH-SEPOLIA",
+            },
+            amount: {
+                amount: amount.toString(),
+                currency: "USD",
+            },
+            metadata: {
+                memo: "Fondos para contrato inteligente",
+            },
+        }),
+    };
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Error al transferir fondos");
+    }
+
+    return data;
+}
+
 
 // Exportar funciones
 export { createLoanContract, takeLoanContract };

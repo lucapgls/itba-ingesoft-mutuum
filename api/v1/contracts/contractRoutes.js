@@ -19,6 +19,7 @@ router.post('/create', async (req, res) => {
         const contractAddress = await createLoanContract(lenderWalletId, loanAmount, interest, deadline);
         res.status(200).json({ contractAddress });
     } catch (error) {
+        console.error('Error en /api/contracts/create:', error.message, error.stack); 
         res.status(500).json({ error: 'Error creating loan contract', details: error.message });
     }
 });

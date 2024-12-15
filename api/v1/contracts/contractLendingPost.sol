@@ -18,6 +18,7 @@ contract ContractLendingPost {
     event DepositConfirmed(address indexed lender, uint256 amount);
     event LoanTaken(address indexed borrower, uint256 amount);
     event ContractClosed();
+    event FundsDeposited(address indexed from, uint256 amount);
 
     constructor(
         uint256 _loanAmount,
@@ -45,18 +46,26 @@ contract ContractLendingPost {
         _;
     }
 
-    function deposit() external payable {
+    // Recibir fondos directamente desde Circle
+    receive() external payable {
+        require(!isLoanTaken, "El prestamo ya fue tomado");
         require(msg.value > 0, "Debe enviar fondos mayores a 0");
-        require(msg.value == loanAmount, "El monto enviado debe coincidir con el del préstamo");
+        emit FundsDeposited(msg.sender, msg.value);
     }
 
-    function transferToWallet(address payable recipient, uint256 amount) external {
-        require(msg.sender == lender, "Solo el propietario puede transferir fondos");
+
+    function deposit() external payable {
+        require(msg.value > 0, "Debe enviar fondos mayores a 0");
+        require(msg.value == loanAmount, "El monto enviado debe coincidir con el del prestamo");
+    }
+
+    function transferToWallet(address payable recipient, uint256 amount) external onlyLender {
         require(address(this).balance >= amount, "Fondos insuficientes en el contrato");
         require(recipient != address(0), "Direccion invalida");
 
         recipient.transfer(amount);
     }
+
 
     function getContractBalance() public view returns (uint256) {
         return address(this).balance;
@@ -83,4 +92,6 @@ contract ContractLendingPost {
         isClosed = true;
         emit ContractClosed();
     }
+
+    
 }
