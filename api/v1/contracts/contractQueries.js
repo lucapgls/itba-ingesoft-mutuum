@@ -89,40 +89,38 @@ async function createLoanContract(lenderWalletId, loanAmount, interest, deadline
 
 
 // Función para que un prestatario tome un préstamo
-async function takeLoanContract(contractAddress, borrowerWalletId) {
-    if (!contractAddress || !borrowerWalletId) {
-        throw new Error('contractAddress y borrowerWalletId son requeridos.');
+async function takeLoanContract(contractAddress, borrowerWalletId, amount) {
+    if (!contractAddress || !borrowerWalletId || !amount) {
+        throw new Error('contractAddress, borrowerWalletId y amount son requeridos.');
     }
 
-    const contract = connectContract(contractAddress);
+    const backendWalletAddress = wallet.address; // Dirección de la wallet backend configurada
 
     try {
-        // Obtener la dirección blockchain del prestatario
-        const borrowerWalletBlockchainAddress = await getWalletBlockchainAddress(borrowerWalletId);
-        
-        console.log(`Conectando al contrato ${contractAddress}...`);
-        console.log(`Dirección blockchain del prestatario: ${borrowerWalletBlockchainAddress}`);
+        console.log(`Iniciando flujo para tomar préstamo desde el contrato: ${contractAddress}`);
 
-        // Confirmar que el prestatario puede tomar el préstamo
-        const txTakeLoan = await contract.takeLoan(borrowerWalletBlockchainAddress);
-        await txTakeLoan.wait();
-        console.log(`Préstamo tomado en el contrato: ${contractAddress}`);
+        // 1. Obtener el contrato y transferir fondos a la wallet backend
+        const contract = connectContract(contractAddress);
+        console.log(`Transfiriendo ${amount} desde el contrato a la wallet backend: ${backendWalletAddress}`);
+        const tx = await contract.transferToWallet(backendWalletAddress, amount);
+        console.log('Esperando confirmación de la transacción...');
+        const receipt = await tx.wait(); // Confirmar transacción
+        const transactionHash = receipt.transactionHash;
+        console.log(`Transferencia desde el contrato completada. Hash de la transacción: ${transactionHash}`);
 
-        // Obtener el monto del préstamo desde el contrato
-        const loanAmount = await contract.getLoanAmount();
-        console.log(`Monto del préstamo obtenido: ${loanAmount}`);
+        // 2. Depositar los fondos en la wallet de Circle
+        console.log(`Iniciando depósito en la wallet de Circle: ${borrowerWalletId}`);
+        const depositResult = await depositToCircle(borrowerWalletId, transactionHash);
+        console.log(`Depósito en Circle completado. Detalles:`, depositResult);
 
-        // Transferir los fondos desde el contrato a la wallet del prestatario
-        const txTransfer = await contract.transferToWallet(borrowerWalletId, loanAmount);
-        await txTransfer.wait(); // Esperar la confirmación de la transacción
-        console.log(`Fondos transferidos al prestatario: ${borrowerWalletId}, Monto: ${loanAmount}`);
+        console.log(`Préstamo tomado y fondos depositados exitosamente en Circle.`);
+        return depositResult;
     } catch (error) {
-        console.error('Error al procesar el préstamo:', error.message);
-        throw new Error('No se pudo completar el préstamo.');
+        console.error('Error al procesar el flujo de toma de préstamo:', error.message);
+        throw new Error('No se pudo completar el proceso de toma de préstamo.');
     }
-
-    console.log(`Préstamo tomado exitosamente por: ${borrowerWalletId}`);
 }
+
 
 // Conectar con el contrato
 function connectContract(contractAddress) {
@@ -180,7 +178,7 @@ async function getWalletBlockchainAddress(walletId) {
         const options = {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${process.env.CIRCLE_API_KEY}`,
+                Authorization: `Bearer ${process.env.CIRCLE_API_KEY}`,
                 "Content-Type": "application/json",
             },
         };
@@ -188,19 +186,105 @@ async function getWalletBlockchainAddress(walletId) {
         const response = await fetch(url, options);
         const data = await response.json();
 
-        // Obtener la primera dirección de blockchain asociada
+        console.log("Respuesta completa del endpoint:", JSON.stringify(data, null, 2)); // Debug
+
+        // Buscar direcciones de blockchain
         const blockchainAddress = data.data?.chainAddresses?.[0]?.address;
 
         if (!blockchainAddress) {
             throw new Error(`No blockchain address found for wallet ID: ${walletId}`);
         }
 
-        console.log(`Blockchain address for wallet ${walletId}: ${blockchainAddress}`);
         return blockchainAddress;
     } catch (error) {
         console.error(`Error fetching blockchain address for wallet ${walletId}:`, error.message);
         throw error;
     }
 }
+
+async function transferFromContract(contractAddress, backendWalletAddress, amount) {
+    const contract = connectContract(contractAddress);
+
+    try {
+        console.log(`Iniciando transferencia desde contrato: ${contractAddress} a la wallet: ${backendWalletAddress}`);
+        const tx = await contract.transferToWallet(backendWalletAddress, amount);
+        await tx.wait(); // Esperar confirmación
+        console.log(`Transferencia exitosa desde contrato a wallet backend. Monto: ${amount}`);
+    } catch (error) {
+        console.error("Error transfiriendo desde el contrato:", error.message);
+        throw new Error('No se pudo transferir los fondos desde el contrato.');
+    }
+}
+
+
+async function depositToCircle(walletId, transactionHash) {
+    const url = "https://api.circle.com/v1/deposits";
+    const options = {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${process.env.CIRCLE_API_KEY}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            idempotencyKey: `${Date.now()}-${transactionHash}`,
+            source: {
+                type: "blockchain",
+                transactionHash: transactionHash, // Hash de la transacción on-chain
+                chain: "ETH-SEPOLIA",
+            },
+            destination: {
+                type: "wallet",
+                id: walletId, // Wallet de Circle
+            },
+        }),
+    };
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (response.ok) {
+        console.log("Depósito exitoso en Circle:", data);
+        return data;
+    } else {
+        console.error("Error realizando depósito en Circle:", data);
+        throw new Error(data.message || "Depósito fallido");
+    }
+}
+
+
+async function depositToCircle(walletId, transactionHash) {
+    const url = "https://api.circle.com/v1/deposits";
+    const options = {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${process.env.CIRCLE_API_KEY}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            idempotencyKey: `${Date.now()}-${transactionHash}`,
+            source: {
+                type: "blockchain",
+                transactionHash: transactionHash,
+                chain: "ETH-SEPOLIA",
+            },
+            destination: {
+                type: "wallet",
+                id: walletId,
+            },
+        }),
+    };
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (response.ok) {
+        console.log("Depósito exitoso en Circle:", data);
+        return data;
+    } else {
+        console.error("Error realizando depósito en Circle:", data);
+        throw new Error(data.message || "Depósito fallido");
+    }
+}
+
 
 export { initializeLoanContract, createLoanContract, takeLoanContract, getWalletBlockchainAddress };
