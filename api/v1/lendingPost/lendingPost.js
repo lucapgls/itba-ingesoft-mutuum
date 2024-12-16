@@ -134,7 +134,28 @@ export const createLendingPost = async (lenderId, initialAmount, availableAmount
       console.error('Error creating lending post:', error);
       throw error;
     }
-    return data?.[0]?.id || null;
+
+    const lendingPostId = data?.[0]?.id;
+
+  // Desplegar el contrato asociado
+  const contractAddress = await deployContract(initialAmount, interest, deadline);
+  console.log(`Contrato desplegado para lending post ${lendingPostId}: ${contractAddress}`);
+
+  // Guardar el contrato en la base de datos
+  const { error: contractError } = await supabase.from('contracts').insert([
+    {
+      contract_address: contractAddress,
+      user_id: lenderId,
+    },
+  ]);
+
+  if (contractError) {
+    console.error('Error guardando el contrato en la base de datos:', contractError.message);
+    throw contractError;
+  }
+
+    return lendingPostId;
+
   } catch (error) {
     console.error('Error:', error);
     throw error;
@@ -172,6 +193,25 @@ export const createLendingPostRequirements = async (lendingPostId, requirements)
 // Function to create a loan
 export const createLoan = async (lendingPostId, borrowerId, loanAmount) => {
   try {
+
+    // Obtener la dirección del contrato asociado al lending post
+      const { data: contractData, error: contractError } = await supabase
+      .from('contracts')
+      .select('contract_address')
+      .eq('contract_address', lendingPostId);
+
+      if (contractError || !contractData || contractData.length === 0) {
+      console.error('Error obteniendo el contrato asociado:', contractError?.message || 'No se encontró contrato');
+      throw contractError || new Error('No se encontró contrato para el lending post');
+      }
+
+      const contractAddress = contractData[0].contract_address;
+
+      // Llamar a la función takeLoanContract
+      await takeLoanContract(contractAddress, borrowerId, loanAmount);
+
+
+      // Loan logic:
     const { data, error } = await supabase.rpc('create_loan', {
       _lending_post_id: lendingPostId,
       _borrower_id: borrowerId,
