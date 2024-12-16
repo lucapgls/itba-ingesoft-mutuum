@@ -38,7 +38,7 @@ const Profile = observer(() => {
 					<View style={{ height: 80 }} />
 					<Image
 						source={{
-							uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=",
+							uri: "https://icons.veryicon.com/png/o/miscellaneous/standard/user-274.png",
 						}}
 						style={styles.circle}
 					/>
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
 		borderRadius: 100,
 		justifyContent: "center",
 		alignItems: "center",
+		backgroundColor: "#dbdbdb"
 	},
 	rectangle: {
 		justifyContent: "center",

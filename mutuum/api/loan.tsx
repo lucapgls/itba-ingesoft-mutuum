@@ -94,3 +94,68 @@ export const fetchLoanById = async (loanId: string) => {
     }
 }
 
+export const getLoansByBorrowerId = async (borrowerId: string) => {
+  try {
+    const response = await fetch(API_SLUG(`/borrower/${borrowerId}`), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error fetching borrower loans');
+    }
+
+    const data = await response.json();
+    return data.loans;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const payLoanQuota = async (loanId: string, amount: number) => {
+  try {
+    const response = await fetch(API_SLUG(`/${loanId}/pay`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error processing loan payment');
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const checkActiveLoanStatus = async (userId: string) => {
+  try {
+    const response = await fetch(API_SLUG(`/status/${userId}`), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error checking loan status');
+    }
+
+    const data = await response.json();
+    return {
+      hasActiveLoans: data.hasActiveLoans,
+      hasOverduePayments: data.hasOverduePayments
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+

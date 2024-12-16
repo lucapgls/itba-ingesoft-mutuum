@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
 	container: {
 		alignItems: "center",
 		justifyContent: "center",
-		gap: 2,
+		gap: 1,
 	},
 	icon: {
 		width: 32, // Tailwind's w-6 is 24px

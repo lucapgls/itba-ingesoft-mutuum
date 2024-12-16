@@ -140,7 +140,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
             <TouchableOpacity style={[styles.card, theme.shadowIOS, theme.shadowAndroid]} onPress={openBottomSheet}>
                 <Image
                     source={{
-                        uri: "https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=",
+                        uri: "https://icons.veryicon.com/png/o/miscellaneous/standard/user-274.png",
                     }}
                     style={styles.avatar}
                 />
@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
         height: 65,
         borderRadius: 50,
         marginRight: 16,
+        backgroundColor: "#dbdbdb"
     },
     details: {
         flex: 1,

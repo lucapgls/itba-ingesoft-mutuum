@@ -20,7 +20,7 @@ const HomeBubble = ({ loans }: { loans: Loan[] }) => {
                     // TODO FIX
                     <UserLoanSmallCard
                         key={loan.userId}
-                        profilePicture="https://media.istockphoto.com/id/1364917563/es/foto/hombre-de-negocios-sonriendo-con-los-brazos-cruzados-sobre-fondo-blanco.jpg?s=612x612&w=0&k=20&c=NqMHLF8T4RzPaBE_WMnflSGB_1-kZZTQgAkekUxumZg=" // todo
+                        profilePicture="https://icons.veryicon.com/png/o/miscellaneous/standard/user-274.png" // todo
                         name={loan.userId} // todo
                         role={loan.role}
                         amount={loan.amount}

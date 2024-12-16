@@ -37,23 +37,41 @@ const getConvertToARS = async (fromAmount: number, fromToken: string) => {
     return { amount, token };
 };
 
-const postWalletTransaction = async (fromWalletId: string, toWalletId: string, amount: number) => {
-    console.log('Posting transaction:', { fromWalletId, toWalletId, amount });
-    const response = await fetch(API_SLUG(`/transaction`), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            fromWalletId,
-            toWalletId,
-            amount
-        })
+const postWalletTransaction = async (
+  fromWalletId: string,
+  toWalletId: string,
+  amount: number
+) => {
+  try {
+    console.log("Posting transaction:", {
+      fromWalletId,
+      toWalletId,
+      amount,
     });
-    const data = await response.json();
-    console.log('Transaction response:', data);
-    return data;
-}
+
+    const response = await fetch(API_SLUG('/transaction'), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fromWalletId,
+        toWalletId,
+        amount,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Transaction failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Transaction error:", error);
+    throw error;
+  }
+};
 
 
 const getWalletID = async (userId: string) => {

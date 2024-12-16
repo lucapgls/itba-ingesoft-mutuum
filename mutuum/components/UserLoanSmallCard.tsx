@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 		height: 45,
 		borderRadius: 25,
 		marginRight: 10,
-		backgroundColor: theme.colors.iconGray,
+		backgroundColor: "#dbdbdb"
 	},
 	textContainer: {
 		flex: 1,

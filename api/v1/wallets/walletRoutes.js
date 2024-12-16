@@ -118,8 +118,7 @@ router.post('/transaction', async (req, res) => {
 
     try {
         const ans = await createTransaction(fromWalletId, toWalletId, amount);
-
-        res.status(200).json(ans);
+        res.status(200).json({ success: true, transaction: ans });
     } catch (error) {
         res.status(500).json({ error: 'Error creating transaction', details: error.message });
     }

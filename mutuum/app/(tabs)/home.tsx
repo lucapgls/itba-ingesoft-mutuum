@@ -121,6 +121,11 @@ const Home = () => {
 	const arsBalance = convertedBalance
 		? convertedBalance.toFixed(2).toString()
 		: "0.00";
+
+	const handleDepositPress = () => {
+		router.push("/deposit");
+	};
+
 	return (
 
 		<View style={styles.container}>

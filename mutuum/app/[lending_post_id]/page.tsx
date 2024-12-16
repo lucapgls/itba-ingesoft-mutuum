@@ -5,7 +5,9 @@ import {
 	StyleSheet,
 	ActivityIndicator,
 	ScrollView,
+	Pressable,
 	TouchableOpacity,
+	Alert,
 } from "react-native";
 import { getLendingPostByLendingPostId } from "store/LendingPostStore"; // Assuming you have an API function to fetch loan details
 import theme from "@theme/theme";
@@ -14,6 +16,7 @@ import {
 	useLocalSearchParams,
 	useGlobalSearchParams,
 	router,
+	Stack,
 } from "expo-router";
 import { askForLoan, getAsking } from "api/lendingPost";
 import UserStore from "store/UserStore";
@@ -21,6 +24,9 @@ import CustomButton from "@components/CustomButton";
 import { fetchUser } from "api/user";
 import NotificationDialog from "@components/NotificationDialog";
 import { getWalletID, postWalletTransaction } from "api/wallet";
+import { runOnJS } from "react-native-reanimated";
+import { createLoan } from "api/loan";
+import { checkActiveLoanStatus } from "api/loan";
 
 interface Requirement {
 	params: {
@@ -40,9 +46,12 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 	const [user, setUser] = useState<any>(null);
 	const [dialogVisible, setDialogVisible] = useState(false);
 	const [dialogVisible2, setDialogVisible2] = useState(false);
+	const [isLoanAccepted, setIsLoanAccepted] = useState(false);
+	const [acceptedUser, setAcceptedUser] = useState<{ id: string; name: string } | null>(null);
 
 	const closeDialog = () => {
 		setDialogVisible(false);
+		router.push("/home");
 	};
 
 	const closeDialog2 = () => {
@@ -134,27 +143,113 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 	}
 
 	const onAccept = async (toUserId: string) => {
-		console.log("TEST");
 		try {
+			if (isLoanAccepted) {
+				return;
+			}
+
 			const toWalletId = await getWalletID(toUserId);
-			console.log("toWalletId", toWalletId);
-
-			// Assuming you have a function to perform the transaction
 			const lenderWalletId = currentUser.walletId;
-			console.log("lenderWalletId", lenderWalletId);
-			const amount = loanDetails.initial_amount;
-			console.log("amount", amount);
+			const amount = Number(loanDetails.initial_amount);
 
-			await postWalletTransaction(lenderWalletId, toWalletId, amount);
-			console.log(
-				`Transaction of ${amount} from ${lenderWalletId} to ${toWalletId} completed.`
+			if (!toWalletId || !lenderWalletId) {
+				throw new Error('Invalid wallet IDs');
+			}
+
+			// First create the loan record
+			const loanResponse = await createLoan(
+				lending_post_id as string,
+				toUserId,
+				amount
 			);
+
+			if (!loanResponse) {
+				throw new Error('Failed to create loan record');
+			}
+
+			// Then process the wallet transaction - lender sends money to borrower
+			const transactionResponse = await postWalletTransaction(
+				lenderWalletId,  // fromWalletId (lender sends)
+				toWalletId,      // toWalletId (borrower receives)
+				amount
+			);
+			
+			if (!transactionResponse) {
+				throw new Error('Transaction failed');
+			}
+
+			const acceptedUserInfo = userNames.find(user => user.id === toUserId);
+			if (acceptedUserInfo) {
+				setAcceptedUser(acceptedUserInfo);
+			}
+
+			setIsLoanAccepted(true);
+			setDialogVisible2(true);
+			
+			setTimeout(() => {
+				router.push("/home");
+			}, 1000);
+
 		} catch (error) {
 			console.error("Error accepting loan request:", error);
-		} finally {
-			setDialogVisible2(true);
+			Alert.alert("Error", "No se pudo procesar el préstamo");
+			setDialogVisible2(false);
 		}
 	};
+
+	const handleRequestLoan = async () => {
+		setIsLoading(true);
+		try {
+			if (!currentUser.userId || !loanDetails) {
+				Alert.alert("Error", "Debe iniciar sesión para solicitar un préstamo");
+				return;
+			}
+
+			// Check if user is the owner
+			if (currentUser.userId === loanDetails.lender_id) {
+				Alert.alert("Error", "No puedes solicitar tu propio préstamo");
+				return;
+			}
+
+			// Check active loans status
+			const loanStatus = await checkActiveLoanStatus(currentUser.userId);
+			
+			if (loanStatus.hasActiveLoans) {
+				if (loanStatus.hasOverduePayments) {
+					Alert.alert(
+						"Error", 
+						"Tienes cuotas pendientes de pago. Por favor, regulariza tu situación para solicitar nuevos préstamos."
+					);
+				} else {
+					Alert.alert(
+						"Error", 
+						"Ya tienes un préstamo activo. Debes completar los pagos antes de solicitar uno nuevo."
+					);
+				}
+				return;
+			}
+
+			await askForLoan(currentUser.userId, lending_post_id as string);
+
+			Alert.alert(
+				"Éxito",
+				"Solicitud enviada correctamente",
+				[
+					{
+						text: "OK",
+						onPress: () => router.back(),
+					},
+				]
+			);
+		} catch (error) {
+			console.error("Error requesting loan:", error);
+			Alert.alert("Error", "No se pudo procesar la solicitud");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const showRequestButton = currentUser.userId && currentUser.userId !== loanDetails.lender_id;
 
 	return (
 		<ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -198,43 +293,64 @@ const LoanDetailsScreen = ({ params }: Requirement) => {
 				))}
 			</View>
 			<View style={{ height: 25 }} />
-			{loanDetails.lender_id === currentUser.userId ? (
+			{loanDetails.lender_id === currentUser.userId && (
 				<>
 					<View style={{ height: 20 }} />
-					<Text style={styles.title}>Solicitudes</Text>
-					{userNames.map(({ id, name }, index) => (
-						<View key={index} style={styles.askingRow}>
-							<Text style={styles.askingId}>{name}</Text>
-							<TouchableOpacity
-								onPress={() => onAccept(id)}
-								
-							>
-								<Text style={{ color: theme.colors.primary }}>
-									Aceptar
-								</Text>
-							</TouchableOpacity>
+					{isLoanAccepted && acceptedUser ? (
+						<View
+							style={[
+								styles.detailsContainer,
+								theme.shadowAndroid,
+								theme.shadowIOS,
+							]}
+						>
+							<Text style={styles.title}>Deudor</Text>
+							<View style={{ height: 12 }} />
+							<View style={styles.infoRow}>
+								<Text style={styles.label}>Nombre</Text>
+								<Text style={styles.value}>{acceptedUser.name}</Text>
+							</View>
+							{/* You can add more borrower details here if needed */}
 						</View>
-					))}
+					) : (
+						<>
+							<Text style={styles.title}>Solicitudes</Text>
+							{userNames.map(({ id, name }, index) => (
+								<View key={index} style={styles.askingRow}>
+									<Text style={styles.askingId}>{name}</Text>
+									<Pressable
+										onPress={() => onAccept(id)}
+										style={({ pressed }) => [
+											styles.acceptButton,
+											pressed && styles.buttonPressed
+										]}
+									>
+										<Text style={{ color: theme.colors.primary }}>
+											Aceptar
+										</Text>
+									</Pressable>
+								</View>
+							))}
+						</>
+					)}
 					<NotificationDialog
 						visible={dialogVisible2}
 						onClose={closeDialog2}
-						title="Préstamo enviado"
+						title="Pr��stamo enviado"
 						text={"Su prestamo se envió al cliente con exito."}
 					/>
 				</>
-			) : (
-				<>
-					<CustomButton
-						text="Solicitar"
-						onPress={() => handleAskForLoan()}
-					/>
-					<NotificationDialog
-						visible={dialogVisible}
-						onClose={closeDialog}
-						text={"Te notificaremos cuando el prestamista acepte tusolicitud."}
-						title ="Solicitud enviada"
-					/>
-				</>
+			)}
+			{showRequestButton && (
+				<TouchableOpacity
+					style={[styles.requestButton, isLoading && styles.disabledButton]}
+					onPress={handleRequestLoan}
+					disabled={isLoading}
+				>
+					<Text style={styles.requestButtonText}>
+						{isLoading ? "Procesando..." : "Solicitar préstamo"}
+					</Text>
+				</TouchableOpacity>
 			)}
 		</ScrollView>
 	);
@@ -259,6 +375,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 18,
 		fontWeight: "500",
+		marginBottom: 8,
 	},
 	infoRow: {
 		flexDirection: "row",
@@ -303,6 +420,28 @@ const styles = StyleSheet.create({
 		
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	acceptButton: {
+		padding: 8,
+		borderRadius: 4,
+	},
+	buttonPressed: {
+		opacity: 0.7,
+	},
+	requestButton: {
+		backgroundColor: theme.colors.primary,
+		padding: 15,
+		borderRadius: 8,
+		alignItems: "center",
+		marginTop: 30,
+	},
+	requestButtonText: {
+		color: "white",
+		fontSize: 16,
+		fontWeight: "600",
+	},
+	disabledButton: {
+		opacity: 0.7,
 	},
 });
 

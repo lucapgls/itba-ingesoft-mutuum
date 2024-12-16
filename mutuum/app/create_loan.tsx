@@ -111,12 +111,12 @@ const CreateLoan: React.FC = () => {
             placeholder="0"
             value={amount}
             onChangeText={setAmount}
-            title="Valor (ETH)"
+            title="Valor (USDC)"
             keyboardType="numeric"
           />
           <View style={{ height: 14 }} />
           <CustomTextInput
-            placeholder="00%"
+            placeholder="0%"
             value={interests}
             onChangeText={setInterests}
             title="Interes (%)"
@@ -152,7 +152,7 @@ const CreateLoan: React.FC = () => {
           <View style={{ height: 8 }} />
 
           <CustomTextInput
-            placeholder="00"
+            placeholder="0"
             value={quotas}
             onChangeText={setQuotas}
             title="Plazo (Meses)"

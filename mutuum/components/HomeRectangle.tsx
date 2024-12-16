@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 
 const Header_Max_Height = 280;
 const Header_Min_Height = 260;
@@ -22,6 +23,9 @@ const HomeRectangle = ({
 	balance: number | string;
 	ars: number | string;
 }) => {
+	const handleDepositPress = () => {
+		router.push("/deposit");
+	};
 	return (
 		<View style={styles.container}>
 			<LinearGradient
@@ -54,7 +58,9 @@ const HomeRectangle = ({
 								style={styles.icon}
 								
 							/>
-							<Text style={styles.buttonText}>Depositar</Text>
+							<Text style={styles.buttonText}
+								onPress={handleDepositPress}
+							>Depositar</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
