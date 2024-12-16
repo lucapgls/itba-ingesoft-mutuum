@@ -65,4 +65,26 @@ router.post('/initialize', async (req, res) => {
     }
 });
 
+/*
+ * @GET /api/contracts/balance
+ *
+ * brief: Consultar el balance de un contrato
+ */
+router.get('/balance', async (req, res) => {
+    const { contractAddress } = req.query;
+
+    if (!contractAddress) {
+        return res.status(400).json({ error: 'contractAddress is required' });
+    }
+
+    try {
+        const balance = await getContractBalance(contractAddress);
+        res.status(200).json({ balance });
+    } catch (error) {
+        console.error('Error en /api/contracts/balance:', error.message, error.stack);
+        res.status(500).json({ error: 'Error fetching contract balance', details: error.message });
+    }
+});
+
+
 export default router;

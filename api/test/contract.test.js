@@ -4,8 +4,8 @@ import { describe } from 'mocha';
 
 import app from '../server.js';
 
-const myLenderWalletId = '8855cb91-e040-518b-920f-5220557fb2f9'; // TODO: Usar wallets que existan
-const myBorrowerWalletId = '201a17b5-d10a-5181-9f46-94b9b1a4fc52'; 
+const myLenderWalletId = '627a6145-e25a-5820-9787-cda00baf3757'; // Harcodeadas
+const myBorrowerWalletId = '7e16d0fb-9981-5a25-a0e3-dcf9d778f579'; 
 
 const existingContractAddress = '0xC450a43092785FfF6d62130E1Dc0CB6C60A77B93';
 
