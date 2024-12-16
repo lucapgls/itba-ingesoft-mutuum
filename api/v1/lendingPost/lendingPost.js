@@ -1,5 +1,66 @@
 import { supabase } from '../../supabase_config.js';
 
+import { supabase } from '../../supabase_config.js';
+import { deployContract, takeLoanContract } from '../contracts/contractQueries.js';
+
+// Función para crear y registrar un contrato en la base de datos
+export const createAndRegisterContract = async (lendingPostId, initialAmount, interest, deadline, lenderId) => {
+  try {
+    // Desplegar el contrato
+    const contractAddress = await deployContract(initialAmount, interest, deadline);
+    console.log(`Contrato desplegado para lending post ${lendingPostId}: ${contractAddress}`);
+
+    // Guardar el contrato en la base de datos
+    const { error } = await supabase.from('contracts').insert([
+      {
+        contract_address: contractAddress,
+        user_id: lenderId,
+      },
+    ]);
+
+    if (error) {
+      console.error('Error guardando el contrato en la base de datos:', error.message);
+      throw error;
+    }
+
+    return contractAddress;
+  } catch (error) {
+    console.error('Error en createAndRegisterContract:', error.message);
+    throw error;
+  }
+};
+
+// Función para obtener la dirección de un contrato asociado a un lending post
+export const getContractAddressByLendingPostId = async (lendingPostId) => {
+  try {
+    const { data, error } = await supabase
+      .from('contracts')
+      .select('contract_address')
+      .eq('contract_address', lendingPostId);
+
+    if (error || !data || data.length === 0) {
+      console.error(`Error obteniendo el contrato para lending post ${lendingPostId}:`, error?.message || 'No se encontró contrato');
+      throw error || new Error('No se encontró contrato para el lending post');
+    }
+
+    return data[0].contract_address;
+  } catch (error) {
+    console.error('Error en getContractAddressByLendingPostId:', error.message);
+    throw error;
+  }
+};
+
+// Función para tomar un préstamo usando el contrato
+export const executeLoanContract = async (lendingPostId, borrowerId, loanAmount) => {
+  try {
+    const contractAddress = await getContractAddressByLendingPostId(lendingPostId);
+    await takeLoanContract(contractAddress, borrowerId, loanAmount);
+    return contractAddress;
+  } catch (error) {
+    console.error('Error en executeLoanContract:', error.message);
+    throw error;
+  }
+};
 
 
 export const fetchLendingPost = async () => {
@@ -137,22 +198,8 @@ export const createLendingPost = async (lenderId, initialAmount, availableAmount
 
     const lendingPostId = data?.[0]?.id;
 
-  // Desplegar el contrato asociado
-  const contractAddress = await deployContract(initialAmount, interest, deadline);
-  console.log(`Contrato desplegado para lending post ${lendingPostId}: ${contractAddress}`);
-
-  // Guardar el contrato en la base de datos
-  const { error: contractError } = await supabase.from('contracts').insert([
-    {
-      contract_address: contractAddress,
-      user_id: lenderId,
-    },
-  ]);
-
-  if (contractError) {
-    console.error('Error guardando el contrato en la base de datos:', contractError.message);
-    throw contractError;
-  }
+   // Crear y registrar el contrato asociado
+   await createAndRegisterContract(lendingPostId, initialAmount, interest, deadline, lenderId);
 
     return lendingPostId;
 
@@ -194,24 +241,10 @@ export const createLendingPostRequirements = async (lendingPostId, requirements)
 export const createLoan = async (lendingPostId, borrowerId, loanAmount) => {
   try {
 
-    // Obtener la dirección del contrato asociado al lending post
-      const { data: contractData, error: contractError } = await supabase
-      .from('contracts')
-      .select('contract_address')
-      .eq('contract_address', lendingPostId);
+    // Ejecutar el contrato para tomar el préstamo
+    await executeLoanContract(lendingPostId, borrowerId, loanAmount);
 
-      if (contractError || !contractData || contractData.length === 0) {
-      console.error('Error obteniendo el contrato asociado:', contractError?.message || 'No se encontró contrato');
-      throw contractError || new Error('No se encontró contrato para el lending post');
-      }
-
-      const contractAddress = contractData[0].contract_address;
-
-      // Llamar a la función takeLoanContract
-      await takeLoanContract(contractAddress, borrowerId, loanAmount);
-
-
-      // Loan logic:
+    
     const { data, error } = await supabase.rpc('create_loan', {
       _lending_post_id: lendingPostId,
       _borrower_id: borrowerId,
