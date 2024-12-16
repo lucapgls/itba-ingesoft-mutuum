@@ -1,5 +1,5 @@
 import express from 'express';
-import { createLoanContract, takeLoanContract, initializeLoanContract } from './contractQueries.js';
+import { createLoanContract, takeLoanContract, initializeLoanContract, deployContract } from './contractQueries.js';
 
 const router = express.Router();
 
@@ -83,6 +83,27 @@ router.get('/balance', async (req, res) => {
     } catch (error) {
         console.error('Error en /api/contracts/balance:', error.message, error.stack);
         res.status(500).json({ error: 'Error fetching contract balance', details: error.message });
+    }
+});
+
+/*
+ * @POST /api/contracts/deploy
+ *
+ * brief: Crear un nuevo contrato para un préstamo
+ */
+router.post('/deploy', async (req, res) => {
+    const { loanAmount, interest, deadline } = req.body;
+
+    if (!loanAmount || !interest || !deadline) {
+        return res.status(400).json({ error: 'loanAmount, interest and deadline are required' });
+    }
+
+    try {
+        const contractAddress = await deployContract(loanAmount, interest, deadline);
+        res.status(200).json({ contractAddress });
+    } catch (error) {
+        console.error('Error en /api/contracts/create:', error.message, error.stack); 
+        res.status(500).json({ error: 'Error creating loan contract', details: error.message });
     }
 });
 

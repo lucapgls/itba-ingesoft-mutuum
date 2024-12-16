@@ -1,4 +1,32 @@
 import { supabase } from '../../supabase_config.js';
+import { deployContract} from '../contracts/contractQueries.js';
+
+// Función para crear y registrar un contrato en la base de datos
+export const createAndRegisterContract = async (lendingPostId, initialAmount, interest, deadline, lenderId) => {
+  try {
+    // Desplegar el contrato
+    const contractAddress = await deployContract(initialAmount, interest, deadline);
+    console.log(`Contrato desplegado para lending post ${lendingPostId}: ${contractAddress}`);
+
+    // Guardar el contrato en la base de datos
+    const { error } = await supabase.from('contracts').insert([
+      {
+        contract_address: contractAddress,
+        user_id: lenderId,
+      },
+    ]);
+
+    if (error) {
+      console.error('Error guardando el contrato en la base de datos:', error.message);
+      throw error;
+    }
+
+    return contractAddress;
+  } catch (error) {
+    console.error('Error en createAndRegisterContract:', error.message);
+    throw error;
+  }
+};
 
 
 export const fetchloan = async () => {
@@ -61,6 +89,11 @@ export const fetchLoanByLendingPostId = async (lendingPostId) => {
 export const createLoan = async (lendingPostId, borrowerId, loanAmount) => {
    const createdAt = new Date().toISOString();
    try {
+
+  // Crear y registrar el contrato asociado
+    await createAndRegisterContract(lendingPostId, initialAmount, interest, deadline, lenderId);
+
+
      const { data, error } = await supabase
        .from('loan')
        .insert([{ 

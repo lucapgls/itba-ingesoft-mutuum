@@ -249,4 +249,4 @@ async function getContractBalance(contractAddress) {
 
 
 
-export { initializeLoanContract, createLoanContract, takeLoanContract, getContractBalance };
+export { initializeLoanContract, createLoanContract, takeLoanContract, getContractBalance, deployContract};
